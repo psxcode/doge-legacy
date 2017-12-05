@@ -18,8 +18,7 @@
     "commit": "git-cz",
     "build": "yarn clean && lerna run build",
     "release": "lerna publish --conventional-commits -m 'chore(release): publish'",
-    "clean": "yarn clean:dist && lerna run clean",
-    "clean:dist": "rimraf packages/*/dist"
+    "clean": "lerna run clean"
   },
   "devDependencies": {
     "@types/node": "^8.0.53",
