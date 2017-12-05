@@ -10,7 +10,7 @@ module.exports = {
   ],
 
   scopes: [
-    {name: 'doge'},
+    {name: 'build'},
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
