@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import { alignTime, alignTimePromise, roundTime, timebuckets } from './index'
+import { alignTime, alignTimePromise, roundTime, timeframes } from './index'
 
 describe('[ helpers / align-time / roundTime ]', function () {
 
   describe('[ helpers / align-time / roundTime / 15min - Math.floor ]', function () {
-    const floor15min = roundTime(timebuckets['15m'], Math.floor)
+    const floor15min = roundTime(timeframes['15m'], Math.floor)
 
     it('should return a time floored to 15min', function () {
       const given = new Date(2017, 0, 0, 0, 17).getTime()
@@ -24,7 +24,7 @@ describe('[ helpers / align-time / roundTime ]', function () {
   })
 
   describe('[ helpers / align-time / roundTime / 15min - Math.ceil ]', function () {
-    const ceil15min = roundTime(timebuckets['15m'], Math.ceil)
+    const ceil15min = roundTime(timeframes['15m'], Math.ceil)
 
     it('should return a time ceiled to 15min', function () {
       const given = new Date(2017, 0, 0, 0, 17).getTime()
@@ -44,7 +44,7 @@ describe('[ helpers / align-time / roundTime ]', function () {
   })
 
   describe('[ helpers / align-time / roundTime / 1h - Math.floor ]', function () {
-    const floor1hr = roundTime(timebuckets['1h'], Math.floor)
+    const floor1hr = roundTime(timeframes['1h'], Math.floor)
 
     it('should return a time floored to hour', function () {
       const given = new Date(2017, 0, 0, 1, 25, 17).getTime()
@@ -64,7 +64,7 @@ describe('[ helpers / align-time / roundTime ]', function () {
   })
 
   describe('[ helpers / align-time / roundTime / 1h - Math.ceil ]', function () {
-    const ceil1hr = roundTime(timebuckets['1h'], Math.ceil)
+    const ceil1hr = roundTime(timeframes['1h'], Math.ceil)
 
     it('should return a time ceiled to hour', function () {
       const given = new Date(2017, 0, 0, 0, 0, 1).getTime()
@@ -88,12 +88,13 @@ describe('[ helpers / align-time / roundTime ]', function () {
 describe('[ helpers / align-time / alignTime ]', function () {
 
   it('should call back within proper time', function (done) {
-    this.timeout(10 * 1000)
+    this.timeout(5 * 1000)
 
     const startTime = new Date().getTime()
-    const expectedEndTime = roundTime(timebuckets['10s'], Math.ceil)(startTime)
+    const timeStep = timeframes['5s']
+    const expectedEndTime = roundTime(timeStep, Math.ceil)(startTime)
 
-    alignTime('10s')(cb)(startTime)
+    alignTime(timeStep)(cb)(startTime)
 
     function cb () {
       const endTime = new Date().getTime()
@@ -106,16 +107,18 @@ describe('[ helpers / align-time / alignTime ]', function () {
 
 describe('[ helpers / align-time / alignTimePromise ]', function () {
 
-  it('should call back within proper time', async function () {
-    this.timeout(10 * 1000)
+  it('should call back within proper time', function () {
+    this.timeout(5 * 1000)
 
     const startTime = new Date().getTime()
-    const expectedEndTime = roundTime(timebuckets['10s'], Math.ceil)(startTime)
+    const timeStep = timeframes['5s']
+    const expectedEndTime = roundTime(timeStep, Math.ceil)(startTime)
 
-    await alignTimePromise('10s')(startTime)
-
-    const endTime = new Date().getTime()
-    expect(Math.abs(expectedEndTime - endTime)).lessThan(1000)
+    return alignTimePromise(timeStep)(startTime)
+      .then(() => {
+        const endTime = new Date().getTime()
+        expect(Math.abs(expectedEndTime - endTime)).lessThan(1000)
+      })
   })
 
 })

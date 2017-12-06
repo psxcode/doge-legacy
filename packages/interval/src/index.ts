@@ -1,21 +1,4 @@
-export type Timeframe =
-  '1s'
-  | '5s'
-  | '10s'
-  | '15s'
-  | '30s'
-  | '1m'
-  | '5m'
-  | '10m'
-  | '15m'
-  | '30m'
-  | '1h'
-  | '3h'
-  | '6h'
-  | '12h'
-  | '1d'
-
-export const timebuckets = {
+export const timeframes = {
   '1s': 1000,
   '5s': 5 * 1000,
   '10s': 10 * 1000,
@@ -36,20 +19,17 @@ export const timebuckets = {
 export const roundTime = (roundStep: number, roundingOperation = Math.round) =>
   (time: number): number => new Date(roundingOperation(time / roundStep) * roundStep).getTime()
 
-export const alignTime = (tb: Timeframe) => {
-  const ms = timebuckets[tb]
+export const alignTime = (ms: number, timeoutFunction = setTimeout) => {
   const ceilTime = roundTime(ms, Math.ceil)
   return (cb: () => void) => (initialTime: number) => {
     const deltaTime = ceilTime(initialTime) - initialTime
-    return setTimeout(cb, Math.max(0, deltaTime))
+    return timeoutFunction(cb, Math.max(0, deltaTime))
   }
 }
 
-export const alignTimePromise = (tb: Timeframe) => {
-  const at = alignTime(tb)
-  return (initialTime: number) => new Promise((resolve) => {
-    at(resolve)(initialTime)
-  })
+export const alignTimePromise = (ms: number, timeoutFunction = setTimeout) => {
+  const at = alignTime(ms, timeoutFunction)
+  return (initialTime: number) => new Promise((resolve) => at(resolve)(initialTime))
 }
 
 const currentTimeMs = (offsetMs = 0) => () => new Date().getTime() + offsetMs
