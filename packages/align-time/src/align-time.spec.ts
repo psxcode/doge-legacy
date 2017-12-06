@@ -29,7 +29,7 @@ nows.forEach((now) => {
         const expectedEndTime = alignValue(timeStep, Math.ceil)(startTime + 1)
         const spy = timeoutSpy(noop, expectedEndTime - startTime, done)
 
-        alignTime(timeStep, spy)(noop)(startTime)
+        alignTime(spy, noop)(timeStep)(noop)(startTime)
       })
     })
   })
@@ -50,7 +50,7 @@ nows.forEach((now) => {
         const expectedEndTime = alignValue(timeStep, Math.ceil)(startTime + 1)
         const spy = timeoutSpy(expectedEndTime - startTime)
 
-        return alignTimePromise(timeStep, spy)(startTime)
+        return alignTimePromise(spy, noop)(timeStep)(startTime)
       })
     })
   })
