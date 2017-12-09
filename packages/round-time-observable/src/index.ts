@@ -13,10 +13,7 @@ export const roundIntervalObservable = (timeoutFn: TimeoutFunction, clearFn: Cle
       const at = pipe(currentTimeFn(offsetMs), roundTimeout(timeoutFn, clearFn)(roundMs)(tick))
       let count = 0
       let done = false
-      let timeout: Function | undefined
-
-      /* make early call if alignStep is long */
-      timeout = at()
+      let timeout = at()
 
       /* return unsubscribe function */
       return () => {
