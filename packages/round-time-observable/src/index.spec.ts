@@ -1,11 +1,7 @@
-import { assert, expect } from 'chai'
 import * as sinon from 'sinon'
 import { roundIntervalObservable } from './index'
 
 const noop = () => void 0
-const assertIsPositiveNumber = (x: number) => {
-  assert(typeof x === 'number' && x > 0, 'value should be positive number')
-}
 const now = (offset: number) => () => 0
 
 describe(`[ roundIntervalObservable ]`, function () {
