@@ -25,6 +25,7 @@ import {
 } from './types'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { setUriParams } from '@doge/uri-params'
+import { Response } from 'node-fetch'
 
 const BASE_URL_API_V1 = `${BASE_URL}/${API_V1}`
 const BASE_URL_API_V2 = `${BASE_URL}/${API_V2}`
@@ -32,13 +33,12 @@ const BASE_URL_API_V2 = `${BASE_URL}/${API_V2}`
 const getCall = ({ request, headers }: IPublicApiOptions) =>
   (apiUrl: string) => (path: string) => {
     const endpointUrl = `${apiUrl}/${path}`
-    return async (params: IBittrexParams = {}) => {
+    return (params: IBittrexParams = {}) => {
       const url = setUriParams(params, endpointUrl)
-      const resp = await request(url, {
+      return request(url, {
         method: 'GET',
         headers: headers()
-      })
-      return resp.json()
+      }).then((resp: Response) => resp.json())
     }
   }
 
@@ -46,7 +46,7 @@ const getCredentialsCall = ({ apikey = '', apisecret = '', request, nonce, hash,
   const hashUri = hash(apisecret)
   return (apiUrl: string) => (path: string) => {
     const endpointUrl = `${apiUrl}/${path}`
-    return async (params: IBittrexParams = {}) => {
+    return (params: IBittrexParams = {}) => {
       const uriParams = {
         ...params,
         apikey: apikey,
@@ -55,11 +55,10 @@ const getCredentialsCall = ({ apikey = '', apisecret = '', request, nonce, hash,
       const uri = setUriParams(uriParams, endpointUrl)
       const hdrs = headers()
       hdrs.set('apisign', hashUri(uri))
-      const resp = await request(uri, {
+      return request(uri, {
         method: 'GET',
         headers: hdrs
-      })
-      return resp.json()
+      }).then((resp: Response) => resp.json())
     }
   }
 }
