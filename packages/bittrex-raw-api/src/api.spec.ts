@@ -1,4 +1,4 @@
-import { getCredentialsApi, getPublicApi } from './index'
+import { getCredentialsApi, getPublicApi } from './api'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response, Headers } from 'node-fetch'
 import { setUriParams } from '@doge/uri-params'
@@ -23,8 +23,8 @@ const expectApisign = (spy: SinonSpy, apisign: string) => {
 
 describe('[ raw-api ]', function () {
 
-  let api
-  let spy
+  let api: any
+  let spy: any
 
   beforeEach(() => {
     spy = fetchSpy()

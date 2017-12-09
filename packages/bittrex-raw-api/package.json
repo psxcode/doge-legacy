@@ -26,15 +26,14 @@
     "test:coverage:report": "codecov -f coverage/*.json"
   },
   "dependencies": {
-    "@doge/uri-params": "*",
     "@std/esm": "^0.18.0",
     "node-fetch": "^1.7.3"
   },
   "devDependencies": {
     "@types/chai": "^4.0.6",
-    "@types/node-fetch": "^1.6.7",
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.53",
+    "@types/node-fetch": "^1.6.7",
     "@types/sinon": "^4.0.0",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",

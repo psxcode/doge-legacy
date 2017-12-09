@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@doge/uri-params@*":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@doge/uri-params/-/uri-params-0.1.1.tgz#298e56c349ec05523c12b0fa203855ba69a025f4"
+
 "@std/esm@^0.18.0":
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.18.0.tgz#e212b565c765f93b29ec522a493a192ce7ae2ba6"
@@ -20,15 +24,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^8.0.53":
+"@types/node@*":
   version "8.0.55"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.55.tgz#015966c0af809216b8a46cc527b5c211994d36f0"
 
-"@types/sinon@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.0.0.tgz#9a93ffa4ee1329e85166278a5ed99f81dc4c8362"
+"@types/node@^8.0.53":
+  version "8.0.57"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.57.tgz#e5d8b4dc112763e35cfc51988f4f38da3c486d99"
 
-"@types/sinon@^4.1.0":
+"@types/sinon@^4.0.0", "@types/sinon@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.1.0.tgz#cdfb934d656b2c888e51f53e95900c7bbca11c08"
 
@@ -2470,19 +2474,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.1, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-sinon@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-4.1.2.tgz#65610521d926fb53742dd84cd599f0b89a82f440"
-  dependencies:
-    diff "^3.1.0"
-    formatio "1.2.0"
-    lodash.get "^4.4.2"
-    lolex "^2.2.0"
-    nise "^1.2.0"
-    supports-color "^4.4.0"
-    type-detect "^4.0.0"
-
-sinon@^4.1.3:
+sinon@^4.1.2, sinon@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/sinon/-/sinon-4.1.3.tgz#fc599eda47ed9f1a694ce774b94ab44260bd7ac5"
   dependencies:
