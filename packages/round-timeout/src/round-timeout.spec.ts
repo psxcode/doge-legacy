@@ -1,7 +1,8 @@
 import { assert, expect } from 'chai'
-import { alignTime, alignTimePromise } from './index'
+import { spy, assert as sinonAssert } from 'sinon'
+import { roundTimeout, roundTimeoutPromise } from './index'
 import { timeframes } from './timeframes'
-import { alignValue } from './align-value'
+import { roundValue } from './round-value'
 
 const noop = () => void 0
 const assertIsPositiveNumber = (x: number) => {
@@ -12,7 +13,7 @@ const nows = [0, 1, 5, 5.5, 10, 11, 1000, 1001, 10000, 10000.5]
 
 nows.forEach((now) => {
 
-  describe(`[ helpers / align-time / alignTime ] [now = ${now}]`, function () {
+  describe(`[ roundTimeout ] [now = ${now}]`, function () {
 
     const timeoutSpy = (expectedCallback, expectedMs, next) =>
       (cb: Function, ms: number) => {
@@ -26,15 +27,15 @@ nows.forEach((now) => {
         const startTime = now
         const timeStep = timeframes[timeframeName]
         assertIsPositiveNumber(timeStep)
-        const expectedEndTime = alignValue(timeStep, Math.ceil)(startTime + 1)
+        const expectedEndTime = roundValue(timeStep, Math.ceil)(startTime + 1)
         const spy = timeoutSpy(noop, expectedEndTime - startTime, done)
 
-        alignTime(spy, noop)(timeStep)(noop)(startTime)
+        roundTimeout(spy, noop)(timeStep)(noop)(startTime)
       })
     })
   })
 
-  describe(`[ helpers / align-time / alignTimePromise ] [now = ${now}]`, function () {
+  describe(`[ roundTimeoutPromise ] [now = ${now}]`, function () {
 
     const timeoutSpy = (expectedMs) =>
       (resolve: Function, ms: number) => {
@@ -47,11 +48,25 @@ nows.forEach((now) => {
         const startTime = now
         const timeStep = timeframes[timeframeName]
         assertIsPositiveNumber(timeStep)
-        const expectedEndTime = alignValue(timeStep, Math.ceil)(startTime + 1)
+        const expectedEndTime = roundValue(timeStep, Math.ceil)(startTime + 1)
         const spy = timeoutSpy(expectedEndTime - startTime)
 
-        return alignTimePromise(spy, noop)(timeStep)(startTime)
+        return roundTimeoutPromise(spy, noop)(timeStep)(startTime)
       })
     })
+  })
+})
+
+describe('[ roundTimeout ]', function () {
+  it('', function () {
+    const timeoutSpy = (resolve: any, ms: number) => 10
+    const clearSpy = spy()
+    const cancel = roundTimeout(timeoutSpy, clearSpy)(0)(noop)(0)
+
+    /* invoke cancel */
+    cancel()
+
+    sinonAssert.calledOnce(clearSpy)
+    sinonAssert.calledWith(clearSpy, 10)
   })
 })

@@ -1,11 +1,11 @@
-import { alignValue } from './align-value'
+import { roundValue } from './round-value'
 
 export type TimeoutFunction = (cb: Function, ms: number) => any
-export type ClearTimeoutFunction = (id: number) => void
+export type ClearTimeoutFunction = (id: any) => void
 
-export const alignTime = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunction) =>
+export const roundTimeout = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunction) =>
   (alignStep: number) => {
-    const ceilTime = alignValue(alignStep, Math.ceil)
+    const ceilTime = roundValue(alignStep, Math.ceil)
     return (cb: () => void) => (initialTime: number) => {
       let deltaTime = Math.max(ceilTime(initialTime) - initialTime, 0)
       deltaTime = deltaTime < 1 ? (ceilTime(initialTime + 1) - initialTime) : deltaTime
@@ -14,8 +14,8 @@ export const alignTime = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunct
     }
   }
 
-export const alignTimePromise = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunction) =>
+export const roundTimeoutPromise = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunction) =>
   (ms: number) => {
-    const at = alignTime(timeoutFn, clearFn)(ms)
+    const at = roundTimeout(timeoutFn, clearFn)(ms)
     return (initialTime: number) => new Promise((resolve) => at(resolve)(initialTime))
   }
