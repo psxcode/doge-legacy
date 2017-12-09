@@ -12,7 +12,7 @@ const nonce = () => 42
 const apikey = 'key'
 const apisecret = 'secret'
 const hashUri = hash(apisecret)
-const fetchSpy = () => mock().returns(new Response('{}', { status: 200 }))
+const fetchSpy = () => mock().returns(Promise.resolve(new Response('{}', { status: 200 })))
 const expectCalledOnce = (spy: SinonSpy) => assert.calledOnce(spy)
 const expectUrl = (spy: SinonSpy, expectedUrl: string) => assert.calledWith(spy, expectedUrl)
 const expectApisign = (spy: SinonSpy, apisign: string) => {

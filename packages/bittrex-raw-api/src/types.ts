@@ -6,8 +6,8 @@ export interface IPublicApiOptions {
 }
 
 export interface IApiOptions {
-  apikey?: string
-  apisecret?: string
+  apikey: string
+  apisecret: string
   request: typeof fetch
   nonce: () => number
   hash: (secret: string) => (str: string) => string

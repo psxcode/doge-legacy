@@ -42,7 +42,7 @@ const getCall = ({ request, headers }: IPublicApiOptions) =>
     }
   }
 
-const getCredentialsCall = ({ apikey = '', apisecret = '', request, nonce, hash, headers }: IApiOptions) => {
+const getCredentialsCall = ({ apikey, apisecret, request, nonce, hash, headers }: IApiOptions) => {
   const hashUri = hash(apisecret)
   return (apiUrl: string) => (path: string) => {
     const endpointUrl = `${apiUrl}/${path}`
