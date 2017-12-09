@@ -38,7 +38,7 @@ describe(`[ roundIntervalObservable ]`, function () {
     const nextSpy = sinon.spy()
     const completeSpy = sinon.spy()
 
-    const sub = roundIntervalObservable(timeoutSpy, clearSpy, now)(1000, 0)
+    roundIntervalObservable(timeoutSpy, clearSpy, now)(1000, 0)
       .take(2)
       .subscribe(nextSpy, noop, completeSpy)
 
@@ -46,8 +46,7 @@ describe(`[ roundIntervalObservable ]`, function () {
       sinon.assert.calledTwice(nextSpy)
       sinon.assert.calledOnce(completeSpy)
       sinon.assert.calledTwice(timeoutSpy)
-      // sinon.assert.calledOnce(clearSpy)
-      // sinon.assert.calledWith(clearSpy, 42)
+      sinon.assert.notCalled(clearSpy)
       done()
     }, 100)
   })
