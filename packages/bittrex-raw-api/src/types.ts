@@ -200,8 +200,8 @@ export type IBittrexGetMarketHistory = (params: IBittrexGetMarketHistoryParams) 
 /*  */
 export interface IBittrexBuySellParams extends IBittrexParams {
   market: string,
-  quantity: string,
-  rate: string
+  quantity: string | number,
+  rate: string | number
 }
 
 export interface IBittrexBuySellResponse extends IBittrexResponse {
@@ -427,3 +427,32 @@ export interface IBittrexGetDepositHistoryResponse extends IBittrexResponse {
 }
 
 export type IBittrexGetDepositHistory = (params: IBittrexGetDepositHistoryParams) => Promise<IBittrexGetDepositHistoryResponse>
+
+export interface IPublicApi {
+  getmarkets: IBittrexGetMarkets,
+  getcurrencies: IBittrexGetCurrencies,
+  getticker: IBittrexGetTicker,
+  getticks: IBittrexGetTicks,
+  getlatesttick: IBittrexGetLatestTick,
+  getmarketsummaries: IBittrexGetMarketSummaries,
+  getmarketsummary: IBittrexGetMarketSummary,
+  getorderbook: IBittrexGetOrderBook,
+  getmarkethistory: IBittrexGetMarketHistory
+}
+
+export interface ICredentialsApi {
+  buylimit: IBittrexBuySell,
+  buymarket: IBittrexBuySell,
+  selllimit: IBittrexBuySell,
+  sellmarket: IBittrexBuySell,
+  cancel: IBittrexCancel,
+  getopenorders: IBittrexGetOpenOrders,
+  getbalances: IBittrexGetBalances,
+  getbalance: IBittrexGetBalance,
+  getwithdrawalhistory: IBittrexGetWithdrawalHistory,
+  getdepositaddress: IBittrexGetDepositAddress,
+  getdeposithistory: IBittrexGetDepositHistory,
+  getorderhistory: IBittrexGetOrderHistory,
+  getorder: IBittrexGetOrder,
+  withdraw: IBittrexWithdraw
+}

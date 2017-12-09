@@ -20,18 +20,16 @@ import {
   IBittrexGetTicks,
   IBittrexGetWithdrawalHistory,
   IBittrexParams,
-  IBittrexWithdraw,
+  IBittrexWithdraw, ICredentialsApi, IPublicApi,
   IPublicApiOptions
 } from './types'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response } from 'node-fetch'
 import { URL, URLSearchParams } from 'url'
+import { entries } from './helpers'
 
 const BASE_URL_API_V1 = new URL(`${API_V1}/`, BASE_URL)
 const BASE_URL_API_V2 = new URL(`${API_V2}/`, BASE_URL)
-
-const entries = (params: IBittrexParams) =>
-  Object.keys(params).map((k: string) => [k, `${params[k]}`] as [string, string])
 
 const getCall = ({ request, headers }: IPublicApiOptions) =>
   (apiUrl: URL) => (path: string) => (params: IBittrexParams = {}) => {
@@ -64,7 +62,7 @@ const getCredentialsCall = ({ apikey, apisecret, request, nonce, hash, headers }
   }
 }
 
-export function getPublicApi (opts: IPublicApiOptions) {
+export function getPublicApi (opts: IPublicApiOptions): IPublicApi {
   const bxPubV1Get = getCall(opts)(BASE_URL_API_V1)
   const bxPubV2Get = getCall(opts)(BASE_URL_API_V2)
 
@@ -91,15 +89,13 @@ export function getPublicApi (opts: IPublicApiOptions) {
   }
 }
 
-export function getCredentialsApi (opts: IApiOptions) {
+export function getCredentialsApi (opts: IApiOptions): ICredentialsApi {
   const bxPrivV1Get = getCredentialsCall(opts)(BASE_URL_API_V1)
 
   const buylimit = bxPrivV1Get('market/buylimit') as IBittrexBuySell
   const buymarket = bxPrivV1Get('market/buymarket') as IBittrexBuySell
   const selllimit = bxPrivV1Get('market/selllimit') as IBittrexBuySell
   const sellmarket = bxPrivV1Get('market/sellmarket') as IBittrexBuySell
-  const tradebuy = bxPrivV1Get('key/market/tradebuy')
-  const tradesell = bxPrivV1Get('key/market/tradesell')
   const cancel = bxPrivV1Get('market/cancel') as IBittrexCancel
   const getopenorders = bxPrivV1Get('market/getopenorders') as IBittrexGetOpenOrders
   const getbalances = bxPrivV1Get('market/getbalances') as IBittrexGetBalances
@@ -116,8 +112,6 @@ export function getCredentialsApi (opts: IApiOptions) {
     buymarket,
     selllimit,
     sellmarket,
-    tradebuy,
-    tradesell,
     cancel,
     getopenorders,
     getbalances,

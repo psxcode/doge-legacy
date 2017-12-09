@@ -1,10 +1,11 @@
 import { getCredentialsApi, getPublicApi } from './api'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response, Headers } from 'node-fetch'
-import { setUriParams } from '@doge/uri-params'
 import { SinonSpy, mock, assert } from 'sinon'
 import { expect } from 'chai'
-import { IBittrexParams } from './types'
+import { IBittrexParams, ICredentialsApi, IPublicApi } from './types'
+import { URL, URLSearchParams } from 'url'
+import { entries } from './helpers'
 
 const hash = (secret: string) => (str: string) => `${secret}${str}`
 const headers = () => new Headers()
@@ -20,10 +21,16 @@ const expectApisign = (spy: SinonSpy, apisign: string) => {
   const hdrs = opts.headers
   expect(hdrs.get('apisign')).eq(apisign)
 }
+const setUriParams = (params: IBittrexParams, baseUrl: string) => {
+  const url = new URL(baseUrl)
+  const search = new URLSearchParams(entries(params))
+  url.search = `${search}`
+  return `${url}`
+}
 
 describe('[ raw-api ]', function () {
 
-  let api: any
+  let api: IPublicApi
   let spy: any
 
   beforeEach(() => {
@@ -157,9 +164,10 @@ describe('[ raw-api ]', function () {
 
 describe('[ credentials-api ]', function () {
 
-  let spy
-  let api
-  const credParams = (params: IBittrexParams = {}) => ({ ...params, ...{ apikey, nonce: nonce() } })
+  let spy: any
+  let api: ICredentialsApi
+  const credParams = (params: IBittrexParams = {}): IBittrexParams =>
+    ({ ...params, apikey, nonce: nonce() })
 
   beforeEach(() => {
     spy = fetchSpy()
@@ -243,38 +251,6 @@ describe('[ credentials-api ]', function () {
       const expectedApisign = hashUri(expectedUrl)
 
       await api.sellmarket(uriParams)
-
-      expectCalledOnce(spy)
-      expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
-    })
-  })
-
-  describe('[ raw-api / tradebuy ]', function () {
-
-    const url = `${BASE_URL}/${API_V1}/key/market/tradebuy`
-
-    it('should call endpoint with proper params', async function () {
-      const expectedUrl = setUriParams(credParams(), url)
-      const expectedApisign = hashUri(expectedUrl)
-
-      await api.tradebuy()
-
-      expectCalledOnce(spy)
-      expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
-    })
-  })
-
-  describe('[ raw-api / tradesell ]', function () {
-
-    const url = `${BASE_URL}/${API_V1}/key/market/tradesell`
-
-    it('should call endpoint with proper params', async function () {
-      const expectedUrl = setUriParams(credParams(), url)
-      const expectedApisign = hashUri(expectedUrl)
-
-      await api.tradesell()
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)

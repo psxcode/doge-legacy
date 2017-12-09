@@ -15,5 +15,5 @@ export default {
     commonjs()
   ],
 
-  external: [],
+  external: ['url'],
 }
