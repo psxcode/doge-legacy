@@ -1,8 +1,8 @@
-import fetch, { Headers } from 'node-fetch'
+import fetch, { RequestInit } from 'node-fetch'
 
 export interface IPublicApiOptions {
   request: typeof fetch
-  headers: () => Headers
+  headers: () => typeof RequestInit.headers
 }
 
 export interface IApiOptions {
@@ -11,7 +11,7 @@ export interface IApiOptions {
   request: typeof fetch
   nonce: () => number
   hash: (secret: string) => (str: string) => string
-  headers: () => Headers
+  headers: () => typeof RequestInit.headers
 }
 
 export interface IBittrexParams {

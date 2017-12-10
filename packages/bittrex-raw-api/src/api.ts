@@ -34,8 +34,7 @@ const BASE_URL_API_V2 = new URL(`${API_V2}/`, BASE_URL)
 const getCall = ({ request, headers }: IPublicApiOptions) =>
   (apiUrl: URL) => (path: string) => (params: IBittrexParams = {}) => {
     const url = new URL(path, apiUrl)
-    const search = new URLSearchParams(entries(params))
-    url.search = `${search}`
+    url.search = `${new URLSearchParams(entries(params))}`
     return request(`${url}`, {
       method: 'GET',
       headers: headers()
@@ -51,13 +50,13 @@ const getCredentialsCall = ({ apikey, apisecret, request, nonce, hash, headers }
       apikey: apikey,
       nonce: nonce()
     }
-    const search = new URLSearchParams(entries(searchParams))
-    url.search = `${search}`
-    const hdrs = headers()
-    hdrs.set('apisign', hashUri(`${url}`))
+    url.search = `${new URLSearchParams(entries(searchParams))}`
     return request(`${url}`, {
       method: 'GET',
-      headers: hdrs
+      headers: {
+        ...headers(),
+        apisign: hashUri(`${url}`)
+      }
     }).then((resp: Response) => resp.json())
   }
 }

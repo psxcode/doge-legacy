@@ -19,7 +19,7 @@ const expectUrl = (spy: SinonSpy, expectedUrl: string) => assert.calledWith(spy,
 const expectApisign = (spy: SinonSpy, apisign: string) => {
   const opts = spy.getCall(0).args[1]
   const hdrs = opts.headers
-  expect(hdrs.get('apisign')).eq(apisign)
+  expect(hdrs.apisign).eq(apisign)
 }
 const setUriParams = (params: IBittrexParams, baseUrl: string) => {
   const url = new URL(baseUrl)
