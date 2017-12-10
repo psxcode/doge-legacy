@@ -1,69 +1,19 @@
 import {
-  IApiOptions,
-  IBittrexBuySell,
-  IBittrexCancel,
-  IBittrexGetBalance,
-  IBittrexGetBalances,
-  IBittrexGetCurrencies,
-  IBittrexGetDepositAddress,
-  IBittrexGetDepositHistory,
-  IBittrexGetLatestTick,
-  IBittrexGetMarketHistory,
-  IBittrexGetMarkets,
-  IBittrexGetMarketSummaries,
-  IBittrexGetMarketSummary,
-  IBittrexGetOpenOrders,
-  IBittrexGetOrder,
-  IBittrexGetOrderBook,
-  IBittrexGetOrderHistory,
-  IBittrexGetTicker,
-  IBittrexGetTicks,
-  IBittrexGetWithdrawalHistory,
-  IBittrexParams,
-  IBittrexWithdraw, ICredentialsApi, IPublicApi,
-  IPublicApiOptions
+  IApiOptions, IBittrexBuySell, IBittrexCancel, IBittrexGetBalance, IBittrexGetBalances, IBittrexGetCurrencies,
+  IBittrexGetDepositAddress, IBittrexGetDepositHistory, IBittrexGetLatestTick, IBittrexGetMarketHistory,
+  IBittrexGetMarkets, IBittrexGetMarketSummaries, IBittrexGetMarketSummary, IBittrexGetOpenOrders, IBittrexGetOrder,
+  IBittrexGetOrderBook, IBittrexGetOrderHistory, IBittrexGetTicker, IBittrexGetTicks, IBittrexGetWithdrawalHistory,
+  IBittrexWithdraw, ICredentialsApi, IPublicApi, IPublicApiOptions
 } from './types'
 import { API_V1, API_V2, BASE_URL } from './config'
-import { Response } from 'node-fetch'
-import { URL, URLSearchParams } from 'url'
-import { entries } from './helpers'
+import { credentialsGet, publicGet } from './helpers'
 
-const BASE_URL_API_V1 = new URL(`${API_V1}/`, BASE_URL)
-const BASE_URL_API_V2 = new URL(`${API_V2}/`, BASE_URL)
-
-const getCall = ({ request, headers }: IPublicApiOptions) =>
-  (apiUrl: URL) => (path: string) => (params: IBittrexParams = {}) => {
-    const url = new URL(path, apiUrl)
-    url.search = `${new URLSearchParams(entries(params))}`
-    return request(`${url}`, {
-      method: 'GET',
-      headers: headers()
-    }).then((resp: Response) => resp.json())
-  }
-
-const getCredentialsCall = ({ apikey, apisecret, request, nonce, hash, headers }: IApiOptions) => {
-  const hashUri = hash(apisecret)
-  return (apiUrl: URL) => (path: string) => (params: IBittrexParams = {}) => {
-    const url = new URL(path, apiUrl)
-    const searchParams: IBittrexParams = {
-      ...params,
-      apikey: apikey,
-      nonce: nonce()
-    }
-    url.search = `${new URLSearchParams(entries(searchParams))}`
-    return request(`${url}`, {
-      method: 'GET',
-      headers: {
-        ...headers(),
-        apisign: hashUri(`${url}`)
-      }
-    }).then((resp: Response) => resp.json())
-  }
-}
+const BASE_URL_API_V1 = `${BASE_URL}/${API_V1}/`
+const BASE_URL_API_V2 = `${BASE_URL}/${API_V2}/`
 
 export function getPublicApi (opts: IPublicApiOptions): IPublicApi {
-  const bxPubV1Get = getCall(opts)(BASE_URL_API_V1)
-  const bxPubV2Get = getCall(opts)(BASE_URL_API_V2)
+  const bxPubV1Get = publicGet(opts)(BASE_URL_API_V1)
+  const bxPubV2Get = publicGet(opts)(BASE_URL_API_V2)
 
   const getmarkets = bxPubV1Get('public/getmarkets') as IBittrexGetMarkets
   const getcurrencies = bxPubV1Get('public/getcurrencies') as IBittrexGetCurrencies
@@ -89,7 +39,7 @@ export function getPublicApi (opts: IPublicApiOptions): IPublicApi {
 }
 
 export function getCredentialsApi (opts: IApiOptions): ICredentialsApi {
-  const bxPrivV1Get = getCredentialsCall(opts)(BASE_URL_API_V1)
+  const bxPrivV1Get = credentialsGet(opts)(BASE_URL_API_V1)
 
   const buylimit = bxPrivV1Get('market/buylimit') as IBittrexBuySell
   const buymarket = bxPrivV1Get('market/buymarket') as IBittrexBuySell
