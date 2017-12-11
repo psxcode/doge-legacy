@@ -5,7 +5,7 @@ import { SinonSpy, mock, assert } from 'sinon'
 import { expect } from 'chai'
 import { IBittrexParams, ICredentialsApi, IPublicApi } from './types'
 import { URL, URLSearchParams } from 'url'
-import { entries } from './helpers'
+import { entries } from '@doge/helpers'
 
 const hash = (secret: string) => (str: string) => `${secret}${str}`
 const headers = () => new Headers()

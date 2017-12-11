@@ -1,11 +1,8 @@
 import { Observable, Observer } from 'rxjs'
 import { roundTimeout, ClearTimeoutFunction, TimeoutFunction } from '@doge/round-timeout'
+import { pipe } from '@doge/helpers'
 
 export type CurrentTimeFunction = (offset: number) => () => number
-const pipe = (...functions: any[]): any => {
-  const [fn, ...fns] = functions
-  return (...args: any[]) => fns.length ? pipe(...fns)(fn(...args)) : fn(...args)
-}
 
 export const roundIntervalObservable = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunction, currentTimeFn: CurrentTimeFunction) =>
   (roundMs: number, offsetMs: number): Observable<number> =>

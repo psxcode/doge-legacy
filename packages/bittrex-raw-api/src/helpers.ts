@@ -1,9 +1,7 @@
 import { IApiOptions, IBittrexParams, IPublicApiOptions } from './types'
 import { Response } from 'node-fetch'
+import { entries } from '@doge/helpers'
 import { URL, URLSearchParams } from 'url'
-
-export const entries = (params: IBittrexParams) =>
-  Object.keys(params).map((k: string) => [k, `${params[k]}`] as [string, string])
 
 export const publicGet = ({ request, headers }: IPublicApiOptions) =>
   (apiUrl: string) => (path: string) => (params: IBittrexParams = {}) => {
