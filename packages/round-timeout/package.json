@@ -14,7 +14,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn rollup -c rollup.config.js",
+    "build": "yarn clean && yarn rollup -c rollup.config.js",
     "clean": "rimraf dist",
     "test": "nyc yarn mocha",
     "test:watch": "yarn mocha -- --watch",

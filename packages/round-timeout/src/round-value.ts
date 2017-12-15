@@ -1,2 +1,3 @@
-export const roundValue = (roundTo: number, roundingOperation = Math.round) =>
-  (value: number): number => roundingOperation(value / roundTo) * roundTo
+export type RoundingFn = typeof Math.round
+export const roundValue = (roundTo: number, roundingFn: RoundingFn) =>
+  (value: number): number => roundingFn(value / roundTo) * roundTo

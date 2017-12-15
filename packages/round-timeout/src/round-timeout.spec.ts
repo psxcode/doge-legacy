@@ -15,7 +15,7 @@ nows.forEach((now) => {
 
   describe(`[ roundTimeout ] [now = ${now}]`, function () {
 
-    const timeoutSpy = (expectedCallback, expectedMs, next) =>
+    const timeoutSpy = (expectedCallback: any, expectedMs: number, next: any) =>
       (cb: Function, ms: number) => {
         expect(cb).eq(expectedCallback)
         expect(ms).eq(expectedMs)
@@ -37,7 +37,7 @@ nows.forEach((now) => {
 
   describe(`[ roundTimeoutPromise ] [now = ${now}]`, function () {
 
-    const timeoutSpy = (expectedMs) =>
+    const timeoutSpy = (expectedMs: number) =>
       (resolve: Function, ms: number) => {
         expect(ms).eq(expectedMs)
         resolve()

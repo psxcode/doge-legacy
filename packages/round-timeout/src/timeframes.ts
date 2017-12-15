@@ -1,4 +1,7 @@
-export const timeframes = {
+export type Timeframes = {
+  [key: string]: number
+}
+export const timeframes: Timeframes = {
   '1s': 1000,
   '5s': 5 * 1000,
   '10s': 10 * 1000,
