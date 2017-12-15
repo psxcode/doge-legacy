@@ -1,9 +1,23 @@
-import { IBittrexParams } from '../../bittrex-raw-api/src/types'
-
-export const pipe = (...functions: any[]): any => {
+export type Fn = (...args: any[]) => any
+export const pipe = (...functions: Fn[]): Fn => {
   const [fn, ...fns] = functions
-  return (...args: any[]) => fns.length ? pipe(...fns)(fn(...args)) : fn(...args)
+  return (...args: any[]) => fns.length
+    ? pipe(...fns)(fn(...args))
+    : fn(...args)
 }
 
-export const entries = (params: {[key: string]: any}) =>
-  Object.keys(params).map((k: string): [string, any] => [k, `${params[k]}`])
+export type asyncFn = (...args: any[]) => Promise<any>
+export const pipeAsync = (...functions: asyncFn[]): asyncFn => {
+  const [fn, ...fns] = functions
+  return (...args: any[]) => fns.length
+    ? fn(...args).then((res: any) => pipeAsync(...fns)(res))
+    : fn(...args)
+}
+
+export type Params = {
+  [key: string]: any
+}
+export const entries = (params: Params) =>
+  Object
+    .keys(params)
+    .map((k: string): [string, any] => [k, `${params[k]}`])
