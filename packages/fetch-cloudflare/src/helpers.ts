@@ -2,7 +2,7 @@ import { createContext, runInContext } from 'vm'
 
 export const base64ascii = (base64: string) => new Buffer(base64, 'base64').toString('ascii')
 
-export const runCookieCode = (code: string) => {
+export const runCookieCode = (code: string): string => {
   const sandbox = createContext({
     document: {},
     location: {
