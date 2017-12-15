@@ -21,3 +21,7 @@ export const entries = (params: Params) =>
   Object
     .keys(params)
     .map((k: string): [string, any] => [k, `${params[k]}`])
+
+export type AnyFn = (...args: any[]) => any
+export const promisify = (f: AnyFn) => (...args: any[]) =>
+  new Promise((resolve, reject) => f(...args, (err: any, val: any) => err ? reject(err) : resolve(val)))
