@@ -16,7 +16,7 @@
     "test": "lerna run test",
     "bootstrap": "lerna bootstrap",
     "commit": "git-cz",
-    "build": "yarn clean && lerna run build",
+    "build": "lerna run build",
     "release": "lerna publish --conventional-commits -m 'chore(release): publish'",
     "clean": "lerna run clean"
   },
