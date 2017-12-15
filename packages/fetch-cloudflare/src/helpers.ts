@@ -1,8 +1,5 @@
 import { createContext, runInContext } from 'vm'
 
-export const promisify = (f) => (...args) =>
-  new Promise((resolve, reject) => f(...args, (err, val) => err ? reject(err) : resolve(val)))
-
 export const base64ascii = (base64: string) => new Buffer(base64, 'base64').toString('ascii')
 
 export const runCookieCode = (code: string) => {
