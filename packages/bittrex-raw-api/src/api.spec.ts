@@ -4,14 +4,13 @@ import { Response, Headers } from 'node-fetch'
 import { SinonSpy, mock, assert } from 'sinon'
 import { IBittrexParams, ICredentialsApi, IPublicApi } from './types'
 import { URL, URLSearchParams } from 'url'
-import { entries } from '@doge/helpers'
 
 const fetchSpy = () => mock().returns(Promise.resolve(new Response('{}', { status: 200 })))
 const expectCalledOnce = (spy: SinonSpy) => assert.calledOnce(spy)
 const expectUrl = (spy: SinonSpy, expectedUrl: string) => assert.calledWith(spy, expectedUrl)
 const setUriParams = (params: IBittrexParams, baseUrl: string) => {
   const url = new URL(baseUrl)
-  const search = new URLSearchParams(entries(params))
+  const search = new URLSearchParams(params)
   url.search = `${search}`
   return `${url}`
 }

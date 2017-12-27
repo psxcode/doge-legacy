@@ -9,7 +9,6 @@ import {
 import { API_V1, API_V2, BASE_URL } from './config'
 import { default as fetch, Response } from 'node-fetch'
 import { URL, URLSearchParams } from 'url'
-import { entries } from '@doge/helpers'
 
 const BASE_URL_API_V1 = `${BASE_URL}/${API_V1}/`
 const BASE_URL_API_V2 = `${BASE_URL}/${API_V2}/`
@@ -18,7 +17,7 @@ const apiRequest = (request: typeof fetch) =>
   (baseUrl: string) => (path: string) => {
     const url = new URL(path, baseUrl)
     return (params: IBittrexParams): Promise<IBittrexResponse> => {
-      url.search = `${new URLSearchParams(entries(params))}`
+      url.search = `${new URLSearchParams(params)}`
       return request(`${url}`).then((resp: Response) => resp.json())
     }
   }
