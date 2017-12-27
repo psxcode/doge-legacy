@@ -2,7 +2,7 @@ import { createContext, runInContext } from 'vm'
 
 export const base64ascii = (base64: string) => new Buffer(base64, 'base64').toString('ascii')
 
-export const runCookieCode = (code: string): string => {
+export const runCookieSettingCode = (code: string): string => {
   const sandbox = createContext({
     document: {},
     location: {
@@ -10,7 +10,7 @@ export const runCookieCode = (code: string): string => {
     }
   })
   runInContext(code, sandbox)
-  return sandbox['document']['cookie']
+  return (sandbox as any)['document']['cookie']
 }
 
 export const getCookieSettingCode = (body: string): string => {
