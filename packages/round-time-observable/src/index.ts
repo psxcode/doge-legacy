@@ -3,6 +3,7 @@ import { roundTimeout, ClearTimeoutFunction, TimeoutFunction } from '@doge/round
 import { pipe } from '@doge/helpers'
 
 export type CurrentTimeFunction = (offset: number) => () => number
+export type CancelTimeoutFn = (() => void) | undefined
 
 export const roundIntervalObservable = (timeoutFn: TimeoutFunction, clearFn: ClearTimeoutFunction, currentTimeFn: CurrentTimeFunction) =>
   (roundMs: number, offsetMs: number): Observable<number> =>
@@ -10,7 +11,7 @@ export const roundIntervalObservable = (timeoutFn: TimeoutFunction, clearFn: Cle
       const at = pipe(currentTimeFn(offsetMs), roundTimeout(timeoutFn, clearFn)(roundMs)(tick))
       let count = 0
       let done = false
-      let timeout = at()
+      let timeout: CancelTimeoutFn = at()
 
       /* return unsubscribe function */
       return () => {
