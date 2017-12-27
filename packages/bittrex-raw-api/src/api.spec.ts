@@ -2,25 +2,13 @@ import { getCredentialsApi, getPublicApi } from './api'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response, Headers } from 'node-fetch'
 import { SinonSpy, mock, assert } from 'sinon'
-import { expect } from 'chai'
 import { IBittrexParams, ICredentialsApi, IPublicApi } from './types'
 import { URL, URLSearchParams } from 'url'
 import { entries } from '@doge/helpers'
 
-const hash = (secret: string) => (str: string) => `${secret}${str}`
-const headers = () => new Headers()
-const nonce = () => 42
-const apikey = 'key'
-const apisecret = 'secret'
-const hashUri = hash(apisecret)
 const fetchSpy = () => mock().returns(Promise.resolve(new Response('{}', { status: 200 })))
 const expectCalledOnce = (spy: SinonSpy) => assert.calledOnce(spy)
 const expectUrl = (spy: SinonSpy, expectedUrl: string) => assert.calledWith(spy, expectedUrl)
-const expectApisign = (spy: SinonSpy, apisign: string) => {
-  const opts = spy.getCall(0).args[1]
-  const hdrs = opts.headers
-  expect(hdrs.apisign).eq(apisign)
-}
 const setUriParams = (params: IBittrexParams, baseUrl: string) => {
   const url = new URL(baseUrl)
   const search = new URLSearchParams(entries(params))
@@ -35,7 +23,7 @@ describe('[ raw-api ]', function () {
 
   beforeEach(() => {
     spy = fetchSpy()
-    api = getPublicApi({ request: spy, headers })
+    api = getPublicApi({ request: spy })
   })
 
   describe('[ raw-api / getmarkets ]', function () {
@@ -166,12 +154,10 @@ describe('[ credentials-api ]', function () {
 
   let spy: any
   let api: ICredentialsApi
-  const credParams = (params: IBittrexParams = {}): IBittrexParams =>
-    ({ ...params, apikey, nonce: nonce() })
 
   beforeEach(() => {
     spy = fetchSpy()
-    api = getCredentialsApi({ apikey, apisecret, request: spy, headers, nonce, hash })
+    api = getCredentialsApi({ request: spy })
   })
 
   describe('[ raw-api / buylimit ]', function () {
@@ -181,17 +167,15 @@ describe('[ credentials-api ]', function () {
     it('should call endpoint with proper params', async function () {
       const uriParams = {
         market: 'BTC-DOGE',
-        quantity: 1.2,
-        rate: 1.3
+        quantity: '1.2',
+        rate: '1.3'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.buylimit(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -205,14 +189,12 @@ describe('[ credentials-api ]', function () {
         quantity: '1.2',
         rate: '1.3'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.buymarket(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -226,14 +208,12 @@ describe('[ credentials-api ]', function () {
         quantity: '1.2',
         rate: '1.3'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.selllimit(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -247,14 +227,12 @@ describe('[ credentials-api ]', function () {
         quantity: '1.2',
         rate: '1.3'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.sellmarket(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -266,14 +244,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         uuid: 'UUID'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.cancel(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -285,14 +261,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         market: 'BTC-DOGE'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getopenorders(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -301,14 +275,12 @@ describe('[ credentials-api ]', function () {
     const url = `${BASE_URL}/${API_V1}/market/getbalances`
 
     it('should call endpoint with proper params', async function () {
-      const expectedUrl = setUriParams(credParams(), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams({}, url)
 
       await api.getbalances()
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -320,14 +292,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         currency: 'DOGE'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getbalance(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -339,14 +309,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         currency: 'DOGE'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getwithdrawalhistory(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -358,14 +326,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         currency: 'DOGE'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getdepositaddress(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -377,14 +343,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         currency: 'DOGE'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getdeposithistory(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -396,14 +360,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         market: 'BTC-DOGE'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getorderhistory(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -415,14 +377,12 @@ describe('[ credentials-api ]', function () {
       const uriParams = {
         uuid: 'UUID'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.getorder(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 
@@ -437,14 +397,12 @@ describe('[ credentials-api ]', function () {
         address: 'address',
         paymentId: 'ID'
       }
-      const expectedUrl = setUriParams(credParams(uriParams), url)
-      const expectedApisign = hashUri(expectedUrl)
+      const expectedUrl = setUriParams(uriParams, url)
 
       await api.withdraw(uriParams)
 
       expectCalledOnce(spy)
       expectUrl(spy, expectedUrl)
-      expectApisign(spy, expectedApisign)
     })
   })
 

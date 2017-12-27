@@ -1,21 +1,11 @@
-import fetch, { RequestInit } from 'node-fetch'
-
-export interface IPublicApiOptions {
-  request: typeof fetch
-  headers: () => typeof RequestInit.headers
-}
+import fetch from 'node-fetch'
 
 export interface IApiOptions {
-  apikey: string
-  apisecret: string
   request: typeof fetch
-  nonce: () => number
-  hash: (secret: string) => (str: string) => string
-  headers: () => typeof RequestInit.headers
 }
 
 export interface IBittrexParams {
-  [key: string]: string | number | undefined
+  [key: string]: string | undefined
 }
 
 export interface IBittrexResponse {
@@ -200,8 +190,8 @@ export type IBittrexGetMarketHistory = (params: IBittrexGetMarketHistoryParams) 
 /*  */
 export interface IBittrexBuySellParams extends IBittrexParams {
   market: string,
-  quantity: string | number,
-  rate: string | number
+  quantity: string,
+  rate: string
 }
 
 export interface IBittrexBuySellResponse extends IBittrexResponse {
