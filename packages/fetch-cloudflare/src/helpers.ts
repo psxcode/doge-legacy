@@ -1,4 +1,4 @@
-import { createContext, runInContext } from 'vm'
+import { createContext, runInContext, runInNewContext } from 'vm'
 
 export const base64ascii = (base64: string) => new Buffer(base64, 'base64').toString('ascii')
 
@@ -41,14 +41,13 @@ export const getChallengeMethod = (body: string): string => {
 
 export const modifyChallengeMethod = (method: string): string => {
   return method
-    .replace(/a\.value =(.+?) \+ .+?;/i, '$1')
-    .replace(/\s{3,}[a-z](?: = |\.).+/g, '')
+    .replace(/a\.value = (.+?) \+ .+?;/i, '$1')
+    .replace(/\s+[a-z](?: = |\.i).+/g, '')
     .replace(/'; \d+'/g, '')
 }
 
 export const evalChallenge = (challenge: string): number => {
-  // tslint:disable-next-line
-  return eval(challenge)
+  return Number(runInNewContext(challenge))
 }
 
 export const isCaptchaError = (body: string): boolean => {
