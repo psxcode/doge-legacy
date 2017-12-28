@@ -1,10 +1,29 @@
 import {
-  IApiOptions, IBittrexBuySell, IBittrexCancel, IBittrexGetBalance, IBittrexGetBalances, IBittrexGetCurrencies,
-  IBittrexGetDepositAddress, IBittrexGetDepositHistory, IBittrexGetLatestTick, IBittrexGetMarketHistory,
-  IBittrexGetMarkets, IBittrexGetMarketSummaries, IBittrexGetMarketSummary, IBittrexGetOpenOrders, IBittrexGetOrder,
-  IBittrexGetOrderBook, IBittrexGetOrderHistory, IBittrexGetTicker, IBittrexGetTicks, IBittrexGetWithdrawalHistory,
-  IBittrexParams, IBittrexResponse,
-  IBittrexWithdraw, ICredentialsApi, IPublicApi
+  IApiOptions,
+  IBittrexBuySell,
+  IBittrexCancel,
+  IBittrexGetBalance,
+  IBittrexGetBalances,
+  IBittrexGetCurrencies,
+  IBittrexGetDepositAddress,
+  IBittrexGetDepositHistory,
+  IBittrexGetLatestTick,
+  IBittrexGetMarketHistory,
+  IBittrexGetMarkets,
+  IBittrexGetMarketSummaries,
+  IBittrexGetMarketSummary,
+  IBittrexGetOpenOrders,
+  IBittrexGetOrder,
+  IBittrexGetOrderBook,
+  IBittrexGetOrderHistory,
+  IBittrexGetTicker,
+  IBittrexGetTicks,
+  IBittrexGetWithdrawalHistory,
+  IBittrexParams,
+  IBittrexResponse,
+  IBittrexWithdraw,
+  ICredentialsApi,
+  IPublicApi
 } from './types'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { default as fetch, Response } from 'node-fetch'
@@ -13,14 +32,14 @@ import { URL, URLSearchParams } from 'url'
 const BASE_URL_API_V1 = `${BASE_URL}/${API_V1}/`
 const BASE_URL_API_V2 = `${BASE_URL}/${API_V2}/`
 
-const apiRequest = (request: typeof fetch) =>
-  (baseUrl: string) => (path: string) => {
-    const url = new URL(path, baseUrl)
-    return (params: IBittrexParams): Promise<IBittrexResponse> => {
-      url.search = `${new URLSearchParams(params)}`
-      return request(`${url}`).then((resp: Response) => resp.json())
-    }
+export type BittrexRequestFn = (params?: IBittrexParams) => Promise<IBittrexResponse>
+const apiRequest = (request: typeof fetch) => (baseUrl: string) => (path: string): BittrexRequestFn => {
+  const url = new URL(path, baseUrl)
+  return (params?: IBittrexParams): Promise<IBittrexResponse> => {
+    url.search = params ? `${new URLSearchParams(params)}` : ''
+    return request(`${url}`).then((resp: Response) => resp.json())
   }
+}
 
 export function getPublicApi ({ request }: IApiOptions): IPublicApi {
   const bxPubV1Get = apiRequest(request)(BASE_URL_API_V1)

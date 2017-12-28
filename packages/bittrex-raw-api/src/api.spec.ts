@@ -1,11 +1,11 @@
 import { getCredentialsApi, getPublicApi } from './api'
 import { API_V1, API_V2, BASE_URL } from './config'
-import { Response, Headers } from 'node-fetch'
+import { Response } from 'node-fetch'
 import { SinonSpy, mock, assert } from 'sinon'
 import { IBittrexParams, ICredentialsApi, IPublicApi } from './types'
 import { URL, URLSearchParams } from 'url'
 
-const fetchSpy = () => mock().returns(Promise.resolve(new Response('{}', { status: 200 })))
+const makeRequestSpy = () => mock().returns(Promise.resolve(new Response('{}', { status: 200 })))
 const expectCalledOnce = (spy: SinonSpy) => assert.calledOnce(spy)
 const expectUrl = (spy: SinonSpy, expectedUrl: string) => assert.calledWith(spy, expectedUrl)
 const setUriParams = (params: IBittrexParams, baseUrl: string) => {
@@ -18,10 +18,10 @@ const setUriParams = (params: IBittrexParams, baseUrl: string) => {
 describe('[ raw-api ]', function () {
 
   let api: IPublicApi
-  let spy: any
+  let spy: SinonSpy
 
   beforeEach(() => {
-    spy = fetchSpy()
+    spy = makeRequestSpy()
     api = getPublicApi({ request: spy })
   })
 
@@ -151,11 +151,11 @@ describe('[ raw-api ]', function () {
 
 describe('[ credentials-api ]', function () {
 
-  let spy: any
+  let spy: SinonSpy
   let api: ICredentialsApi
 
   beforeEach(() => {
-    spy = fetchSpy()
+    spy = makeRequestSpy()
     api = getCredentialsApi({ request: spy })
   })
 
