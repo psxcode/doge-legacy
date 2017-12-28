@@ -2,14 +2,14 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
-import { fetchGetCookies } from './fetch-cookie'
+import { fetchCookiesRequest } from './fetch-cookies-request'
 import { Response } from 'node-fetch'
-import { GetCookiesFn } from './types'
+import { RequestCookiesFn } from './types'
 
 const testUrl = 'http://test.com'
 const mockedCookies = 'cookie-value=value'
-const getCookies: GetCookiesFn = (url: string) => mockedCookies
-const noCookies: GetCookiesFn = (url: string) => ''
+const getCookies: RequestCookiesFn = (url: string) => mockedCookies
+const noCookies: RequestCookiesFn = (url: string) => ''
 const getCallArg = (spy: SinonSpy, argNumber = 0) => spy.getCall(0).args[argNumber]
 const getOpts = (spy: SinonSpy) => {
   const opts = getCallArg(spy, 1)
@@ -41,7 +41,7 @@ const makeRequestSpy = () => sinon.mock()
 describe('[ fetch-get-cookies ]', function () {
   it('should forward url', async function () {
     const spy = makeRequestSpy()
-    await fetchGetCookies(getCookies)(spy)(testUrl)
+    await fetchCookiesRequest(getCookies)(spy)(testUrl)
 
     expect(getCallArg(spy)).eq(testUrl)
   })
@@ -49,7 +49,7 @@ describe('[ fetch-get-cookies ]', function () {
   it('should forward url with path', async function () {
     const spy = makeRequestSpy()
     const url = `${testUrl}/custom/path`
-    await fetchGetCookies(getCookies)(spy)(url)
+    await fetchCookiesRequest(getCookies)(spy)(url)
 
     expect(getCallArg(spy)).eq(url)
   })
@@ -57,14 +57,14 @@ describe('[ fetch-get-cookies ]', function () {
   it('should forward url with search', async function () {
     const spy = makeRequestSpy()
     const url = `${testUrl}/?param1=value1&param2=value2`
-    await fetchGetCookies(getCookies)(spy)(url)
+    await fetchCookiesRequest(getCookies)(spy)(url)
 
     expect(getCallArg(spy)).eq(url)
   })
 
   it('should provide default init options', async function () {
     const spy = makeRequestSpy()
-    await fetchGetCookies(getCookies)(spy)(testUrl)
+    await fetchCookiesRequest(getCookies)(spy)(testUrl)
 
     getOpts(spy)
   })
@@ -72,7 +72,7 @@ describe('[ fetch-get-cookies ]', function () {
   it('should merge init options', async function () {
     const spy = makeRequestSpy()
     const opts = { body: 'body', size: 4 }
-    await fetchGetCookies(getCookies)(spy)(testUrl, opts)
+    await fetchCookiesRequest(getCookies)(spy)(testUrl, opts)
 
     expect(getSpecificOpt(spy, 'body')).eq('body')
     expect(getSpecificOpt(spy, 'size')).eq(4)
@@ -80,21 +80,21 @@ describe('[ fetch-get-cookies ]', function () {
 
   it('should set default headers', async function () {
     const spy = makeRequestSpy()
-    await fetchGetCookies(getCookies)(spy)(testUrl)
+    await fetchCookiesRequest(getCookies)(spy)(testUrl)
 
     expect(getHeaders(spy)).ok
   })
 
   it('should set \'cookie\' header', async function () {
     const spy = makeRequestSpy()
-    await fetchGetCookies(getCookies)(spy)(testUrl)
+    await fetchCookiesRequest(getCookies)(spy)(testUrl)
 
     expect(getSpecificHeader(spy, 'cookie')).eq(mockedCookies)
   })
 
   it('should not set \'cookie\' header if no cookies', async function () {
     const spy = makeRequestSpy()
-    await fetchGetCookies(noCookies)(spy)(testUrl)
+    await fetchCookiesRequest(noCookies)(spy)(testUrl)
 
     expect(hasSpecificHeader(spy, 'cookie')).eq(false)
   })
@@ -102,7 +102,7 @@ describe('[ fetch-get-cookies ]', function () {
   it('should merge headers', async function () {
     const spy = makeRequestSpy()
     const opts = { headers: { 'custom-header': 'value' } }
-    await fetchGetCookies(getCookies)(spy)(testUrl, opts)
+    await fetchCookiesRequest(getCookies)(spy)(testUrl, opts)
 
     expect(getSpecificHeader(spy, 'custom-header')).eq('value')
   })

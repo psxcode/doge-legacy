@@ -1,22 +1,30 @@
-import { RequestInit, Response } from 'node-fetch'
+import { Request, RequestInit, Response } from 'node-fetch'
 import { FetchFn } from './types'
 import { URL } from 'url'
 
+/**
+ * number of calls will be 'maxRedirects' + 1,
+ * and if last call is also redirect,
+ * then return as is
+ * 'numRedirects' is reset when user makes new call
+ */
 export const fetchFollow = (maxRedirects: number) =>
   (request: FetchFn): FetchFn =>
     (url: string, opts: RequestInit = {}): Promise<Response> => {
       let numRedirects = 0
-      const r = (url: string, opts: RequestInit): Promise<Response> =>
-        request(url, opts).then((resp: Response) => {
-          if (resp.status === 302 && numRedirects++ < maxRedirects) {
-            const { headers, url } = resp
-            if (headers && headers.has('location')) {
-              const location = headers.get('location')
-              const referer = new URL(url).origin
-              return r(location, { ...opts, headers: { ...opts.headers, referer } })
-            }
+      const innerRequest = (url: string, opts: RequestInit): Promise<Response> =>
+        request(url, { ...opts, redirect: 'manual' }).then((resp: Response) => {
+          const { headers, url, status } = resp
+          if (status === 302 && headers && headers.has('location') && numRedirects < maxRedirects) {
+            const location = headers.get('location')
+            const { origin, pathname } = new URL(url)
+            ++numRedirects
+            return innerRequest(location, {
+              ...opts,
+              headers: { ...opts.headers, referer: `${origin}${pathname}` }
+            })
           }
           return resp
         })
-      return r(url, opts)
+      return innerRequest(url, opts)
     }

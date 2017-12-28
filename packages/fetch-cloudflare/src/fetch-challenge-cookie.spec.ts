@@ -3,11 +3,11 @@ import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
 import { Response } from 'node-fetch'
-import { SetCookiesFn } from './types'
+import { ResponseCookiesFn } from './types'
 import { fetchSetCookiesAndReloadChallenge } from './fetch-challenge'
 
 const testUrl = 'http://test.com'
-const ignoreSettingCookies: SetCookiesFn = (cookies: string) => {}
+const ignoreSettingCookies: ResponseCookiesFn = (cookies: string) => {}
 const getCallArg = (spy: SinonSpy, argNumber = 0) => spy.getCall(0).args[argNumber]
 const getUrl = (spy: SinonSpy) => {
   const url = getCallArg(spy, 0)

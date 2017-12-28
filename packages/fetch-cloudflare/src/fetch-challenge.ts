@@ -1,7 +1,7 @@
 import { URL, URLSearchParams } from 'url'
 import { Request, RequestInit, Response } from 'node-fetch'
 import { pipe } from '@doge/helpers'
-import { FetchFn, SetCookiesFn } from './types'
+import { FetchFn, ResponseCookiesFn } from './types'
 import {
   base64ascii,
   evalChallenge,
@@ -17,7 +17,7 @@ import {
 
 const solveCookieSettingChallenge = pipe(getCookieSettingCode, base64ascii, runCookieSettingCode)
 
-export const fetchSetCookiesAndReloadChallenge = (setCookie: SetCookiesFn) =>
+export const fetchSetCookiesAndReloadChallenge = (setCookie: ResponseCookiesFn) =>
   (request: FetchFn): FetchFn =>
     (url: string, opts: RequestInit = {}): Promise<Response> =>
       request(url, opts).then((resp: Response) => {
