@@ -20,7 +20,11 @@
     "test:watch": "yarn mocha -- --watch",
     "mocha": "mocha --opts mocha.opts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@doge/helpers": "*",
+    "@std/esm": "^0.18.0",
+    "rxjs": "^5.5.5"
+  },
   "devDependencies": {
     "@types/chai": "^4.0.6",
     "@types/mocha": "^2.2.44",

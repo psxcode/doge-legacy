@@ -1,5 +1,5 @@
 import * as sinon from 'sinon'
-import { roundIntervalObservable } from './index'
+import { roundIntervalObservable } from './round-interval-observable'
 
 const noop = () => void 0
 const now = (offset: number) => () => 0
