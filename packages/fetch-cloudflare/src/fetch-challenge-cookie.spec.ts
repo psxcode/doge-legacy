@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
 import { Response } from 'node-fetch'
 import { ResponseCookiesFn } from './types'
-import { fetchSetCookiesAndReloadChallenge } from './fetch-challenge'
+import { fetchSetCookiesChallenge } from './fetch-challenge-cookie'
 
 const testUrl = 'http://test.com'
 const ignoreSettingCookies: ResponseCookiesFn = (cookies: string) => {}
@@ -26,14 +26,14 @@ describe('[ fetch-challenge-cookie ]', function () {
   it('should not touch url', async function () {
     const spy = makeNoCookiesRequestSpy()
     const url = `${testUrl}/?param1=value1&param2=value2`
-    await fetchSetCookiesAndReloadChallenge(ignoreSettingCookies)(spy)(url)
+    await fetchSetCookiesChallenge(ignoreSettingCookies)(spy)(url)
 
     expect(getUrl(spy)).eq(url)
   })
 
   it('should provide default init options', async function () {
     const spy = makeNoCookiesRequestSpy()
-    await fetchSetCookiesAndReloadChallenge(ignoreSettingCookies)(spy)(testUrl)
+    await fetchSetCookiesChallenge(ignoreSettingCookies)(spy)(testUrl)
 
     getInitOptions(spy)
   })
@@ -41,7 +41,7 @@ describe('[ fetch-challenge-cookie ]', function () {
   it('should not touch init options', async function () {
     const spy = makeNoCookiesRequestSpy()
     const opts = { body: 'body', size: 4 }
-    await fetchSetCookiesAndReloadChallenge(ignoreSettingCookies)(spy)(testUrl, opts)
+    await fetchSetCookiesChallenge(ignoreSettingCookies)(spy)(testUrl, opts)
 
     expect(getInitOptions(spy)).deep.eq(opts)
   })
@@ -49,7 +49,7 @@ describe('[ fetch-challenge-cookie ]', function () {
   it('should not consume response', async function () {
     const spy = makeNoCookiesRequestSpy()
     const opts = { body: 'body', size: 4 }
-    const resp = await fetchSetCookiesAndReloadChallenge(ignoreSettingCookies)(spy)(testUrl, opts)
+    const resp = await fetchSetCookiesChallenge(ignoreSettingCookies)(spy)(testUrl, opts)
     const json = await resp.json()
 
     expect(json).ok
