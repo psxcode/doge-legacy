@@ -14,8 +14,8 @@ export function pipeAsync<A, B, C, D, E, F, G> (fn0: AsyncPipeFn<A, B>, fn1: Asy
 export function pipeAsync<A, B, C, D, E, F, G, H> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>, fn6: AsyncPipeFn<G, H>): AsyncFn<A, H>
 export function pipeAsync<A, B, C, D, E, F, G, H, I> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>, fn6: AsyncPipeFn<G, H>, fn7: AsyncPipeFn<H, I>): AsyncFn<A, I>
 export function pipeAsync (fn: AsyncPipeFn<any, any> = identity, ...fns: AsyncPipeFn<any, any>[]): AsyncFn<any, any> {
-  return (arg: any): Promise<any> =>
-    fns.length
-      ? Promise.resolve(fn(arg)).then((res: any) => pipeAsync(...fns)(res))
-      : Promise.resolve(fn(arg))
+  return (arg: any): Promise<any> => {
+    const resolved = Promise.resolve().then(() => fn(arg))
+    return fns.length > 0 ? resolved.then((res: any) => pipeAsync(...fns)(res)) : resolved
+  }
 }
