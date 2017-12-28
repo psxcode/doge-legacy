@@ -23,7 +23,7 @@ describe('[ pipe ]', function () {
     expect(piped()).eq('12')
   })
 
-  it('should work with a constant function', function () {
+  it('should work with a discarding constant function', function () {
     const piped = pipe(add(2), constant(10), toString)
     expect(piped(2)).eq('10')
   })
@@ -43,7 +43,7 @@ describe('[ pipe ]', function () {
     expect(piped(1)).eq('10')
   })
 
-  it('', function () {
+  it('should work with functions returning different type', function () {
     const piped = pipe(toNumber, mult(10))
     expect(piped('10')).eq(100)
   })
