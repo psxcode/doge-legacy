@@ -1,6 +1,6 @@
 import { Request, RequestInit, Response } from 'node-fetch'
 import { URL, URLSearchParams } from 'url'
-import { FetchFn } from './types'
+import { FetchFn } from '../types'
 import { pipe } from '@doge/helpers'
 import {
   evalChallenge,

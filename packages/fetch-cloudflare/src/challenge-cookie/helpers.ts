@@ -1,6 +1,7 @@
 import { createContext, runInContext, runInNewContext } from 'vm'
 
-export const base64ascii = (base64: string) => new Buffer(base64, 'base64').toString('ascii')
+export const base64ascii = (base64: string) =>
+  new Buffer(base64, 'base64').toString('ascii')
 
 export const runCookieSettingCode = (code: string): string => {
   const sandbox = createContext({
@@ -24,32 +25,6 @@ export const getChallengeErrorCode = (body: string): string => {
   return match ? match[1] : ''
 }
 
-export const getChallengeId = (body: string): string => {
-  const match = body.match(/name="jschl_vc" value="(\w+)"/)
-  return match ? match[1] : ''
-}
-
-export const getChallengePass = (body: string): string => {
-  const match = body.match(/name="pass" value="(.+?)"/)
-  return match ? match[1] : ''
-}
-
-export const getChallengeMethod = (body: string): string => {
-  const match = body.match(/getElementById\('cf-content'\)[\s\S]+?setTimeout.+?\r?\n([\s\S]+?a\.value =.+?)\r?\n/i)
-  return match ? match[1] : ''
-}
-
-export const modifyChallengeMethod = (method: string): string => {
-  return method
-    .replace(/a\.value = (.+?) \+ .+?;/i, '$1')
-    .replace(/\s+[a-z](?: = |\.i).+/g, '')
-    .replace(/'; \d+'/g, '')
-}
-
-export const evalChallenge = (challenge: string): number => {
-  return Number(runInNewContext(challenge))
-}
-
 export const isCaptchaError = (body: string): boolean => {
   // Finding captcha
   return body.includes('why_captcha') || /cdn-cgi\/l\/chk_captcha/i.test(body)
@@ -62,8 +37,4 @@ export const isCodeError = (body: string): boolean => {
 export const isSetCookieAndReloadChallenge = (body: string): boolean => {
   return body.includes('You are being redirected') ||
     body.includes('sucuri_cloudproxy_js')
-}
-
-export const isJsChallenge = (body: string): boolean => {
-  return body.includes('a = document.getElementById(\'jschl-answer\');')
 }

@@ -1,6 +1,6 @@
 import { Request, RequestInit, Response } from 'node-fetch'
 import { pipe } from '@doge/helpers'
-import { FetchFn, ResponseCookiesFn } from './types'
+import { FetchFn, ResponseCookiesFn } from '../types'
 import {
   base64ascii,
   getCookieSettingCode,

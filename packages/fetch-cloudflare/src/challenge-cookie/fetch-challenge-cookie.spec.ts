@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
 import { Response } from 'node-fetch'
-import { ResponseCookiesFn } from './types'
+import { ResponseCookiesFn } from '../types'
 import { fetchSetCookiesChallenge } from './fetch-challenge-cookie'
 
 const testUrl = 'http://test.com'

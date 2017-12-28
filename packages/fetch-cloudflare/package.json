@@ -55,7 +55,7 @@
       ".ts"
     ],
     "include": [
-      "src/*.ts"
+      "src/**/*.ts"
     ],
     "exclude": [
       "**/*.d.ts",
