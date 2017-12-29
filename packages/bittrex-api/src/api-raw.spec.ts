@@ -1,4 +1,4 @@
-import { getCredentialsApi, getPublicApi } from './api'
+import { getCredentialsApi, getPublicApi } from './api-raw'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response } from 'node-fetch'
 import { SinonSpy, mock, assert } from 'sinon'
@@ -22,7 +22,7 @@ describe('[ raw-api ]', function () {
 
   beforeEach(() => {
     spy = makeRequestSpy()
-    api = getPublicApi({ request: spy })
+    api = getPublicApi(spy)
   })
 
   describe('[ raw-api / getmarkets ]', function () {
@@ -156,7 +156,7 @@ describe('[ credentials-api ]', function () {
 
   beforeEach(() => {
     spy = makeRequestSpy()
-    api = getCredentialsApi({ request: spy })
+    api = getCredentialsApi(spy)
   })
 
   describe('[ raw-api / buylimit ]', function () {

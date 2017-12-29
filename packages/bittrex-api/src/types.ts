@@ -1,7 +1,7 @@
-import fetch from 'node-fetch'
+import { Observable } from 'rxjs/Observable'
 
-export interface IApiOptions {
-  request: typeof fetch
+export type JsonObject = {
+  [key: string]: string | string[] | number | number[] | boolean | boolean[]
 }
 
 export interface IBittrexParams {
@@ -17,7 +17,10 @@ export interface IBittrexResponse {
  * Public Api
  */
 
-/* public/getmarkets */
+/**
+ * GetMarkets
+ * public/getmarkets
+ */
 export interface IBittrexMarketItem {
   'MarketCurrency': string,
   'BaseCurrency': string,
@@ -33,9 +36,13 @@ export interface IBittrexGetMarketsResponse extends IBittrexResponse {
   result: IBittrexMarketItem[]
 }
 
-export type IBittrexGetMarkets = () => Promise<IBittrexGetMarketsResponse>
+export type BittrexGetMarketsPromise = () => Promise<IBittrexGetMarketsResponse>
+export type BittrexGetMarketsObservable = () => Observable<IBittrexGetMarketsResponse>
 
-/* public/getcurrencies */
+/**
+ * GetCurrencies
+ * public/getcurrencies
+ */
 export interface IBittrexCurrencyItem {
   'Currency': string,
   'CurrencyLong': string,
@@ -50,9 +57,13 @@ export interface IBittrexGetCurrenciesResponse extends IBittrexResponse {
   result: IBittrexCurrencyItem[]
 }
 
-export type IBittrexGetCurrencies = () => Promise<IBittrexGetCurrenciesResponse>
+export type BittrexGetCurrenciesPromise = () => Promise<IBittrexGetCurrenciesResponse>
+export type BittrexGetCurrenciesObservable = () => Observable<IBittrexGetCurrenciesResponse>
 
-/* public/getticker */
+/**
+ * GetTicker
+ * public/getticker
+ */
 export interface IBittrexTicker {
   'Bid': number,
   'Ask': number,
@@ -67,9 +78,13 @@ export interface IBittrexGetTickerResponse extends IBittrexResponse {
   result: IBittrexTicker
 }
 
-export type IBittrexGetTicker = (params: IBittrexGetTickerParams) => Promise<IBittrexGetTickerResponse>
+export type BittrexGetTickerPromise = (params: IBittrexGetTickerParams) => Promise<IBittrexGetTickerResponse>
+export type BittrexGetTickerObservable = (params: IBittrexGetTickerParams) => Observable<IBittrexGetTickerResponse>
 
-/* pub/market/getticks */
+/**
+ * GetTicks
+ * pub/market/getticks
+ */
 export interface IBittrexTickItem {
   O: number,
   H: number,
@@ -92,9 +107,12 @@ export interface IBittrexGetTicksResponse extends IBittrexResponse {
   result: IBittrexTickItem[]
 }
 
-export type IBittrexGetTicks = (params: IBittrexGetTicksParams) => Promise<IBittrexGetTicksResponse>
+export type BittrexGetTicksPromise = (params: IBittrexGetTicksParams) => Promise<IBittrexGetTicksResponse>
+export type BittrexGetTicksObservable = (params: IBittrexGetTicksParams) => Observable<IBittrexGetTicksResponse>
 
-/*  */
+/**
+ * GetLatestTick
+ */
 export interface IBittrexGetLatestTickParams extends IBittrexParams {
   marketname: string,
   tickinterval: IBittrexTickInterval
@@ -105,9 +123,13 @@ export interface IBittrexGetLatestTickResponse extends IBittrexResponse {
   result: IBittrexTickItem
 }
 
-export type IBittrexGetLatestTick = (params: IBittrexGetLatestTickParams) => Promise<IBittrexGetLatestTickResponse>
+export type BittrexGetLatestTickPromise = (params: IBittrexGetLatestTickParams) => Promise<IBittrexGetLatestTickResponse>
+export type BittrexGetLatestTickObservable = (params: IBittrexGetLatestTickParams) => Observable<IBittrexGetLatestTickResponse>
 
-/* public/getmarketsummaries */
+/**
+ * GetMarketSummaries
+ * public/getmarketsummaries
+ */
 export interface IBittrexMarketSummaryItem {
   'MarketName': string,
   'High': number,
@@ -129,9 +151,12 @@ export interface IBittrexGetMarketSummariesResponse extends IBittrexResponse {
   result: IBittrexMarketSummaryItem[]
 }
 
-export type IBittrexGetMarketSummaries = () => Promise<IBittrexGetMarketSummariesResponse>
+export type BittrexGetMarketSummariesPromise = () => Promise<IBittrexGetMarketSummariesResponse>
+export type BittrexGetMarketSummariesObservable = () => Observable<IBittrexGetMarketSummariesResponse>
 
-/*  */
+/**
+ * GetMarketSummary
+ */
 export interface IBittrexGetMarketSummaryParams extends IBittrexParams {
   market: string
 }
@@ -140,9 +165,12 @@ export interface IBittrexGetMarketSummaryResponse extends IBittrexResponse {
   result: IBittrexMarketSummaryItem
 }
 
-export type IBittrexGetMarketSummary = (params: IBittrexGetMarketSummaryParams) => Promise<IBittrexGetMarketSummaryResponse>
+export type BittrexGetMarketSummaryPromise = (params: IBittrexGetMarketSummaryParams) => Promise<IBittrexGetMarketSummaryResponse>
+export type BittrexGetMarketSummaryObservable = (params: IBittrexGetMarketSummaryParams) => Observable<IBittrexGetMarketSummaryResponse>
 
-/*  */
+/**
+ * GetOrderBook
+ */
 export type BittrexOrderBookType = 'buy' | 'sell' | 'both'
 
 export interface IBittrexOrderBookItem {
@@ -160,9 +188,12 @@ export interface IBittrexGetOrderBookResponse extends IBittrexResponse {
   sell?: IBittrexOrderBookItem[]
 }
 
-export type IBittrexGetOrderBook = (params: IBittrexGetOrderBookParams) => Promise<IBittrexGetOrderBookResponse>
+export type BittrexGetOrderBookPromise = (params: IBittrexGetOrderBookParams) => Promise<IBittrexGetOrderBookResponse>
+export type BittrexGetOrderBookObservable = (params: IBittrexGetOrderBookParams) => Observable<IBittrexGetOrderBookResponse>
 
-/*  */
+/**
+ * GetMarketHistory
+ */
 export interface IBittrexMarketHistoryItem {
   'Id': number,
   'TimeStamp': string,
@@ -181,13 +212,16 @@ export interface IBittrexGetMarketHistoryResponse extends IBittrexResponse {
   result: IBittrexMarketHistoryItem[]
 }
 
-export type IBittrexGetMarketHistory = (params: IBittrexGetMarketHistoryParams) => Promise<IBittrexGetMarketHistoryResponse>
+export type BittrexGetMarketHistoryPromise = (params: IBittrexGetMarketHistoryParams) => Promise<IBittrexGetMarketHistoryResponse>
+export type BittrexGetMarketHistoryObservable = (params: IBittrexGetMarketHistoryParams) => Observable<IBittrexGetMarketHistoryResponse>
 
 /**
  * Market Apis
  */
 
-/*  */
+/**
+ * BuySell
+ */
 export interface IBittrexBuySellParams extends IBittrexParams {
   market: string,
   quantity: string,
@@ -198,9 +232,12 @@ export interface IBittrexBuySellResponse extends IBittrexResponse {
   uuid: string
 }
 
-export type IBittrexBuySell = (params: IBittrexBuySellParams) => Promise<IBittrexBuySellResponse>
+export type BittrexBuySellPromise = (params: IBittrexBuySellParams) => Promise<IBittrexBuySellResponse>
+export type BittrexBuySellObservable = (params: IBittrexBuySellParams) => Observable<IBittrexBuySellResponse>
 
-/*  */
+/**
+ * Cancel
+ */
 export interface IBittrexCancelParams extends IBittrexParams {
   uuid: string
 }
@@ -209,8 +246,12 @@ export interface IBittrexCancelResponse extends IBittrexResponse {
   uuid: null
 }
 
-export type IBittrexCancel = (params: IBittrexCancelParams) => Promise<IBittrexCancelResponse>
+export type BittrexCancelPromise = (params: IBittrexCancelParams) => Promise<IBittrexCancelResponse>
+export type BittrexCancelObservable = (params: IBittrexCancelParams) => Observable<IBittrexCancelResponse>
 
+/**
+ * GetOpenOrders
+ */
 export type BittrexOrderType = 'limit_buy' | 'limit_sell'
 
 export interface IBittrexOpenOrderItem {
@@ -241,13 +282,16 @@ export interface IBittrexGetOpenOrdersResponse extends IBittrexResponse {
   result: IBittrexOpenOrderItem[]
 }
 
-export type IBittrexGetOpenOrders = (params: IBittrexGetOpenOrdersParams) => Promise<IBittrexGetOpenOrdersResponse>
+export type BittrexGetOpenOrdersPromise = (params: IBittrexGetOpenOrdersParams) => Promise<IBittrexGetOpenOrdersResponse>
+export type BittrexGetOpenOrdersObservable = (params: IBittrexGetOpenOrdersParams) => Observable<IBittrexGetOpenOrdersResponse>
 
 /**
  * Account Api
  */
 
-/*  */
+/**
+ * GetBalances
+ */
 export interface IBittrexBalanceItem {
   'Currency': string,
   'Balance': number,
@@ -262,7 +306,7 @@ export interface IBittrexGetBalancesResponse extends IBittrexResponse {
   result: IBittrexBalanceItem[]
 }
 
-export type IBittrexGetBalances = () => Promise<IBittrexGetBalancesResponse>
+export type BittrexGetBalancesPromise = () => Promise<IBittrexGetBalancesResponse>
 
 export interface IBittrexGetBalanseParams extends IBittrexParams {
   currency: string
@@ -272,9 +316,12 @@ export interface IBittrexGetBalanceResponse extends IBittrexResponse {
   result: IBittrexBalanceItem
 }
 
-export type IBittrexGetBalance = (params: IBittrexGetBalanseParams) => Promise<IBittrexGetBalanceResponse>
+export type BittrexGetBalancePromise = (params: IBittrexGetBalanseParams) => Promise<IBittrexGetBalanceResponse>
+export type BittrexGetBalanceObservable = (params: IBittrexGetBalanseParams) => Observable<IBittrexGetBalanceResponse>
 
-/*  */
+/**
+ * GetDepositAddress
+ */
 export interface IBittrexGetDepositAddressParams extends IBittrexParams {
   currency: string
 }
@@ -286,9 +333,12 @@ export interface IBittrexGetDepositAddressResponse extends IBittrexResponse {
   }
 }
 
-export type IBittrexGetDepositAddress = (params: IBittrexGetDepositAddressParams) => Promise<IBittrexGetDepositAddressResponse>
+export type BittrexGetDepositAddressPromise = (params: IBittrexGetDepositAddressParams) => Promise<IBittrexGetDepositAddressResponse>
+export type BittrexGetDepositAddressObservable = (params: IBittrexGetDepositAddressParams) => Observable<IBittrexGetDepositAddressResponse>
 
-/*  */
+/**
+ * Withdraw
+ */
 export interface IBittrexWithdrawParams extends IBittrexParams {
   currency: string,
   quantity: string,
@@ -301,9 +351,12 @@ export interface IBittrexWithdrawResponse extends IBittrexResponse {
   }
 }
 
-export type IBittrexWithdraw = (params: IBittrexWithdrawParams) => Promise<IBittrexWithdrawResponse>
+export type BittrexWithdrawPromise = (params: IBittrexWithdrawParams) => Promise<IBittrexWithdrawResponse>
+export type BittrexWithdrawObservable = (params: IBittrexWithdrawParams) => Observable<IBittrexWithdrawResponse>
 
-/*  */
+/**
+ * GetOrder
+ */
 export interface IBittrexOrderItem {
   'AccountId': null,
   'OrderUuid': string,
@@ -338,9 +391,13 @@ export interface IBittrexGetOrderResponse extends IBittrexResponse {
   result: IBittrexOrderItem
 }
 
-export type IBittrexGetOrder = (params: IBittrexGetOrderParams) => Promise<IBittrexGetOrderResponse>
+export type BittrexGetOrderPromise = (params: IBittrexGetOrderParams) => Promise<IBittrexGetOrderResponse>
+export type BittrexGetOrderObservable = (params: IBittrexGetOrderParams) => Observable<IBittrexGetOrderResponse>
 
-/* account/getorderhistory */
+/**
+ * GetOrderHistory
+ * account/getorderhistory
+ */
 export interface IBittrexOrderHistoryItem {
   'OrderUuid': string,
   'Exchange': string,
@@ -366,9 +423,13 @@ export interface IBittrexGetOrderHistoryResponse extends IBittrexResponse {
   result: IBittrexOrderHistoryItem[]
 }
 
-export type IBittrexGetOrderHistory = (params: IBittrexGetOrderHistoryParams) => Promise<IBittrexGetOrderHistoryResponse>
+export type BittrexGetOrderHistoryPromise = (params: IBittrexGetOrderHistoryParams) => Promise<IBittrexGetOrderHistoryResponse>
+export type BittrexGetOrderHistoryObservable = (params: IBittrexGetOrderHistoryParams) => Observable<IBittrexGetOrderHistoryResponse>
 
-/* account/getwithdrawalhistory */
+/**
+ * GetWithdrawalHistory
+ * account/getwithdrawalhistory
+ */
 export interface IBittrexWithdrawalHistoryItem {
   'PaymentUuid': string,
   'Currency': string,
@@ -391,9 +452,13 @@ export interface IBittrexGetWithdrawalHistoryResponse extends IBittrexResponse {
   result: IBittrexWithdrawalHistoryItem[]
 }
 
-export type IBittrexGetWithdrawalHistory = (params: IBittrexGetWithdrawalHistoryParams) => Promise<IBittrexGetWithdrawalHistoryResponse>
+export type BittrexGetWithdrawalHistoryPromise = (params: IBittrexGetWithdrawalHistoryParams) => Promise<IBittrexGetWithdrawalHistoryResponse>
+export type BittrexGetWithdrawalHistoryObservable = (params: IBittrexGetWithdrawalHistoryParams) => Observable<IBittrexGetWithdrawalHistoryResponse>
 
-/* account/getdeposithistory */
+/**
+ * GetDepositHistory
+ * account/getdeposithistory
+ */
 export interface IBittrexDepositHistoryItem {
   'PaymentUuid': string,
   'Currency': string,
@@ -416,33 +481,34 @@ export interface IBittrexGetDepositHistoryResponse extends IBittrexResponse {
   result: IBittrexDepositHistoryItem[]
 }
 
-export type IBittrexGetDepositHistory = (params: IBittrexGetDepositHistoryParams) => Promise<IBittrexGetDepositHistoryResponse>
+export type BittrexGetDepositHistoryPromise = (params: IBittrexGetDepositHistoryParams) => Promise<IBittrexGetDepositHistoryResponse>
+export type BittrexGetDepositHistoryObservable = (params: IBittrexGetDepositHistoryParams) => Observable<IBittrexGetDepositHistoryResponse>
 
 export interface IPublicApi {
-  getmarkets: IBittrexGetMarkets,
-  getcurrencies: IBittrexGetCurrencies,
-  getticker: IBittrexGetTicker,
-  getticks: IBittrexGetTicks,
-  getlatesttick: IBittrexGetLatestTick,
-  getmarketsummaries: IBittrexGetMarketSummaries,
-  getmarketsummary: IBittrexGetMarketSummary,
-  getorderbook: IBittrexGetOrderBook,
-  getmarkethistory: IBittrexGetMarketHistory
+  getmarkets: BittrexGetMarketsPromise,
+  getcurrencies: BittrexGetCurrenciesPromise,
+  getticker: BittrexGetTickerPromise,
+  getticks: BittrexGetTicksPromise,
+  getlatesttick: BittrexGetLatestTickPromise,
+  getmarketsummaries: BittrexGetMarketSummariesPromise,
+  getmarketsummary: BittrexGetMarketSummaryPromise,
+  getorderbook: BittrexGetOrderBookPromise,
+  getmarkethistory: BittrexGetMarketHistoryPromise
 }
 
 export interface ICredentialsApi {
-  buylimit: IBittrexBuySell,
-  buymarket: IBittrexBuySell,
-  selllimit: IBittrexBuySell,
-  sellmarket: IBittrexBuySell,
-  cancel: IBittrexCancel,
-  getopenorders: IBittrexGetOpenOrders,
-  getbalances: IBittrexGetBalances,
-  getbalance: IBittrexGetBalance,
-  getwithdrawalhistory: IBittrexGetWithdrawalHistory,
-  getdepositaddress: IBittrexGetDepositAddress,
-  getdeposithistory: IBittrexGetDepositHistory,
-  getorderhistory: IBittrexGetOrderHistory,
-  getorder: IBittrexGetOrder,
-  withdraw: IBittrexWithdraw
+  buylimit: BittrexBuySellPromise,
+  buymarket: BittrexBuySellPromise,
+  selllimit: BittrexBuySellPromise,
+  sellmarket: BittrexBuySellPromise,
+  cancel: BittrexCancelPromise,
+  getopenorders: BittrexGetOpenOrdersPromise,
+  getbalances: BittrexGetBalancesPromise,
+  getbalance: BittrexGetBalancePromise,
+  getwithdrawalhistory: BittrexGetWithdrawalHistoryPromise,
+  getdepositaddress: BittrexGetDepositAddressPromise,
+  getdeposithistory: BittrexGetDepositHistoryPromise,
+  getorderhistory: BittrexGetOrderHistoryPromise,
+  getorder: BittrexGetOrderPromise,
+  withdraw: BittrexWithdrawPromise
 }
