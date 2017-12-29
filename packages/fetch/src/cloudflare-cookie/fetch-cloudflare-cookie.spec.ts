@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
 import { Response } from 'node-fetch'
 import { ResponseCookiesFn } from '../types'
-import { fetchSetCookiesChallenge } from './fetch-challenge-cookie'
+import { fetchSetCookiesChallenge } from './fetch-cloudflare-cookie'
 
 const testUrl = 'http://test.com'
 const ignoreSettingCookies: ResponseCookiesFn = (cookies: string) => {}

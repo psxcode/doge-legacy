@@ -1,5 +1,5 @@
 {
-  "name": "@doge/fetch-cloudflare",
+  "name": "@doge/fetch",
   "version": "0.0.0",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",

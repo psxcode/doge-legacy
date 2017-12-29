@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
 import { Response } from 'node-fetch'
-import { fetchJsChallenge } from './fetch-challenge-js'
+import { fetchJsChallenge } from './fetch-cloudflare-js'
 
 const testUrl = 'http://test.com'
 const getCallArg = (spy: SinonSpy, argNumber = 0) => spy.getCall(0).args[argNumber]

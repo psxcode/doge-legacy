@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
-import { fetchApisign } from './fetch-apisign'
+import { fetchApisign } from './fetch-bittrex-apisign'
 
 const testUrl = 'http://test.com/'
 const hash = (stringToHash: string) => `hashed_${stringToHash}`

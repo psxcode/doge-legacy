@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { SinonSpy } from 'sinon'
-import { fetchApikey } from './fetch-apikey'
+import { fetchApikey } from './fetch-bittrex-apikey'
 import { URL } from 'url'
 
 const testUrl = 'http://test.com/'
