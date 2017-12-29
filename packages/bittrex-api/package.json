@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@doge/helpers": "*",
-    "@doge/fetch-cloudflare": "*",
+    "@doge/fetch": "*",
     "@doge/round-timeout": "*",
     "@std/esm": "^0.18.0",
     "node-fetch": "^1.7.3",
