@@ -26,11 +26,10 @@
     "test:coverage:report": "codecov -f coverage/*.json"
   },
   "dependencies": {
-    "@doge/helpers": "*",
-    "@std/esm": "^0.18.0",
-    "node-fetch": "^1.7.3"
+    "@doge/helpers": "*"
   },
   "devDependencies": {
+    "@std/esm": "^0.18.0",
     "@types/chai": "^4.0.6",
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.53",
@@ -39,6 +38,7 @@
     "@types/tough-cookie": "^2.3.2",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
+    "node-fetch": "^1.7.3",
     "nyc": "^11.3.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.52.0",
