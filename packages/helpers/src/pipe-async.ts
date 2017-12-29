@@ -1,8 +1,5 @@
-import { PipeFn } from './pipe'
 import { identity } from './identity'
-
-export type AsyncFn <A, B> = (arg?: A) => Promise<B>
-export type AsyncPipeFn<A, B> = PipeFn<A, B> | AsyncFn<A, B>
+import { AsyncFn, AsyncPipeFn } from './types'
 
 export function pipeAsync<A> (): (arg: A) => Promise<A>
 export function pipeAsync<A, B> (fn0: AsyncPipeFn<A, B>): AsyncFn<A, B>

@@ -1,6 +1,5 @@
 import { identity } from './identity'
-
-export type PipeFn<T, R> = (arg?: T) => R
+import { PipeFn } from './types'
 
 export function pipe<A> (): (arg: A) => A
 export function pipe<A, B> (fn: PipeFn<A, B>): PipeFn<A, B>

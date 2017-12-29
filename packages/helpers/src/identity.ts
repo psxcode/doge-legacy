@@ -1,4 +1,3 @@
-export function identity<T> (arg: T): T
-export function identity (arg: any) {
+export function identity<T> (arg: T): T {
   return arg
 }
