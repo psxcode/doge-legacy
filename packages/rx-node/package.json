@@ -1,0 +1,59 @@
+{
+  "name": "@doge/rx-node",
+  "version": "0.0.0",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "psxcode <psxcode@gmail.com> (https://github.com/psxcode)",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "yarn clean && yarn tsc",
+    "clean": "rimraf dist",
+    "test": "nyc yarn mocha",
+    "test:watch": "yarn mocha -- --watch",
+    "mocha": "mocha --opts mocha.opts"
+  },
+  "dependencies": {
+    "@doge/helpers": "*",
+    "rxjs": "^5.5.5"
+  },
+  "devDependencies": {
+    "@std/esm": "^0.18.0",
+    "@types/chai": "^4.0.6",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.53",
+    "@types/sinon": "^4.1.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "rimraf": "^2.6.2",
+    "sinon": "^4.1.3",
+    "source-map-support": "^0.5.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "all": true
+  }
+}
