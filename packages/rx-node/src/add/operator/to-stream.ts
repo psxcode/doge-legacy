@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable'
-import { writeToStream } from '../../operator/to-stream'
+import { toStream } from '../../operator/to-stream'
 
-Observable.prototype.toStream = writeToStream
+Observable.prototype.toStream = toStream
 
 declare module 'rxjs/Observable' {
   interface Observable<T> {
-    toStream: typeof writeToStream
+    toStream: typeof toStream
   }
 }

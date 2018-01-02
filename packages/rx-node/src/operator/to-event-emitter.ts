@@ -8,20 +8,14 @@ declare module 'events' {
   }
 }
 
-export function toEventEmitter<T> (this: Observable<T>, eventName = 'data', selector?: (arg: T) => any): EventEmitter {
-  const e = new EventEmitter()
+export function toEventEmitter<T> (this: Observable<T>, eventName = 'data'): EventEmitter {
+  const ee = new EventEmitter()
 
-  e.publish = () => this.subscribe(
-    (x: T) => {
-      try {
-        e.emit(eventName, selector ? selector(x) : x)
-      } catch (e) {
-        e.emit('error', e)
-      }
-    },
-    (err: any) => e.emit('error', err),
-    () => e.emit('end')
+  ee.publish = () => this.subscribe(
+    (x: T) => ee.emit(eventName, x),
+    (err: any) => ee.emit('error', err),
+    () => ee.emit('end')
   )
 
-  return e
+  return ee
 }
