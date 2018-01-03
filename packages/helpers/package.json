@@ -19,8 +19,7 @@
     "test": "nyc yarn mocha --opts mocha.opts",
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@std/esm": "^0.18.0",
     "@types/chai": "^4.0.6",
