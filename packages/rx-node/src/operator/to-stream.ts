@@ -4,7 +4,7 @@ import { Readable, ReadableOptions } from 'stream'
 
 export function toStream<T extends string> (this: Observable<T>, opts: ReadableOptions = {}) {
   const source = this
-  let sub: Subscription | null
+  let sub: Subscription
   return new Readable({
     ...opts,
     encoding: opts.encoding || 'utf8',
@@ -13,19 +13,24 @@ export function toStream<T extends string> (this: Observable<T>, opts: ReadableO
         sub = source.subscribe(
           (data: T) => {
             if (!this.push(data)) {
-              this.emit('error', new Error('Buffer limit reached'))
               sub && sub.unsubscribe()
-              sub = null
+              this.emit('error', new Error('Buffer limit reached'))
+              this.push(null)
             }
           },
-          (e) => this.emit('error', e),
-          () => this.push(null)
+          (e) => {
+            sub && sub.unsubscribe()
+            this.emit('error', e)
+            this.push(null)
+          },
+          () => {
+            this.push(null)
+          }
         )
       }
     },
     destroy () {
       sub && sub.unsubscribe()
-      sub = null
     }
   })
 }

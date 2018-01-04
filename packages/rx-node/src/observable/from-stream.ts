@@ -4,14 +4,23 @@ import 'rxjs/add/operator/share'
 
 export function fromStream<T extends string | Buffer> (source: ReadableStream): Observable<T> {
   return new Observable<T>((observer) => {
-    source.on('data', (chunk: T) => {
+    const onData = (chunk: T) => {
       observer.next(chunk)
-    })
-    source.on('end', () => {
+    }
+    const onEnd = () => {
+      source.removeListener('data', onData)
+      source.removeListener('end', onEnd)
+      source.removeListener('error', onError)
       observer.complete()
-    })
-    source.on('error', (e) => {
+    }
+    const onError = (e: any) => {
+      source.removeListener('data', onData)
+      source.removeListener('end', onEnd)
+      source.removeListener('error', onError)
       observer.error(e)
-    })
+    }
+    source.on('data', onData)
+    source.on('end', onEnd)
+    source.on('error', onError)
   }).share()
 }
