@@ -3,16 +3,14 @@ import * as sinon from 'sinon'
 import * as debug from 'debug'
 import { makeSmallStrings, makeDataSpy, waitForEnd, waitForEvent } from './test-helpers'
 import {
-  readableFromStringsBlockingAsync,
-  readableFromStringsBlockingAsyncErrorContinue,
-  readableFromStringsBlockingAsyncErrorBreak,
-  readableFromStringsBlockingAsyncErrorHang
-} from './from-strings-blocking-async'
+  readableFromStringsAsync, readableFromStringsAsyncErrorBreak,
+  readableFromStringsAsyncErrorContinue, readableFromStringsAsyncErrorHang
+} from './from-strings-async'
 
-describe('[ stream-test / readable / from-strings-blocking-async ]', function () {
+describe('[ stream-test / readable / from-strings-async ]', function () {
   it('should', async function () {
-    const data = makeSmallStrings(3)
-    const stream = readableFromStringsBlockingAsync(100)(data, { highWaterMark: 1 })
+    const data = makeSmallStrings()
+    const stream = readableFromStringsAsync(100)(data, { highWaterMark: 10 })
     const dataSpy = makeDataSpy()
     stream.on('data', dataSpy)
 
@@ -23,7 +21,7 @@ describe('[ stream-test / readable / from-strings-blocking-async ]', function ()
 
   it('should', async function () {
     const data = makeSmallStrings()
-    const stream = readableFromStringsBlockingAsyncErrorContinue(10, 1)(data)
+    const stream = readableFromStringsAsyncErrorContinue(10, 1)(data)
     const dataSpy = makeDataSpy()
     const errSpy = sinon.spy()
     const endSpy = sinon.spy()
@@ -40,7 +38,7 @@ describe('[ stream-test / readable / from-strings-blocking-async ]', function ()
 
   it('should', async function () {
     const data = makeSmallStrings()
-    const stream = readableFromStringsBlockingAsyncErrorBreak(10, 1)(data)
+    const stream = readableFromStringsAsyncErrorBreak(10, 1)(data)
     const dataSpy = makeDataSpy()
     const errSpy = sinon.spy()
     const endSpy = sinon.spy()
@@ -56,7 +54,7 @@ describe('[ stream-test / readable / from-strings-blocking-async ]', function ()
 
   it('should', async function () {
     const data = makeSmallStrings()
-    const stream = readableFromStringsBlockingAsyncErrorHang(10, 1)(data)
+    const stream = readableFromStringsAsyncErrorHang(10, 1)(data)
     const dataSpy = makeDataSpy()
     const errSpy = sinon.spy()
     const endSpy = sinon.spy()

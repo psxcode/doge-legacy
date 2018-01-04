@@ -2,17 +2,17 @@ import * as debugFactory from 'debug'
 import { Readable, ReadableOptions } from 'stream'
 
 export const readableFromStringsBlockingSync = () => {
-  const debug = debugFactory('stream-test:from-strings-one-push-sync')
+  const debug = debugFactory('stream-test:from-strings-blocking-sync')
   return (data: string[] = [], opts: ReadableOptions = {}) => {
     let i = 0
     return new Readable({
       encoding: 'utf8',
       ...opts,
       read () {
-        debug('blocking multiple pushes in one read: begin at %d', i)
+        debug('read at %d', i)
         while (true) {
           if (i >= data.length) {
-            debug('data complete at %d', i)
+            debug('complete at %d', i)
             this.push(null)
             break
           }
