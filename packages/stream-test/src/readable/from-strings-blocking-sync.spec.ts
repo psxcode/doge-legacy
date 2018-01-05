@@ -4,9 +4,7 @@ import * as debug from 'debug'
 import {
   makeDataSpy,
   waitForEnd,
-  makeMediumStrings,
-  makePullConsumer,
-  makeDelayPullConsumer
+  makeMediumStrings
 } from './test-helpers'
 import { readableFromStringsBlockingSync } from './from-strings-blocking-sync'
 
@@ -27,7 +25,7 @@ describe('[ stream-test / readable ]', function () {
     const data = makeMediumStrings()
     const stream = readableFromStringsBlockingSync()(data, { highWaterMark: 64 })
     const dataSpy = makeDataSpy()
-    makePullConsumer(stream, dataSpy)
+    // makeSyncLazyOnReadableConsumer(stream, dataSpy)
 
     await waitForEnd(stream)
     expect(dataSpy.data().join('')).deep.eq(data.join(''))
@@ -38,7 +36,7 @@ describe('[ stream-test / readable ]', function () {
     const data = makeMediumStrings()
     const stream = readableFromStringsBlockingSync()(data, { highWaterMark: 64 })
     const dataSpy = makeDataSpy()
-    makeDelayPullConsumer(stream, dataSpy, 50)
+    // makeAsyncLazyOnReadableConsumer(stream, dataSpy, 50)
 
     await waitForEnd(stream)
     expect(dataSpy.data().join('')).deep.eq(data.join(''))

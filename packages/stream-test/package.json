@@ -18,7 +18,7 @@
     "clean": "rimraf dist",
     "tsc": "tsc",
     "rollup": "rollup -c rollup.config.js",
-    "mocha": "mocha --opts mocha.opts",
+    "mocha": "DEBUG=stream-test:* mocha --opts mocha.opts",
     "test": "yarn test:once",
     "test:once": "DEBUG=stream-test:* nyc yarn mocha",
     "test:watch": "yarn mocha -- --watch",
