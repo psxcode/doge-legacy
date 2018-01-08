@@ -1,5 +1,4 @@
 /* tslint:disable no-conditional-assignment */
-import * as sinon from 'sinon'
 import * as debug from 'debug'
 import { EventEmitter } from 'events'
 import { Readable } from 'stream'
@@ -43,7 +42,10 @@ export const makeSpy = (name: string, message: string): SpyFn => {
   let data: any[] = []
   const dbg = debug(`stream-test:event-spy:${name}`)
   const spy = (value: any) => {
-    dbg(message, i, value.length / 8)
+    if (!value) {
+      dbg('NO VALUE')
+    }
+    dbg(message, i, value && (value.length / 8))
     data.push(value)
     ++i
   }
@@ -67,7 +69,7 @@ export interface IReadableConsumer {
 export const makeOnReadableConsumer = (stream: Readable,
                                        onData: (data: string) => void,
                                        { readDelayMs, readSize, eager }: IReadableConsumer = {}) => {
-  const dbg = debug('stream-test:async-blocking-readable-consumer')
+  const dbg = debug('stream-test:readable-consumer')
   let i = 0
   const eagerReader = (i: number) => {
     let chunk: string
@@ -76,12 +78,13 @@ export const makeOnReadableConsumer = (stream: Readable,
     dbg('eager read at %d end', i)
   }
   const lazyReader = (i: number) => {
-    dbg('lazy read at %d begin', i)
-    onData(stream.read())
+    let chunk: string
+    dbg('lazy read at %d begin', i);
+    (chunk = stream.read()) && onData(chunk)
     dbg('lazy read at %d done', i)
   }
   const asyncHandler = () => {
-    dbg('received readable at %d', i)
+    dbg('received readable event at %d', i)
     wait(readDelayMs).then(eager
       ? eagerReader.bind(null, i)
       : lazyReader.bind(null, i)
@@ -100,12 +103,14 @@ export const makeOnReadableConsumer = (stream: Readable,
     stream.removeListener('readable', syncHandler)
     stream.removeListener('end', unsubscribe)
   }
-  dbg('consumer subscribe')
-  stream.on('readable', isFinite(readDelayMs) && readDelayMs >= 0
-    ? asyncHandler
-    : syncHandler)
-  stream.once('end', unsubscribe)
-  return unsubscribe
+  return () => {
+    dbg('consumer subscribe')
+    stream.on('readable', isFinite(readDelayMs) && readDelayMs >= 0
+      ? asyncHandler
+      : syncHandler)
+    stream.once('end', unsubscribe)
+    return unsubscribe
+  }
 }
 
 export const makeOnDataConsumer = (stream: Readable, onData: (data: string) => void) => {
@@ -121,10 +126,12 @@ export const makeOnDataConsumer = (stream: Readable, onData: (data: string) => v
     stream.removeListener('readable', onDataEvent)
     stream.removeListener('end', unsubscribe)
   }
-  dbg('consumer subscribe')
-  stream.on('data', onDataEvent)
-  stream.once('end', unsubscribe)
-  return unsubscribe
+  return () => {
+    dbg('consumer subscribe')
+    stream.on('data', onDataEvent)
+    stream.once('end', unsubscribe)
+    return unsubscribe
+  }
 }
 
 export const makeStrings = (initialRepeat: number) => (repeat = 1) => {
