@@ -47,7 +47,7 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, pushDelayM
         dbg('eager read end at %d', i - 1)
         inProgress = false
       } else {
-        dbg('read %d', i)
+        dbg('lazy read requested %d', i)
         push.call(this, data, i)
         ++i
       }

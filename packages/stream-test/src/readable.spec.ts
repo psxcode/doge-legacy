@@ -3,556 +3,118 @@ import { expect } from 'chai'
 import {
   makeMediumStrings,
   makeSmallStrings,
-  makeDataSpy,
-  wait,
-  waitForEnd,
-  waitForEndOrError,
   makeOnDataConsumer,
-  makeOnReadableConsumer
+  makeOnReadableConsumer,
+  makeReadableTest,
+  xmakeReadableTest,
+  SpyFn
 } from './test-helpers'
 import { makeReadable } from './readable'
-import { Readable } from 'stream'
 
-const makeTest = <T>(data: T[], stream: Readable, )
+const expectSameData = <T> (data: T[], spy: SpyFn<T>) => {
+  expect(spy.data().join('')).deep.eq(data.join(''))
+}
+const expectSameCallCount = <T> (data: T[], spy: SpyFn<T>) => {
+  expect(spy.data()).deep.eq(data)
+  expect(spy.callCount()).eq(data.length)
+}
+
+/**
+ * LAZY-PRODUCER
+ * on every _read() pushes one chunk with 'this.push()'
+ * Node just calls _read() until internal buffer is full
+ * works fine with both 'data' and 'readable' consumer
+ * Node respects highWaterMark, by stopping calling _read()
+ */
+
+/**
+ * EAGER-PRODUCER
+ * on first _read() repeats 'this.push()' until internal buffer is full
+ * works fine with both 'data' and 'readable' consumer
+ * highWaterMark limits amount of pushed data, by returning 'false' from 'this.push()'
+ */
+
+/**
+ * ASYNC-PRODUCER
+ * on _read() does not immediately 'this.push()' the chunk
+ * Node will NOT call _read() again, until 'this.push()' invoked
+ * On next 'this.push()', Node will immediately call _read() again
+ * In LAZY-ASYNC this is ok (pushes chunks one-by-one after every _read())
+ * In EAGER-ASYNC, special guard value should be used
+ */
 
 describe('[ stream-test / readable ]', function () {
   this.slow(1000)
 
-  describe('[ lazy-sync-stream ]', function () {
-    describe('[ sync-data-consumer ]', function () {
-      /**
-       * Consuming 'lazy-sync-stream', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it.skip('consuming string stream, using \'data\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
+  /**
+   * DATA CONSUMER
+   * for every 'this.push()', there will be 'data' event giving corresponding chunk
+   * Balanced behavior
+   * Good for any type of data
+   * Best for 'object-mode'
+   */
+  describe('[ data consumer ]', function () {
+    /* LAZY-SYNC-PRODUCER */
+    xmakeReadableTest(makeSmallStrings(),
+      (data) => makeReadable()(data, { objectMode: true }),
+      makeOnDataConsumer,
+      expectSameCallCount)
 
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'lazy-sync-stream' in 'object-mode', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it.skip('consuming string stream, using \'data\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ sync-readable-consumer ]', function () {
-      /**
-       * Consuming 'lazy-sync-stream', using 'eager-sync-readable' consumer
-       * bad case, use 'lazy-readable' or 'data' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'lazy-sync-stream', using 'lazy-sync-readable' consumer
-       * 'string' data arrives concatenated up to 'highWaterMark',
-       * resulting in small amount of 'readable' events
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'lazy-sync-stream' in 'object-mode', using 'eager-sync-readable' consumer
-       * every 'stream.read()' returns one object
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ async-readable-consumer ]', function () {
-      /**
-       * Consuming 'lazy-sync-stream' in 'object-mode', using 'eager-async-readable' consumer
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, better use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 50, eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'lazy-sync-stream', using 'lazy-async-readable' consumer
-       * 'string' data arrives concatenated up to 'highWaterMark',
-       * resulting in small amount of 'readable' events
-       * best usage for concatable data
-       */
-      it.skip('should', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable()(data)
-        const dataSpy = makeDataSpy()
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 100 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-    })
+    /* EAGER-SYNC-PRODUCER */
+    xmakeReadableTest(makeSmallStrings(3),
+      (data) => makeReadable({ eager: true })(data, { objectMode: true }),
+      makeOnDataConsumer,
+      expectSameCallCount)
   })
 
-  describe('[ lazy-async-stream ]', function () {
-    describe('[ sync-data-consumer ]', function () {
-      /**
-       * Consuming 'lazy-async-stream', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it.skip('consuming string stream, using \'data\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'lazy-async-stream' in 'object-mode', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it.skip('consuming string stream, using \'data\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ pushDelayMs: 10 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ sync-readable-consumer ]', function () {
-      /**
-       * Consuming 'lazy-async-stream', using 'eager-sync-readable' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'lazy-async-stream', using 'lazy-sync-readable' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 50 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'lazy-async-stream' in 'object-mode', using 'eager-sync-readable' consumer
-       * every 'stream.read()' returns one object
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 50 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'lazy-async-stream' in 'object-mode', using 'lazy-sync-readable' consumer
-       * every 'stream.read()' returns one object
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 50 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ async-readable-consumer ]', function () {
-      /**
-       * Consuming 'lazy-async-stream', using 'eager-async-readable' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true, readDelayMs: 10 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'lazy-async-stream', using 'lazy-async-readable' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 50 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 10 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'lazy-async-stream' in 'object-mode', using 'eager-async-readable' consumer
-       * every 'stream.read()' returns one object
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 50 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true, readDelayMs: 10 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'lazy-async-stream' in 'object-mode', using 'lazy-async-readable' consumer
-       * every 'stream.read()' returns one object
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeSmallStrings()
-        const stream = makeReadable({ pushDelayMs: 50 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 10 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
+  /**
+   * EAGER-READABLE CONSUMER
+   * On 'readable' event starts 'stream.read()' until there is no data left
+   * every 'stream.read()' invokes 'readable.read()',
+   * and if stream is lazy, it returns chunk, so 'stream.read()' immediately returns that chunk
+   * This forces stream to give all its data, one-by-one
+   * Then series of 'readable' events continues to be emitted from stream
+   * Then stream 'ends'
+   * Bad, not optimal
+   */
+  describe('[ eager-readable consumer ]', function () {
+    /* EAGER-SYNC-PRODUCER */
+    xmakeReadableTest(makeMediumStrings(),
+      (data) => makeReadable({ eager: true })(data, {  highWaterMark: 64 }),
+      (stream, spy) => makeOnReadableConsumer(stream, spy, { eager: true }),
+      expectSameData)
   })
 
-  describe('[ eager-sync-stream ]', function () {
-    describe('[ sync-data-consumer ]', function () {
-      /**
-       * Consuming 'eager-sync-stream', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it('consuming string stream, using \'data\'', async function () {
-        const data = makeSmallStrings(4)
-        const stream = makeReadable({ eager: true })(data, { highWaterMark: 96 })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'eager-sync-stream' in 'object-mode', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it.skip('consuming string stream, using \'data\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ sync-readable-consumer ]', function () {
-      /**
-       * Consuming 'eager-sync-stream', using 'eager-sync-readable' consumer
-       * bad case, use 'lazy-readable' or 'data' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'eager-sync-stream', using 'lazy-sync-readable' consumer
-       * 'string' data arrives concatenated up to 'highWaterMark',
-       * resulting in small amount of 'readable' events
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'eager-sync-stream' in 'object-mode', using 'eager-sync-readable' consumer
-       * every 'stream.read()' returns one object
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ async-readable-consumer ]', function () {
-      /**
-       * Consuming 'eager-sync-stream', using 'eager-async-readable' consumer
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, better use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 50, eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'eager-sync-stream', using 'lazy-async-readable' consumer
-       * 'string' data arrives concatenated up to 'highWaterMark',
-       * resulting in small amount of 'readable' events
-       * best usage for concatable data
-       */
-      it.skip('should', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true })(data)
-        const dataSpy = makeDataSpy()
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 100 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-    })
+  /**
+   * LAZY-READABLE CONSUMER
+   * On 'readable' event makes one 'stream.read'
+   * Allows buffered data to arrive in one large chunk
+   * Good for concatenatable data (strings, buffers)
+   * Bad for 'object-mode', stream never ends
+   */
+  describe('[ lazy-readable consumer ]', function () {
+    /* EAGER-SYNC-PRODUCER */
+    xmakeReadableTest(makeMediumStrings(),
+      (data) => makeReadable({ eager: true })(data),
+      (stream, spy) => makeOnReadableConsumer(stream, spy),
+      expectSameData)
   })
 
-  describe('[ eager-async-stream ]', function () {
-    describe('[ sync-data-consumer ]', function () {
-      /**
-       * Consuming 'eager-async-stream', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it('consuming string stream, using \'data\'', async function () {
-        const data = makeSmallStrings(4)
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data, { highWaterMark: 96 })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'eager-async-stream' in 'object-mode', using 'sync-data' consumer
-       * every 'this.push' inside readable, results in 'data' event,
-       * so data arrives in same order and chunks
-       */
-      it.skip('consuming string stream, using \'data\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnDataConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ sync-readable-consumer ]', function () {
-      /**
-       * Consuming 'eager-async-stream', using 'eager-sync-readable' consumer
-       * bad case, use 'lazy-readable' or 'data' consumer
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'eager-async-stream', using 'lazy-sync-readable' consumer
-       * 'string' data arrives concatenated up to 'highWaterMark',
-       * resulting in small amount of 'readable' events
-       */
-      it.skip('consuming string stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy)
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-
-      /**
-       * Consuming 'eager-async-stream' in 'object-mode', using 'eager-sync-readable' consumer
-       * every 'stream.read()' returns one object
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data, { objectMode: true })
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-    })
-
-    describe('[ async-readable-consumer ]', function () {
-      /**
-       * Consuming 'eager-async-stream', using 'eager-async-readable' consumer
-       * you must use eager 'readable' consumer, or stream hangs
-       * worst case, better use 'data' consumer
-       */
-      it.skip('consuming object stream, using \'readable\'', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        await wait(100)
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 50, eager: true })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data()).deep.eq(data)
-        expect(dataSpy.callCount()).eq(data.length)
-      })
-
-      /**
-       * Consuming 'eager-async-stream', using 'lazy-async-readable' consumer
-       * 'string' data arrives concatenated up to 'highWaterMark',
-       * resulting in small amount of 'readable' events
-       * best usage for concatable data
-       */
-      it.skip('should', async function () {
-        const data = makeMediumStrings()
-        const stream = makeReadable({ eager: true, pushDelayMs: 10 })(data)
-        const dataSpy = makeDataSpy()
-        makeOnReadableConsumer(stream, dataSpy, { readDelayMs: 100 })
-
-        await waitForEndOrError(stream, 100)
-        expect(dataSpy.data().join('')).deep.eq(data.join(''))
-      })
-    })
+  /**
+   * LAZY-ASYNC-READABLE CONSUMER
+   * 'readable' event arrives immediately after first 'this.push()'
+   * Consuming this chunk, with stream.read(),
+   * means stream becomes empty, and you wait for the next 'readable'
+   * You can postpone stream.read(), allowing stream to fill its buffer
+   * highWaterMark works perfectly here, affects 'readable' event count
+   * Best for concatenatable data (strings, buffers)
+   * Bad for 'object-mode', stream never ends
+   */
+  describe('[ lazy-async-readable consumer ]', function () {
+    /* EAGER-SYNC-PRODUCER */
+    xmakeReadableTest(makeMediumStrings(),
+      (data) => makeReadable({ eager: true })(data),
+      (stream, spy) => makeOnReadableConsumer(stream, spy, { readDelayMs: 0 }),
+      expectSameData)
   })
 })
