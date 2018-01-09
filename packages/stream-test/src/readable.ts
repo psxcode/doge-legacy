@@ -62,7 +62,7 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, pushDelayM
     return new Readable({
       encoding: 'utf8',
       ...opts,
-      read: isFinite(Number(pushDelayMs)) && pushDelayMs >= 0
+      read: pushDelayMs && isFinite(pushDelayMs) && pushDelayMs >= 0
         ? asyncHandler
         : syncHandler
     })
