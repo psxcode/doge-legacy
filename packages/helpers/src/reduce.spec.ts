@@ -7,7 +7,7 @@ const gen = function* (n: number) {
   for (let i = 0; i < n; ++i) yield i
 }
 
-describe.only('[ reduce ]', function () {
+describe('[ reduce ]', function () {
   it('works with arrays', function () {
     const data = [1, 2, 3, 4, 5]
     const spy = makeSpy(add)
