@@ -1,11 +1,10 @@
 import { AnyFn, PredicateFn } from './types'
 
-export const throwOn = (predicate: PredicateFn, errorMessage = '', ErrorContructor = Error) =>
-  (fn: AnyFn) =>
-    (...args: any[]): any | never => {
-      const res: any = fn(...args)
-      if (!predicate(res)) {
-        throw new ErrorContructor(errorMessage)
-      }
-      return res
+export const throwOn = <T> (predicate: PredicateFn<T>, throwFn: () => never) =>
+  (fn: (...args: any[]) => T) => (...args: any[]): T | never => {
+    const result: T = fn(...args)
+    if (!predicate(result)) {
+      throwFn()
     }
+    return result
+  }
