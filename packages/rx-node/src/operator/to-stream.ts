@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import { Readable, ReadableOptions } from 'stream'
 
-export function toStream<T extends string> (this: Observable<T>, opts: ReadableOptions = {}) {
+export function toStream<T> (this: Observable<T>, opts: ReadableOptions = {}) {
   const source = this
   let sub: Subscription
   return new Readable({

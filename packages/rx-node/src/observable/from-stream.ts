@@ -2,7 +2,7 @@ import ReadableStream = NodeJS.ReadableStream
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/share'
 
-export function fromStream<T extends string | Buffer> (source: ReadableStream): Observable<T> {
+export function fromStream<T> (source: ReadableStream): Observable<T> {
   const subscribeToStream = (onData: (data?: T) => void,
                              onError: (e: any) => void,
                              onEnd: () => void) => {
