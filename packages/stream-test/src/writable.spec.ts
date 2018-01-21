@@ -3,8 +3,9 @@ import {
   makeMediumStrings,
   makeSmallStrings,
   makeWritableProducer,
-  makeWritableTest, SpyFn,
-  xmakeWritableTest
+  makeWritableTest,
+  xmakeWritableTest,
+  SpyFn
 } from './test-helpers'
 import { makeWritable } from './writable'
 
