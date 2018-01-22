@@ -65,7 +65,7 @@ cacheFactories.forEach((makeCache: () => ICache<any, any>) => {
   })
 })
 
-describe.only('[ memoize ]', function () {
+describe('[ memoize ]', function () {
   it('should set value to cache', function () {
     const cache = makeSpyCache()
     const spy = sinon.mock().returns('value')
