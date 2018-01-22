@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { map } from './map'
-import { reduce } from './reduce'
+import { filter, map, reduce } from './iterable'
 import { makeSpy } from './test-helpers'
 
 const multBy = (x: number) => (val: number) => val * x
@@ -46,5 +45,45 @@ describe('[ map ]', function () {
     const result = [...map(spy, map(multBy(2), data))]
     expect(result).deep.eq([4, 8, 12, 16, 20])
     expect(spy.callCount()).eq(data.length)
+  })
+})
+
+describe('[ filter ]', function () {
+  it('works with arrays', function () {
+    const data = [1, 2, 3, 4, 5]
+    const spy = makeSpy(isEven)
+    expect(spy.callCount()).eq(0)
+    const result = [...filter(spy, data)]
+    expect(result).deep.eq([2, 4])
+    expect(spy.callCount()).eq(data.length)
+  })
+
+  it('works with Generators', function () {
+    const iterator = gen(5)
+    const spy = makeSpy(isEven)
+    expect(spy.callCount()).eq(0)
+    const result = [...filter(spy, iterator)]
+    expect(result).deep.eq([0, 2, 4])
+    expect(spy.callCount()).eq(5)
+  })
+})
+
+describe('[ reduce ]', function () {
+  it('works with arrays', function () {
+    const data = [1, 2, 3, 4, 5]
+    const spy = makeSpy(add)
+    expect(spy.callCount()).eq(0)
+    const result = reduce(spy, 0, data)
+    expect(spy.callCount()).eq(data.length)
+    expect(result).eq(15)
+  })
+
+  it('works with Generators', function () {
+    const data = gen(6)
+    const spy = makeSpy(add)
+    expect(spy.callCount()).eq(0)
+    const result = reduce(spy, 0, data)
+    expect(spy.callCount()).eq(6)
+    expect(result).eq(15)
   })
 })
