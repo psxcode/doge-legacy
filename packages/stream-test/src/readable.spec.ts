@@ -1,24 +1,13 @@
-/* tslint:disable no-conditional-assignment */
-import { expect } from 'chai'
 import {
   makeMediumStrings,
   makeSmallStrings,
   makeOnDataConsumer,
   makeOnReadableConsumer,
   makeReadableTest,
-  xmakeReadableTest,
-  SpyFn
+  xmakeReadableTest, expectSameCallCount, expectSameData
 } from './test-helpers'
 import { makeReadable } from './readable'
 import { iterate } from '@doge/helpers'
-
-const expectSameData = <T> (data: T[], spy: SpyFn<T>) => {
-  expect(spy.data().join('')).deep.eq(data.join(''))
-}
-const expectSameCallCount = <T> (data: T[], spy: SpyFn<T>) => {
-  expect(spy.data()).deep.eq(data)
-  expect(spy.callCount()).eq(data.length)
-}
 
 /**
  * LAZY-PRODUCER
@@ -56,14 +45,14 @@ describe('[ stream-test / readable ]', function () {
    */
   describe('[ data consumer ]', function () {
     /* LAZY-SYNC-PRODUCER */
-    xmakeReadableTest(makeSmallStrings(),
-      (data) => makeReadable()({ objectMode: true })(iterate(data)),
+    xmakeReadableTest(makeSmallStrings(2),
+      (data) => makeReadable({})({})(iterate(data)),
       makeOnDataConsumer,
       expectSameCallCount)
 
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeSmallStrings(3),
-      (data) => makeReadable({ eager: true })({ objectMode: true })(iterate(data)),
+      (data) => makeReadable({ eager: true })({ highWaterMark: 64 })(iterate(data)),
       makeOnDataConsumer,
       expectSameCallCount)
   })
@@ -97,7 +86,7 @@ describe('[ stream-test / readable ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
       (data) => makeReadable({ eager: true })({})(iterate(data)),
-      (stream, spy) => makeOnReadableConsumer(stream, spy),
+      (stream, spy) => makeOnReadableConsumer(stream, spy, {}),
       expectSameData)
   })
 
@@ -115,7 +104,7 @@ describe('[ stream-test / readable ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
       (data) => makeReadable({ eager: true })({})(iterate(data)),
-      (stream, spy) => makeOnReadableConsumer(stream, spy, { readDelayMs: 0 }),
+      (stream, spy) => makeOnReadableConsumer(stream, spy, { delayMs: 0 }),
       expectSameData)
   })
 })

@@ -1,27 +1,19 @@
-import { expect } from 'chai'
 import {
+  expectSameCallCount,
   makeMediumStrings,
   makeSmallStrings,
   makeWritableProducer,
   makeWritableTest,
-  xmakeWritableTest,
-  SpyFn
+  xmakeWritableTest
 } from './test-helpers'
 import { makeWritable } from './writable'
+import { iterate } from '@doge/helpers'
 
-const expectSameData = <T> (data: T[], spy: SpyFn<T>) => {
-  expect(spy.data().join('')).deep.eq(data.join(''))
-}
-const expectSameCallCount = <T> (data: T[], spy: SpyFn<T>) => {
-  expect(spy.data()).deep.eq(data)
-  expect(spy.callCount()).eq(data.length)
-}
-
-describe('', function () {
+describe('[ writable ]', function () {
   this.slow(1000)
 
-  makeWritableTest(makeMediumStrings(),
-    (spy) => makeWritable({ writeDelayMs: 10 })(spy, { highWaterMark: 256 }),
-    (stream, data) => makeWritableProducer(stream, data, { eager: true }),
+  xmakeWritableTest(makeMediumStrings(),
+    (spy) => makeWritable({ delayMs: 10 })({ highWaterMark: 256, decodeStrings: false })(spy),
+    (stream, data) => makeWritableProducer<string>({ eager: true })(iterate(data))(stream),
     expectSameCallCount)
 })

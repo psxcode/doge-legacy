@@ -2,22 +2,23 @@
 import * as debug from 'debug'
 import { Readable, ReadableOptions } from 'stream'
 import { wait } from './test-helpers'
+import { isPositiveNumber } from './helpers'
 
 export interface IMakeReadableOptions {
   errorAtStep?: number
   errorBehavior?: 'break' | 'continue',
-  pushDelayMs?: number
+  delayMs?: number
   eager?: boolean
 }
 
-export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, pushDelayMs }: IMakeReadableOptions = {}) =>
+export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }: IMakeReadableOptions) =>
   (readableOptions: ReadableOptions) => {
     const dbg = debug('stream-test:readable')
     return (iterator: Iterator<T>, maxLength = 0) => {
       let i = 0
       let inProgress = false
-      const push = function (this: Readable, iteratorResult: IteratorResult<T>) {
-        if (isFinite(errorAtStep) && i === errorAtStep) {
+      const push = function (this: Readable, iteratorResult: IteratorResult<T>, i: number) {
+        if (isPositiveNumber(errorAtStep) && i === errorAtStep) {
           dbg('emitting error at %d', i)
           this.emit('error', new Error(`emitting error at ${i}`))
           if (errorBehavior === 'break') {
@@ -40,25 +41,23 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, pushDelayM
         return res
       }
       const syncHandler = function (this: Readable) {
+        if (inProgress) return
         if (eager) {
           dbg('eager read requested %d', i)
-          if (inProgress) return
           inProgress = true
           dbg('eager read begin at %d', i)
-          while (push.call(this, iterator.next())) {
-            ++i
-          }
+          while (push.call(this, iterator.next(), i++)) {}
           dbg('eager read end at %d', i - 1)
           inProgress = false
         } else {
           dbg('lazy read requested %d', i)
-          push.call(this, iterator.next())
-          ++i
+          push.call(this, iterator.next(), i++)
         }
       }
       const asyncHandler = function (this: Readable) {
+        if (inProgress) return
         dbg('async read')
-        wait(pushDelayMs).then(() => {
+        wait(delayMs as number).then(() => {
           dbg('actual read %d', i)
           syncHandler.call(this)
         })
@@ -66,7 +65,7 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, pushDelayM
       return new Readable({
         encoding: 'utf8',
         ...readableOptions,
-        read: pushDelayMs && isFinite(pushDelayMs) && pushDelayMs >= 0
+        read: isPositiveNumber(delayMs)
           ? asyncHandler
           : syncHandler
       })

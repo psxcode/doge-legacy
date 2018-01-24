@@ -1,8 +1,14 @@
 /* tslint:disable no-conditional-assignment no-empty */
 import * as debug from 'debug'
 import { EventEmitter } from 'events'
-import { Readable, Writable } from 'stream'
+import { Readable, Transform, Writable } from 'stream'
+import { expect } from 'chai'
 import ReadableStream = NodeJS.ReadableStream
+import WritableStream = NodeJS.WritableStream
+import { makeWritable } from './writable'
+import { map } from './transform'
+import { makeReadable } from './readable'
+import { isPositiveNumber } from './helpers'
 
 export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -59,31 +65,31 @@ export const makeErrorSpy = <T> () => makeSpy<T>('error', 'error event #%d recei
 export const makeEndSpy = <T> () => makeSpy<T>('end', 'end event received')
 
 export interface IReadableConsumer {
-  readDelayMs?: number,
+  delayMs?: number,
   readSize?: number,
   eager?: boolean
 }
 
 export const makeOnReadableConsumer = <T> (stream: Readable,
-                                           onData: (data: T) => void,
-                                           { readDelayMs, readSize, eager }: IReadableConsumer = {}) => {
+                                           sink: (data: T) => void,
+                                           { delayMs, readSize, eager }: IReadableConsumer) => {
   const dbg = debug('stream-test:readable-consumer')
   let i = 0
   const eagerReader = (i: number) => {
     let chunk: T
     dbg('eager read at %d begin', i)
-    while (chunk = stream.read(readSize)) onData(chunk)
+    while (chunk = stream.read(readSize)) sink(chunk)
     dbg('eager read at %d done', i)
   }
   const lazyReader = (i: number) => {
     let chunk: T
     dbg('lazy read at %d begin', i);
-    (chunk = stream.read()) && onData(chunk)
+    (chunk = stream.read()) && sink(chunk)
     dbg('lazy read at %d done', i)
   }
   const asyncHandler = () => {
     dbg('received \'readable\' event at %d', i)
-    wait(readDelayMs).then(eager
+    wait(delayMs as number).then(eager
       ? eagerReader.bind(null, i)
       : lazyReader.bind(null, i)
     )
@@ -104,7 +110,7 @@ export const makeOnReadableConsumer = <T> (stream: Readable,
   }
   return () => {
     dbg('consumer subscribe')
-    stream.on('readable', isFinite(readDelayMs) && readDelayMs >= 0
+    stream.on('readable', isPositiveNumber(delayMs)
       ? asyncHandler
       : syncHandler)
     stream.once('end', unsubscribe)
@@ -112,12 +118,12 @@ export const makeOnReadableConsumer = <T> (stream: Readable,
   }
 }
 
-export const makeOnDataConsumer = <T> (stream: ReadableStream, onData: (data: T) => void) => {
+export const makeOnDataConsumer = <T> (stream: ReadableStream, sink: (data: T) => void) => {
   const dbg = debug('stream-test:data-consumer')
   let i = 0
   const onDataEvent = (chunk: T) => {
     dbg('received \'data\' event at %d', i)
-    onData(chunk)
+    sink(chunk)
     ++i
   }
   const unsubscribe = () => {
@@ -190,7 +196,7 @@ export const makeWritableProducer = <T> ({ eager }: IWritableProducer = {}) =>
   }
 
 export const makeStrings = (initialRepeat: number) => (repeat = 1): Iterable<string> => ({
-  *[Symbol.iterator] () {
+  * [Symbol.iterator] () {
     for (let i = 0; i < initialRepeat * repeat; ++i) {
       yield '#' + `${i}`.padStart(7, '0')
     }
@@ -202,7 +208,7 @@ export const makeLargeStrings = makeStrings(256)
 
 export const makeReadableTest = <T> (data: Iterable<T>,
                                      makeReadable: (data: Iterable<T>) => Readable,
-                                     makeConsumer: (stream: Readable, spy: SpyFn<T>) => () => any,
+                                     makeConsumer: (stream: Readable, sink: (data: T) => void) => () => any,
                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return it('should work', async function () {
     const spy = makeDataSpy<T>()
@@ -242,4 +248,42 @@ export const xmakeWritableTest = <T> (data: Iterable<T>,
                                       makeProducer: (stream: Writable, data: Iterable<T>) => () => void,
                                       expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return void 0
+}
+
+export const makeTransformTest = <T> (data: Iterable<T>,
+                                      makeReadable: (data: Iterable<T>) => ReadableStream,
+                                      makeWritable: (sink: (data: T) => void) => WritableStream,
+                                      makeTransform: () => Transform,
+                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
+  return it('should work', async function () {
+    const readable = makeReadable(data)
+    const spy = makeDataSpy<T>()
+    const writable = makeWritable(spy)
+    const transform = makeTransform()
+    await wait(100)
+    const stream = readable.pipe(transform).pipe(writable)
+    await waitForEndOrError(stream, 10)
+    expectFn && expectFn(data, spy)
+  })
+}
+
+export const xmakeTransformTest = <T> (data: Iterable<T>,
+                                      makeReadable: (data: Iterable<T>) => ReadableStream,
+                                      makeWritable: (spy: (data: T) => void) => WritableStream,
+                                      makeTransform: () => Transform,
+                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
+  return void 0
+}
+
+export const concatStrings = (iterable: Iterable<string> | string[]): string => {
+  return Array.from(iterable).join('')
+}
+
+export const expectSameData = (data: Iterable<string>, spy: SpyFn<string>) => {
+  expect(concatStrings(spy.data())).deep.eq(concatStrings(data))
+}
+export const expectSameCallCount = (data: Iterable<string>, spy: SpyFn<string>) => {
+  const arr = Array.from(data)
+  expect(spy.data()).deep.eq(arr)
+  expect(spy.callCount()).eq(arr.length)
 }
