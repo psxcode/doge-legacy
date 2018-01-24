@@ -63,7 +63,6 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }:
         })
       }
       return new Readable({
-        encoding: 'utf8',
         ...readableOptions,
         read: isPositiveNumber(delayMs)
           ? asyncHandler

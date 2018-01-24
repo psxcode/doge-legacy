@@ -1,10 +1,13 @@
+import { expect } from 'chai'
 import {
   makeMediumStrings,
   makeSmallStrings,
   makeOnDataConsumer,
   makeOnReadableConsumer,
   makeReadableTest,
-  xmakeReadableTest, expectSameCallCount, expectSameData
+  xmakeReadableTest,
+  expectSameCallCount,
+  expectSameData
 } from './test-helpers'
 import { makeReadable } from './readable'
 import { iterate } from '@doge/helpers'
@@ -44,15 +47,33 @@ describe('[ stream-test / readable ]', function () {
    * Best for 'object-mode'
    */
   describe('[ data consumer ]', function () {
+    /**
+     * for every single 'push' one 'data' event
+     */
     /* LAZY-SYNC-PRODUCER */
     xmakeReadableTest(makeSmallStrings(2),
-      (data) => makeReadable({})({})(iterate(data)),
+      (data) => makeReadable({})({ encoding: 'utf8' })(iterate(data)),
       makeOnDataConsumer,
       expectSameCallCount)
 
+    /**
+     * allows several 'push'es up to highWaterMark
+     * then begins sending 'data' event
+     * number os 'data' equals number of 'push'
+     */
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeSmallStrings(3),
-      (data) => makeReadable({ eager: true })({ highWaterMark: 64 })(iterate(data)),
+      (data) => makeReadable({ eager: true })({ encoding: 'utf8', highWaterMark: 64 })(iterate(data)),
+      makeOnDataConsumer,
+      expectSameCallCount)
+
+    /**
+     * for every EAGER 'push' there is synchronous 'data' event
+     * highWaterMark is not needed
+     */
+    /* EAGER-ASYNC-PRODUCER */
+    xmakeReadableTest(makeSmallStrings(5),
+      (data) => makeReadable({ eager: true, delayMs: 20 })({ encoding: 'utf8' })(iterate(data)),
       makeOnDataConsumer,
       expectSameCallCount)
   })
@@ -70,7 +91,7 @@ describe('[ stream-test / readable ]', function () {
   describe('[ eager-readable consumer ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
-      (data) => makeReadable({ eager: true })({ highWaterMark: 64 })(iterate(data)),
+      (data) => makeReadable({ eager: true })({  encoding: 'utf8', highWaterMark: 64 })(iterate(data)),
       (stream, spy) => makeOnReadableConsumer(stream, spy, { eager: true }),
       expectSameData)
   })
@@ -85,7 +106,7 @@ describe('[ stream-test / readable ]', function () {
   describe('[ lazy-readable consumer ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
-      (data) => makeReadable({ eager: true })({})(iterate(data)),
+      (data) => makeReadable({ eager: true })({ encoding: 'utf8' })(iterate(data)),
       (stream, spy) => makeOnReadableConsumer(stream, spy, {}),
       expectSameData)
   })
@@ -103,7 +124,7 @@ describe('[ stream-test / readable ]', function () {
   describe('[ lazy-async-readable consumer ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
-      (data) => makeReadable({ eager: true })({})(iterate(data)),
+      (data) => makeReadable({ eager: true })({ encoding: 'utf8' })(iterate(data)),
       (stream, spy) => makeOnReadableConsumer(stream, spy, { delayMs: 0 }),
       expectSameData)
   })
