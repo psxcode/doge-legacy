@@ -10,6 +10,7 @@ import {
   SpyFn
 } from './test-helpers'
 import { makeReadable } from './readable'
+import { iterate } from '@doge/helpers'
 
 const expectSameData = <T> (data: T[], spy: SpyFn<T>) => {
   expect(spy.data().join('')).deep.eq(data.join(''))
@@ -56,13 +57,13 @@ describe('[ stream-test / readable ]', function () {
   describe('[ data consumer ]', function () {
     /* LAZY-SYNC-PRODUCER */
     xmakeReadableTest(makeSmallStrings(),
-      (data) => makeReadable()(data, { objectMode: true }),
+      (data) => makeReadable()({ objectMode: true })(iterate(data)),
       makeOnDataConsumer,
       expectSameCallCount)
 
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeSmallStrings(3),
-      (data) => makeReadable({ eager: true })(data, { objectMode: true }),
+      (data) => makeReadable({ eager: true })({ objectMode: true })(iterate(data)),
       makeOnDataConsumer,
       expectSameCallCount)
   })
@@ -80,7 +81,7 @@ describe('[ stream-test / readable ]', function () {
   describe('[ eager-readable consumer ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
-      (data) => makeReadable({ eager: true })(data, {  highWaterMark: 64 }),
+      (data) => makeReadable({ eager: true })({ highWaterMark: 64 })(iterate(data)),
       (stream, spy) => makeOnReadableConsumer(stream, spy, { eager: true }),
       expectSameData)
   })
@@ -95,7 +96,7 @@ describe('[ stream-test / readable ]', function () {
   describe('[ lazy-readable consumer ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
-      (data) => makeReadable({ eager: true })(data),
+      (data) => makeReadable({ eager: true })({})(iterate(data)),
       (stream, spy) => makeOnReadableConsumer(stream, spy),
       expectSameData)
   })
@@ -113,7 +114,7 @@ describe('[ stream-test / readable ]', function () {
   describe('[ lazy-async-readable consumer ]', function () {
     /* EAGER-SYNC-PRODUCER */
     xmakeReadableTest(makeMediumStrings(),
-      (data) => makeReadable({ eager: true })(data),
+      (data) => makeReadable({ eager: true })({})(iterate(data)),
       (stream, spy) => makeOnReadableConsumer(stream, spy, { readDelayMs: 0 }),
       expectSameData)
   })
