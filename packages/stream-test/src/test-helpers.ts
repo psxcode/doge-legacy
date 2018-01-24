@@ -48,9 +48,9 @@ export const makeSpy = <T> (name: string, message: string): SpyFn<T> => {
   let i = 0
   let data: T[] = []
   const dbg = debug(`stream-test:event-spy:${name}`)
-  const spy = (value?: any) => {
-    dbg(message, i, value && (value.length / 8))
-    value && data.push(value)
+  const spy = (value?: T) => {
+    dbg(message, i, value)
+    value != null && data.push(value)
     ++i
   }
   (spy as SpyFn<T>).callCount = () => i;
@@ -58,7 +58,7 @@ export const makeSpy = <T> (name: string, message: string): SpyFn<T> => {
   return (spy as SpyFn<T>)
 }
 
-export const makeDataSpy = <T> () => makeSpy<T>('data', 'consume %d, length %d')
+export const makeDataSpy = <T> () => makeSpy<T>('data', 'consume %d, value %s')
 
 export const makeErrorSpy = <T> () => makeSpy<T>('error', 'error event #%d received')
 
@@ -195,16 +195,28 @@ export const makeWritableProducer = <T> ({ eager }: IWritableProducer = {}) =>
     }
   }
 
-export const makeStrings = (initialRepeat: number) => (repeat = 1): Iterable<string> => ({
+export const makeStringsIterable = (initialRepeat: number) => (repeat = 1): Iterable<string> => ({
   * [Symbol.iterator] () {
     for (let i = 0; i < initialRepeat * repeat; ++i) {
       yield '#' + `${i}`.padStart(7, '0')
     }
   }
 })
-export const makeSmallStrings = makeStrings(4)
-export const makeMediumStrings = makeStrings(64)
-export const makeLargeStrings = makeStrings(256)
+export const makeSmallStrings = makeStringsIterable(4)
+export const makeMediumStrings = makeStringsIterable(64)
+export const makeLargeStrings = makeStringsIterable(256)
+
+export const makeRangeIterable = (initialRange: number) => (multiplier: number): Iterable<number> => ({
+  * [Symbol.iterator] () {
+    for (let i = 0; i < initialRange * multiplier; ++i) {
+      yield i
+    }
+  }
+})
+
+export const makeSmallRange = makeRangeIterable(4)
+export const makeMediumRange = makeRangeIterable(64)
+export const makeLargeRange = makeRangeIterable(256)
 
 export const makeReadableTest = <T> (data: Iterable<T>,
                                      makeReadable: (data: Iterable<T>) => Readable,
