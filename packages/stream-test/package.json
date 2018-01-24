@@ -25,7 +25,9 @@
     "test:coverage:generate": "nyc report --reporter=json",
     "test:coverage:report": "codecov -f coverage/*.json"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@doge/helers": "*"
+  },
   "devDependencies": {
     "@std/esm": "^0.18.0",
     "@types/chai": "^4.0.6",
