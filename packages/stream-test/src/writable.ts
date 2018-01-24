@@ -8,25 +8,25 @@ export interface IWritableConsumer {
   errorAtStep?: number
 }
 
-export const makeWritable = ({ delayMs, errorAtStep }: IWritableConsumer = {}) =>
+export const makeWritable = <T>({ delayMs, errorAtStep }: IWritableConsumer = {}) =>
   (writableOptions: WritableOptions = {}) => {
     const dbg = debug('stream-test:writable')
-    return (sink: (data: any) => void) => {
+    return (sink: (data: T) => void) => {
       let i = 0
 
-      const syncHandler = (chunk: any, encoding: string, cb: (err: any) => void) => {
+      const syncHandler = (chunk: T, encoding: string, cb: (err?: Error) => void) => {
         dbg('actual write %d', i)
         sink(chunk)
         if (i === errorAtStep) {
           dbg('returning an error at %d', i)
           cb(new Error(`error at step ${i}`))
         } else {
-          cb(null)
+          cb()
         }
         ++i
       }
 
-      const asyncHandler = (chunk: any, encoding: string, cb: (err: any) => void) => {
+      const asyncHandler = (chunk: T, encoding: string, cb: (err: any) => void) => {
         dbg('async write')
         wait(delayMs as number).then(() => syncHandler(chunk, encoding, cb))
       }
@@ -43,9 +43,9 @@ export const makeWritable = ({ delayMs, errorAtStep }: IWritableConsumer = {}) =
 
       return new Writable({
         ...writableOptions,
-        write: isPositiveNumber(delayMs)
+        write: (isPositiveNumber(delayMs)
           ? asyncHandler
-          : syncHandler,
+          : syncHandler) as any,
         final: isPositiveNumber(delayMs)
           ? asyncFinal
           : syncFinal
