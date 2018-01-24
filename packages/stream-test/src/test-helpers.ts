@@ -2,6 +2,7 @@
 import * as debug from 'debug'
 import { EventEmitter } from 'events'
 import { Readable, Writable } from 'stream'
+import ReadableStream = NodeJS.ReadableStream
 
 export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -111,7 +112,7 @@ export const makeOnReadableConsumer = <T> (stream: Readable,
   }
 }
 
-export const makeOnDataConsumer = <T> (stream: Readable, onData: (data: T) => void) => {
+export const makeOnDataConsumer = <T> (stream: ReadableStream, onData: (data: T) => void) => {
   const dbg = debug('stream-test:data-consumer')
   let i = 0
   const onDataEvent = (chunk: T) => {
@@ -136,75 +137,73 @@ export interface IWritableProducer {
   eager?: boolean
 }
 
-export const makeWritableProducer = <T> (stream: Writable,
-                                         data: T[],
-                                         { eager }: IWritableProducer = {}) => {
-  const dbg = debug('stream-test:data-producer')
-  let i = 0
-  const noop = () => {
-  }
-  const eagerWriter = () => {
-    dbg('eager writing begin at %d', i)
-    while (i < data.length && writeChunk(data, i++)) {}
-    dbg('eager writing done at %d', i - 1)
-  }
-  const lazyWriter = () => {
-    dbg('lazy writing begin at %d', i)
-    writeChunk(data, i++, lazyWriter)
-    dbg('lazy writing done at %d', i - 1)
-  }
-  const writeChunk = (data: T[], i: number, cb?: () => void): boolean => {
-    if (i >= data.length) return false
-    if (i < data.length - 1) {
-      dbg('writing %d', i)
-      const backpressure = stream.write(data[i], cb)
-      if (!backpressure) {
-        dbg('backpressure at %d', i)
+export const makeWritableProducer = <T> ({ eager }: IWritableProducer = {}) =>
+  (iterator: Iterator<T>, maxLength = 0) => (stream: Writable) => {
+    const dbg = debug('stream-test:data-producer')
+    let i = 0
+    const noop = () => {
+    }
+    const eagerWriter = () => {
+      dbg('eager writing begin at %d', i)
+      while (writeChunk(iterator.next())) {
+        ++i
       }
-      return backpressure
-    } else {
-      dbg('ending %d', i)
-      stream.end(data[i])
-      return false
+      dbg('eager writing done at %d', i - 1)
+    }
+    const lazyWriter = () => {
+      dbg('lazy writing begin at %d', i)
+      writeChunk(iterator.next(), lazyWriter)
+      dbg('lazy writing done at %d', i - 1)
+    }
+    const writeChunk = (iteratorResult: IteratorResult<T>, cb?: () => void): boolean => {
+      if (iteratorResult.done || (maxLength > 0 && i >= maxLength)) {
+        dbg('ending %d', i)
+        stream.end()
+        return false
+      } else {
+        dbg('writing %d', i)
+        const backpressure = stream.write(iteratorResult.value, cb)
+        if (!backpressure) {
+          dbg('backpressure at %d', i)
+        }
+        return backpressure
+      }
+    }
+    const onDrainEvent = () => {
+      dbg('received \'drain\' event %d', i)
+      eager ? eagerWriter() : lazyWriter()
+    }
+    const unsubscribe = () => {
+      dbg('unsubscribe')
+      stream.removeListener('drain', onDrainEvent)
+      stream.removeListener('finish', unsubscribe)
+    }
+
+    return () => {
+      dbg('producer subscribe')
+      stream.on('drain', onDrainEvent)
+      stream.once('finish', unsubscribe)
+      /* drain event could already be emitted, try to write once */
+      eager ? eagerWriter() : lazyWriter()
+      return unsubscribe
     }
   }
-  const onDrainEvent = () => {
-    dbg('received \'drain\' event %d', i)
-    eager ? eagerWriter() : lazyWriter()
-  }
-  const unsubscribe = () => {
-    dbg('unsubscribe')
-    /* stop writes */
-    i = data.length
-    stream.removeListener('drain', onDrainEvent)
-    stream.removeListener('finish', unsubscribe)
-  }
 
-  return () => {
-    dbg('producer subscribe')
-    stream.on('drain', onDrainEvent)
-    stream.once('finish', unsubscribe)
-    /* drain event could already be emitted, try to write once */
-    eager ? eagerWriter() : lazyWriter()
-    return unsubscribe
+export const makeStrings = (initialRepeat: number) => (repeat = 1): Iterable<string> => ({
+  *[Symbol.iterator] () {
+    for (let i = 0; i < initialRepeat * repeat; ++i) {
+      yield '#' + `${i}`.padStart(7, '0')
+    }
   }
-}
-
-export const makeStrings = (initialRepeat: number) => (repeat = 1) => {
-  const arr: string[] = new Array(initialRepeat * repeat)
-  for (let i = 0; i < arr.length; ++i) {
-    arr[i] = '_' + `${i}`.padStart(7, '0')
-  }
-  return arr
-}
+})
 export const makeSmallStrings = makeStrings(4)
 export const makeMediumStrings = makeStrings(64)
 export const makeLargeStrings = makeStrings(256)
 
-export const makeReadableTest = <T> (data: T[],
-                                     makeReadable: (data: T[]) => Readable,
+export const makeReadableTest = <T> (data: Iterable<T>,
+                                     makeReadable: (data: Iterable<T>) => Readable,
                                      makeConsumer: (stream: Readable, spy: SpyFn<T>) => () => any,
-                                     expectFn?: (data: T[], spy: SpyFn<T>) => void) => {
+                                     expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return it('should work', async function () {
     const spy = makeDataSpy<T>()
     const stream = makeReadable(data)
@@ -216,17 +215,17 @@ export const makeReadableTest = <T> (data: T[],
   })
 }
 
-export const xmakeReadableTest = <T> (data: T[],
-                                      makeReadable: (data: T[]) => Readable,
+export const xmakeReadableTest = <T> (data: Iterable<T>,
+                                      makeReadable: (data: Iterable<T>) => Readable,
                                       makeConsumer: (stream: Readable, spy: (data: T) => void) => () => any,
-                                      expectFn?: (data: T[], spy: SpyFn<T>) => void) => {
+                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return void 0
 }
 
-export const makeWritableTest = <T> (data: T[],
+export const makeWritableTest = <T> (data: Iterable<T>,
                                      makeWritable: (spy: (data: T) => void) => Writable,
-                                     makeProducer: (stream: Writable, data: T[]) => () => void,
-                                     expectFn?: (data: T[], spy: SpyFn<T>) => void) => {
+                                     makeProducer: (stream: Writable, data: Iterable<T>) => () => void,
+                                     expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return it('should work', async function () {
     const spy = makeDataSpy<T>()
     const stream = makeWritable(spy)
@@ -238,9 +237,9 @@ export const makeWritableTest = <T> (data: T[],
   })
 }
 
-export const xmakeWritableTest = <T> (data: T[],
+export const xmakeWritableTest = <T> (data: Iterable<T>,
                                       makeWritable: (spy: (data: T) => void) => Writable,
-                                      makeProducer: (stream: Writable, data: T[]) => () => void,
-                                      expectFn?: (data: T[], spy: SpyFn<T>) => void) => {
+                                      makeProducer: (stream: Writable, data: Iterable<T>) => () => void,
+                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return void 0
 }
