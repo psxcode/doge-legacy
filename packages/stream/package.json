@@ -1,5 +1,5 @@
 {
-  "name": "@doge/stream-test",
+  "name": "@doge/stream",
   "version": "0.0.0",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
