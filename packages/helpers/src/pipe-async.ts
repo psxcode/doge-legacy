@@ -1,4 +1,3 @@
-import { identityAsync } from './identity'
 import { AsyncFn, AsyncPipeFn } from './types'
 
 export function pipeAsync<A> (): (arg: A) => Promise<A>
@@ -11,5 +10,5 @@ export function pipeAsync<A, B, C, D, E, F, G> (fn0: AsyncPipeFn<A, B>, fn1: Asy
 export function pipeAsync<A, B, C, D, E, F, G, H> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>, fn6: AsyncPipeFn<G, H>): AsyncFn<A, H>
 export function pipeAsync<A, B, C, D, E, F, G, H, I> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>, fn6: AsyncPipeFn<G, H>, fn7: AsyncPipeFn<H, I>): AsyncFn<A, I>
 export function pipeAsync (...fns: AsyncPipeFn<any, any>[]): AsyncFn<any, any> {
-  return fns.reduce((acc, fn) => (arg: any) => acc(arg).then(fn), identityAsync)
+  return (initial: any) => fns.reduce((arg, fn) => arg.then(fn), Promise.resolve(initial))
 }

@@ -1,4 +1,3 @@
-import { identity } from './identity'
 import { PipeFn } from './types'
 
 export function pipe<A> (): (arg: A) => A
@@ -11,5 +10,5 @@ export function pipe<A, B, C, D, E, F, G> (fn0: PipeFn<A, B>, fn1: PipeFn<B, C>,
 export function pipe<A, B, C, D, E, F, G, H> (fn0: PipeFn<A, B>, fn1: PipeFn<B, C>, fn2: PipeFn<C, D>, fn3: PipeFn<D, E>, fn4: PipeFn<E, F>, fn5: PipeFn<F, G>, fn6: PipeFn<G, H>): PipeFn<A, H>
 export function pipe<A, B, C, D, E, F, G, H, I> (fn0: PipeFn<A, B>, fn1: PipeFn<B, C>, fn2: PipeFn<C, D>, fn3: PipeFn<D, E>, fn4: PipeFn<E, F>, fn5: PipeFn<F, G>, fn6: PipeFn<G, H>, fn7: PipeFn<H, I>): PipeFn<A, I>
 export function pipe (...fns: PipeFn<any, any>[]) {
-  return fns.reduce((acc, fn) => (arg: any) => fn(acc(arg)), identity)
+  return (initial: any) => fns.reduce((arg, fn) => fn(arg), initial)
 }

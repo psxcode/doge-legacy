@@ -56,7 +56,7 @@ describe('[ pipe-async ]', function () {
     const piped = pipeAsync(throwing('error'))
     try {
       await piped()
-      throw new Error('should not reach this point')
+      expect.fail('should not reach this point')
     } catch (e) {
       expect(e.message).eq('error')
     }
@@ -66,7 +66,7 @@ describe('[ pipe-async ]', function () {
     const piped = pipeAsync(add(2), throwing('error'), toString)
     try {
       await piped()
-      throw new Error('should not reach this point')
+      expect.fail('should not reach this point')
     } catch (e) {
       expect(e.message).eq('error')
     }
