@@ -1,5 +1,3 @@
-import { AnyFn } from './types'
-
-export const promisify = (fn: AnyFn) => (...args: any[]) =>
+export const promisify = (fn: (...args: any[]) => any) => (...args: any[]) =>
   new Promise((resolve, reject) =>
     fn(...args, (err: any, val: any) => { err ? reject(err) : resolve(val) }))

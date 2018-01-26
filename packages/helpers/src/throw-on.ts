@@ -1,4 +1,4 @@
-import { AnyFn, PredicateFn } from './types'
+import { PredicateFn } from './types'
 
 export const throwOn = <T> (predicate: PredicateFn<T>, throwFn: () => never) =>
   (fn: (...args: any[]) => T) => (...args: any[]): T | never => {
