@@ -1,40 +1,27 @@
 /* tslint:disable no-conditional-assignment no-empty */
 import * as debug from 'debug'
 import { EventEmitter } from 'events'
-import { Readable, Transform, Writable } from 'stream'
+import { Readable, Writable } from 'stream'
 import { expect } from 'chai'
+import { wait as waitRaw, bind } from '@doge/helpers'
 import ReadableStream = NodeJS.ReadableStream
 import WritableStream = NodeJS.WritableStream
-import { makeWritable } from './writable'
-import { map } from './transform'
-import { makeReadable } from './readable'
 import { isPositiveNumber } from './helpers'
+import { raceEvents } from './wait-event'
+import ReadWriteStream = NodeJS.ReadWriteStream
+import { pipe, PipedStream } from './pipe'
 
-export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+export const wait = waitRaw(setTimeout)
+const doWait = (ms: number) => bind(ms)(wait)
 
-export const waitForEvent = (ee: EventEmitter, events: string[], waitAfterMs = 0) => {
-  const startedAt = Date.now()
-  let listeners: Function[]
-  const dbg = debug('stream-test:wait-for-event')
-  const unsubscribe = () => listeners.forEach((l) => l())
-  return new Promise(resolve => {
-    listeners = events.map(name => {
-      const listener = () => {
-        dbg('\'%s\' within %dms', name, Date.now() - startedAt)
-        unsubscribe()
-        waitAfterMs < 0 ? resolve() : wait(waitAfterMs).then(resolve)
-      }
-      ee.on(name, listener)
-      return () => ee.removeListener(name, listener)
-    })
-  })
-}
+export const waitForEnd = (ee: EventEmitter, waitAfterMs = 0) =>
+  raceEvents('end', 'finish')(ee).then(doWait(waitAfterMs))
 
-export const waitForEnd = (ee: EventEmitter, waitAfterMs = 0) => waitForEvent(ee, ['end'], waitAfterMs)
+export const waitForError = (ee: EventEmitter, waitAfterMs = 0) =>
+  raceEvents('error')(ee).then(doWait(waitAfterMs))
 
-export const waitForError = (ee: EventEmitter, waitAfterMs = 0) => waitForEvent(ee, ['error'], waitAfterMs)
-
-export const waitForEndOrError = (ee: EventEmitter, waitAfterMs = 0) => waitForEvent(ee, ['end', 'finish', 'error'], waitAfterMs)
+export const waitForEndOrError = (ee: EventEmitter, waitAfterMs = 0) =>
+  raceEvents('end', 'finish', 'error')(ee).then(doWait(waitAfterMs))
 
 export interface SpyFn<T> {
   (data?: T): void
@@ -265,7 +252,7 @@ export const xmakeWritableTest = <T> (data: Iterable<T>,
 export const makeTransformTest = <T> (data: Iterable<T>,
                                       makeReadable: (data: Iterable<T>) => ReadableStream,
                                       makeWritable: (sink: (data: T) => void) => WritableStream,
-                                      makeTransform: () => Transform,
+                                      makeTransform: () => ReadWriteStream | PipedStream,
                                       expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return it('should work', async function () {
     const readable = makeReadable(data)
@@ -273,8 +260,8 @@ export const makeTransformTest = <T> (data: Iterable<T>,
     const writable = makeWritable(spy)
     const transform = makeTransform()
     await wait(100)
-    const stream = readable.pipe(transform).pipe(writable)
-    await waitForEndOrError(stream, 10)
+    const stream = pipe(readable as ReadWriteStream, transform, writable as ReadWriteStream) as PipedStream
+    await waitForEndOrError(stream.tail, 10)
     expectFn && expectFn(data, spy)
   })
 }
@@ -282,7 +269,7 @@ export const makeTransformTest = <T> (data: Iterable<T>,
 export const xmakeTransformTest = <T> (data: Iterable<T>,
                                       makeReadable: (data: Iterable<T>) => ReadableStream,
                                       makeWritable: (spy: (data: T) => void) => WritableStream,
-                                      makeTransform: () => Transform,
+                                      makeTransform: () => ReadWriteStream | PipedStream,
                                       expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return void 0
 }
