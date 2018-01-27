@@ -63,7 +63,7 @@ describe('[ transform ]', function () {
       () => scan(addAll),
       (data, spy) => {
         expect(spy.data()).deep
-          .eq(Array.from(data).reduce((acc: number[], val) => [...acc, val + acc.reduce(addAll, 0)], []))
+          .eq(Array.from(data).reduce((acc: number[], val, i) => [...acc, i > 0 ? val + acc[i - 1] : val], []))
       })
   })
 
