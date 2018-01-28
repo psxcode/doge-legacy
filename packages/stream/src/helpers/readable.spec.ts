@@ -8,7 +8,7 @@ import {
   xmakeReadableTest,
   expectSameCallCount,
   expectSameData
-} from './test-helpers'
+} from './helpers'
 import { makeReadable } from './readable'
 import { iterate } from '@doge/helpers'
 

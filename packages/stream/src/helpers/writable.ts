@@ -1,6 +1,6 @@
 import { Writable, WritableOptions } from 'stream'
 import * as debug from 'debug'
-import { wait } from './test-helpers'
+import { wait } from './helpers'
 import { isPositiveNumber } from './helpers'
 
 export interface IWritableConsumer {

@@ -1,7 +1,7 @@
 /* tslint:disable no-conditional-assignment no-empty */
 import * as debug from 'debug'
 import { Readable, ReadableOptions } from 'stream'
-import { wait } from './test-helpers'
+import { wait } from './helpers'
 import { isPositiveNumber } from './helpers'
 
 export interface IMakeReadableOptions {

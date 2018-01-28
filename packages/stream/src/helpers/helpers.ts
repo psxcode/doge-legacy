@@ -4,12 +4,11 @@ import { EventEmitter } from 'events'
 import { Readable, Writable } from 'stream'
 import { expect } from 'chai'
 import { wait as waitRaw, bind } from '@doge/helpers'
+import { raceEvents } from '../wait-event'
+import { pipe, PipedStream } from '../pipe'
 import ReadableStream = NodeJS.ReadableStream
 import WritableStream = NodeJS.WritableStream
-import { isPositiveNumber } from './helpers'
-import { raceEvents } from './wait-event'
 import ReadWriteStream = NodeJS.ReadWriteStream
-import { pipe, PipedStream } from './pipe'
 
 export const wait = waitRaw(setTimeout)
 const doWait = (ms: number) => bind(ms)(wait)
@@ -22,6 +21,10 @@ export const waitForError = (ee: EventEmitter, waitAfterMs = 0) =>
 
 export const waitForEndOrError = (ee: EventEmitter, waitAfterMs = 0) =>
   raceEvents('end', 'finish', 'error')(ee).then(doWait(waitAfterMs))
+
+export const isPositiveNumber = (num: any): num is number => {
+  return num && isFinite(num) && num >= 0
+}
 
 export interface SpyFn<T> {
   (data?: T): void

@@ -5,7 +5,7 @@ import {
   makeWritableProducer,
   makeWritableTest,
   xmakeWritableTest
-} from './test-helpers'
+} from './helpers'
 import { makeWritable } from './writable'
 import { iterate } from '@doge/helpers'
 
