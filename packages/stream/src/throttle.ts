@@ -23,3 +23,33 @@ export const throttle = (subscribeToInterval: (doNext: () => void) => () => void
     }
   })
 }
+
+export const throttleTime = (setTimeout: (cb: () => void, ms: number) => any, clearTimeout: (id: any) => void) =>
+  (ms: number) => {
+    let lastChunk: any
+    let inProgress = false
+    let timeoutId: any
+    return new Transform({
+      objectMode: true,
+      transform (chunk, encoding, callback) {
+        lastChunk = chunk
+        if (!inProgress) {
+          inProgress = true
+          timeoutId = setTimeout(() => {
+            inProgress = false
+            if (lastChunk != null) {
+              this.push(lastChunk)
+              lastChunk = undefined
+            }
+          }, ms)
+        }
+        callback()
+      },
+      flush (callback) {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
+        callback(null, lastChunk)
+      }
+    })
+  }
