@@ -1,10 +1,10 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 
-export const throttle = (subscribeToInterval: (doNext: () => void) => () => void) => {
+export const throttleRaw = (opts: TransformOptions) => (subscribeToInterval: (doNext: () => void) => () => void) => {
   let lastChunk: any
   let unsubscribe: any
   return new Transform({
-    objectMode: true,
+    ...opts,
     transform (chunk, encoding, callback) {
       lastChunk = chunk
       if (unsubscribe == null) {
@@ -24,13 +24,15 @@ export const throttle = (subscribeToInterval: (doNext: () => void) => () => void
   })
 }
 
-export const throttleTime = (setTimeout: (cb: () => void, ms: number) => any, clearTimeout: (id: any) => void) =>
+export const throttle = throttleRaw({ objectMode: true })
+
+export const throttleTimeRaw = (opts: TransformOptions) => (setTimeout: (cb: () => void, ms: number) => any, clearTimeout: (id: any) => void) =>
   (ms: number) => {
     let lastChunk: any
     let inProgress = false
     let timeoutId: any
     return new Transform({
-      objectMode: true,
+      ...opts,
       transform (chunk, encoding, callback) {
         lastChunk = chunk
         if (!inProgress) {
@@ -53,3 +55,5 @@ export const throttleTime = (setTimeout: (cb: () => void, ms: number) => any, cl
       }
     })
   }
+
+export const throttleTime = throttleTimeRaw({ objectMode: true })

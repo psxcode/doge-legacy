@@ -1,10 +1,10 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 
-export const reduce = (reducer: (state: any, value: any) => any) => {
+export const reduceRaw = <T, R> (opts: TransformOptions) => (reducer: (state: R, value: T) => R) => {
   let state: any
   return new Transform({
-    objectMode: true,
-    transform (chunk, encoding, callback) {
+    ...opts,
+    transform (chunk: any, encoding, callback) {
       try {
         state = reducer(state, chunk)
       } catch (e) {
@@ -17,3 +17,5 @@ export const reduce = (reducer: (state: any, value: any) => any) => {
     }
   })
 }
+
+export const reduce = reduceRaw<any, any>({ objectMode: true })

@@ -1,9 +1,9 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 
-export const last = () => {
+export const lastRaw = (opts: TransformOptions) => () => {
   let value: any
   return new Transform({
-    objectMode: true,
+    ...opts,
     transform (chunk, encoding, callback) {
       value = chunk
       callback()
@@ -13,3 +13,5 @@ export const last = () => {
     }
   })
 }
+
+export const last = lastRaw({ objectMode: true })

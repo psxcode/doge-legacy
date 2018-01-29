@@ -1,12 +1,15 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 
-export const first = () => {
+export const firstRaw = (opts: TransformOptions) => () => {
   let fulfilled = false
   return new Transform({
-    objectMode: true,
+    ...opts,
     transform (chunk, encoding, callback) {
-      callback(null, fulfilled ? undefined : chunk)
+      this.push(fulfilled ? null : chunk)
       fulfilled = true
+      callback()
     }
   })
 }
+
+export const first = firstRaw({ objectMode: true })

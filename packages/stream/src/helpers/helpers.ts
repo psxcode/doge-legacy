@@ -196,7 +196,7 @@ export const makeSmallStrings = makeStringsIterable(4)
 export const makeMediumStrings = makeStringsIterable(64)
 export const makeLargeStrings = makeStringsIterable(256)
 
-export const makeRangeIterable = (initialRange: number) => (multiplier: number): Iterable<number> => ({
+export const makeRangeIterable = (initialRange: number) => (multiplier: number = 1): Iterable<number> => ({
   * [Symbol.iterator] () {
     for (let i = 0; i < initialRange * multiplier; ++i) {
       yield i

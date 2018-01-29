@@ -1,9 +1,9 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 
-export const scan = (reducer: (state: any, value: any) => any) => {
+export const scanRaw = <T, R> (opts: TransformOptions) => (reducer: (state: any, value: any) => any) => {
   let state: any
   return new Transform({
-    objectMode: true,
+    ...opts,
     transform (chunk, encoding, callback) {
       try {
         state = reducer(state, chunk)
@@ -14,3 +14,5 @@ export const scan = (reducer: (state: any, value: any) => any) => {
     }
   })
 }
+
+export const scan = scanRaw<any, any>({ objectMode: true })

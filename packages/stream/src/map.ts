@@ -1,9 +1,9 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 
-export const map = (xf: (value: any) => any) =>
+export const mapRaw = <T, R> (opts: TransformOptions) => (xf: (value: T) => R) =>
   new Transform({
-    objectMode: true,
-    transform (chunk, encoding, callback) {
+    ...opts,
+    transform (chunk: any, encoding, callback) {
       let res
       try {
         res = xf(chunk)
@@ -13,3 +13,5 @@ export const map = (xf: (value: any) => any) =>
       callback(null, res)
     }
   })
+
+export const map = mapRaw<any, any>({ objectMode: true })

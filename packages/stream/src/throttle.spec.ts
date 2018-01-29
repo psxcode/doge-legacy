@@ -22,8 +22,8 @@ describe('[ throttle ]', function () {
 
 describe('[ throttleTime ]', function () {
 
-  makeTransformTest<number>(makeSmallRange(4),
-    (data) => makeReadable({ delayMs: 0 })({ objectMode: true })(iterate(data)),
+  xmakeTransformTest<number>(makeSmallRange(4),
+    (data) => makeReadable({ delayMs: 10 })({ objectMode: true })(iterate(data)),
     (spy) => makeWritable({})({ objectMode: true })(spy),
     () => throttleTime(setTimeout, clearTimeout)(30))
 })
