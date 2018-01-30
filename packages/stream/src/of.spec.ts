@@ -1,12 +1,13 @@
 import { expect } from 'chai'
 import {
-  makeOnDataConsumer, makeOnReadableConsumer,
+  makeOnDataConsumer,
+  makeOnReadableConsumer,
   makeReadableTest,
   makeSmallRange,
   makeSmallStrings,
   xmakeReadableTest
 } from './helpers/helpers'
-import { of, ofRaw } from './of'
+import { of } from './of'
 
 describe('[ of ]', function () {
   xmakeReadableTest<number>(makeSmallRange(),
@@ -14,14 +15,5 @@ describe('[ of ]', function () {
     (readable, sink) => makeOnDataConsumer(readable, sink),
     (data, spy) => {
       expect(spy.data()).deep.eq(Array.from(data))
-    })
-})
-
-describe('[ ofRaw ]', function () {
-  xmakeReadableTest(makeSmallStrings(),
-    (data) => ofRaw(...data),
-    (readable, sink) => makeOnReadableConsumer(readable, sink, {}),
-    (data, spy) => {
-      expect(spy.data().join('')).deep.eq(Array.from(data).join(''))
     })
 })

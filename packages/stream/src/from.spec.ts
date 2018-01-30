@@ -9,14 +9,7 @@ import {
 import { from } from './from'
 
 describe('[ from ]', function () {
-  makeReadableTest(makeMediumRange(),
-    from,
-    makeOnDataConsumer,
-    expectSameCallCount)
-})
-
-describe('[ fromRaw ]', function () {
-  makeReadableTest(makeMediumRange(),
+  xmakeReadableTest(makeMediumRange(),
     from,
     makeOnDataConsumer,
     expectSameCallCount)
