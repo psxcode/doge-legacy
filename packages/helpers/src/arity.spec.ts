@@ -1,6 +1,8 @@
 /* tslint:disable no-empty */
+import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { binary, nullary, ternary, unary } from './arity'
+import { binary, nullary, ternary, unary, voidify } from './arity'
+import { identity } from './identity'
 
 const makeSpy = () => sinon.spy()
 
@@ -42,6 +44,13 @@ describe('[ arity ]', function () {
       un('a', 'b', 'c', 'd')
       sinon.assert.calledOnce(spy)
       sinon.assert.calledWithExactly(spy, 'a', 'b', 'c')
+    })
+  })
+
+  describe('[ voidify ]', function () {
+    it('should work', function () {
+      const result = voidify(identity)('value')
+      expect(result).eq(undefined)
     })
   })
 })
