@@ -5,7 +5,7 @@ export interface IDelayItem {
   data: any
 }
 
-export const delayRaw = (opts: TransformOptions) => (wait: (ms: number) => Promise<{}>, timestamp: () => number) => (ms: number) => {
+export const delayRaw = (opts: TransformOptions) => (wait: (ms: number) => Promise<any>, timestamp: () => number) => (ms: number) => {
   const buffer: IDelayItem[] = []
   let inProgress = false
   let endCallback: any
