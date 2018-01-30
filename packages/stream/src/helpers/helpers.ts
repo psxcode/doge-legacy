@@ -4,7 +4,7 @@ import { EventEmitter } from 'events'
 import { Readable, Writable } from 'stream'
 import { expect } from 'chai'
 import { wait as waitRaw, bind } from '@doge/helpers'
-import { raceEvents } from '../wait-event'
+import { race } from '../events'
 import { pipe, PipedStream } from '../pipe'
 import ReadableStream = NodeJS.ReadableStream
 import WritableStream = NodeJS.WritableStream
@@ -14,13 +14,13 @@ export const wait = waitRaw(setTimeout)
 const doWait = (ms: number) => bind(ms)(wait)
 
 export const waitForEnd = (ee: EventEmitter, waitAfterMs = 0) =>
-  raceEvents('end', 'finish')(ee).then(doWait(waitAfterMs))
+  race('end', 'finish')(ee).then(doWait(waitAfterMs))
 
 export const waitForError = (ee: EventEmitter, waitAfterMs = 0) =>
-  raceEvents('error')(ee).then(doWait(waitAfterMs))
+  race('error')(ee).then(doWait(waitAfterMs))
 
 export const waitForEndOrError = (ee: EventEmitter, waitAfterMs = 0) =>
-  raceEvents('end', 'finish', 'error')(ee).then(doWait(waitAfterMs))
+  race('end', 'finish', 'error')(ee).then(doWait(waitAfterMs))
 
 export const isPositiveNumber = (num: any): num is number => {
   return num && isFinite(num) && num >= 0
