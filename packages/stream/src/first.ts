@@ -5,8 +5,11 @@ export const firstRaw = (opts: TransformOptions) => () => {
   return new Transform({
     ...opts,
     transform (chunk, encoding, callback) {
-      this.push(fulfilled ? null : chunk)
-      fulfilled = true
+      if (!fulfilled) {
+        this.push(chunk)
+        this.push(null)
+        fulfilled = true
+      }
       callback()
     }
   })
