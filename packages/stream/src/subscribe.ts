@@ -1,49 +1,57 @@
 import ReadableStream = NodeJS.ReadableStream
+import { on, onceAll } from './events'
+import { all, voidify } from '@doge/helpers'
 
 const noop = () => void 0
 
-export const subscribe = (next: (chunk: any) => void,
-                          error?: (err: Error) => void,
-                          complete?: () => void) =>
-  (stream: ReadableStream) => {
-    const unsubscribe = () => {
-      stream.removeListener('data', next)
-      stream.removeListener('error', onError)
-      stream.removeListener('end', onComplete)
-    }
-    const onComplete = () => {
-      complete && complete()
-      unsubscribe()
-    }
-    const onError = error ? error : noop
-    stream.on('data', next)
-    stream.on('error', onError)
-    stream.on('end', onComplete)
-    return unsubscribe
-  }
+export interface IObserver {
+  next: (chunk: any) => void
+  error?: (err: Error) => void,
+  complete?: () => void
+}
 
-export const subscribeConcatable = (next: (chunk: string | Buffer) => void,
-                                    error?: (err: Error) => void,
-                                    complete?: () => void) =>
-  (stream: ReadableStream) => {
-    const unsubscribe = () => {
-      stream.removeListener('readable', onReadable)
-      stream.removeListener('error', onError)
-      stream.removeListener('end', onComplete)
+export const isObserver = (obj: any): obj is IObserver => {
+  return 'next' in obj && typeof obj.next === 'function'
+}
+
+export function subscribe (observer: IObserver | ((chunk: any) => void)) {
+  const { next, error, complete } = isObserver(observer)
+    ? observer
+    : { next: observer, error: undefined, complete: undefined }
+  return (...streams: ReadableStream[]) => {
+    const onComplete = voidify(all(unsubscribe, complete || noop))
+    const unsub = [
+      on(next)('data')(...streams),
+      error ? on(error)('error')(...streams) : noop,
+      onceAll(onComplete)('end')(...streams)
+    ]
+    return unsubscribe
+
+    function unsubscribe () {
+      unsub.forEach(u => u())
     }
-    const onReadable = () => {
-      const chunk = stream.read()
+  }
+}
+
+export const subscribeReadable = (next: (chunk: string | Buffer) => void,
+                                  error?: (err: Error) => void,
+                                  complete?: () => void) =>
+  (...streams: ReadableStream[]) => {
+    function onReadable (this: ReadableStream) {
+      const chunk = this.read()
       if (chunk) {
         next(chunk)
       }
     }
-    const onComplete = () => {
-      complete && complete()
-      unsubscribe()
-    }
-    const onError = error ? error : noop
-    stream.on('readable', onReadable)
-    stream.on('error', onError)
-    stream.on('end', onComplete)
+    const onComplete = voidify(all(unsubscribe, complete || noop))
+    const unsub = [
+      on(onReadable)('readable')(...streams),
+      error ? on(error)('error')(...streams) : noop,
+      onceAll(onComplete)('end')(...streams)
+    ]
     return unsubscribe
+
+    function unsubscribe () {
+      unsub.forEach(u => u())
+    }
   }
