@@ -1,9 +1,11 @@
 import EventEmitter = NodeJS.EventEmitter
-import { bindCtx } from '@doge/helpers'
+import { bindCtx, all as invokeAll, voidify } from '@doge/helpers'
 
 export const on = (cb: (value?: any) => void) => (...events: string[]) => (...emitters: EventEmitter[]) => {
-  const cbs = new WeakMap()
-  emitters.forEach(ee => cbs.set(ee, bindCtx(ee)(cb)))
+  const cbs = new WeakMap<EventEmitter, any>(
+    emitters.map(ee => [ee, bindCtx(ee)(cb)] as [EventEmitter, any])
+  )
+  /* subscribe */
   emitters.forEach(ee => events.forEach(e => ee.addListener(e, cbs.get(ee))))
   return () => {
     emitters.forEach(ee => events.forEach(e => ee.removeListener(e, cbs.get(ee))))
@@ -11,49 +13,45 @@ export const on = (cb: (value?: any) => void) => (...events: string[]) => (...em
 }
 
 export const onceRace = (cb: (value?: any) => void) => (...events: string[]) => (...emitters: EventEmitter[]) => {
-  const unsub = () => emitters.forEach(ee => events.forEach(e => ee.removeListener(e, listener)))
-  const listener = (val?: any) => {
-    unsub()
-    return cb(val)
+  const cbs = new WeakMap<EventEmitter, any>(
+    emitters.map(ee => [ee, voidify(invokeAll(unsubscribe, bindCtx(ee)(cb)))] as [EventEmitter, any])
+  )
+  function unsubscribe () {
+    emitters.forEach(ee => events.forEach(e => ee.removeListener(e, cbs.get(ee))))
   }
-  emitters.forEach(ee => events.forEach(e => ee.addListener(e, listener)))
-  return unsub
-}
-
-export const onceAll = (cb: () => void) => (...events: string[]) => (...ees: EventEmitter[]) => {
-  const doneEE = new WeakMap<EventEmitter, string[]>()
-  ees.forEach(ee => doneEE.set(ee, []))
-  const listeners: any[] = []
-  const check = () => ees.every(ee => (doneEE.get(ee) as string[]).length === events.length)
-
-  const listener = (ee: EventEmitter, e: string) => (val?: any) => {
-    const doneEvents = doneEE.get(ee) as string[]
-    if (!doneEvents.includes(e)) {
-      doneEE.set(ee, doneEvents.concat([e]))
-      if (check()) {
-        unsubscribe()
-        return cb()
-      }
-    }
-  }
-  const unsubscribe = () => {
-    listeners.forEach(l => l())
-    listeners.length = 0
-  }
-  events.forEach(e => ees.forEach(ee => {
-    const l = listener(ee, e)
-    listeners.push(l)
-    ee.addListener(e, l)
-  }))
+  /* subscribe */
+  emitters.forEach(ee => events.forEach(e => ee.addListener(e, cbs.get(ee))))
   return unsubscribe
 }
 
-export const race = (...events: string[]) => (...ees: EventEmitter[]) =>
+export const onceAll = (cb: () => void) => (...events: string[]) => (...emitters: EventEmitter[]) => {
+  const doneEE = new WeakMap<EventEmitter, number>()
+  const cbs = new WeakMap<EventEmitter, any>()
+  emitters.forEach(ee => doneEE.set(ee, 0))
+  emitters.forEach(ee => cbs.set(ee, bindCtx(ee)(listener)))
+
+  /* subscribe */
+  emitters.forEach(ee => events.forEach(e => ee.once(e, cbs.get(ee))))
+  return unsubscribe
+
+  function listener (this: EventEmitter) {
+    doneEE.set(this, (doneEE.get(this) as number) + 1)
+    if (emitters.every(ee => (doneEE.get(ee) as number) === events.length)) {
+      unsubscribe()
+      return cb()
+    }
+  }
+  function unsubscribe () {
+    emitters.forEach(ee => events.forEach(e => ee.removeListener(e, cbs.get(ee))))
+  }
+}
+
+export const onceRacePromise = (...events: string[]) => (...ees: EventEmitter[]) =>
   new Promise(resolve => {
     onceRace(resolve)(...events)(...ees)
   })
 
-export const all = (...events: string[]) => (...ees: EventEmitter[]) =>
+export const onceAllPromise = (...events: string[]) => (...ees: EventEmitter[]) =>
   new Promise(resolve => {
     onceAll(resolve)(...events)(...ees)
   })
