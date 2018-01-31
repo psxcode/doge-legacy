@@ -18,12 +18,9 @@
     "clean": "rimraf dist",
     "tsc": "tsc",
     "rollup": "rollup -c rollup.config.js",
-    "mocha": "DEBUG=stream-test:* mocha --opts mocha.opts",
     "test": "yarn test:once",
-    "test:once": "DEBUG=stream-test:* nyc yarn mocha",
-    "test:watch": "yarn mocha -- --watch",
-    "test:coverage:generate": "nyc report --reporter=json",
-    "test:coverage:report": "codecov -f coverage/*.json"
+    "test:once": "DEBUG=stream-test:* mocha --opts mocha.opts",
+    "test:watch": "yarn mocha -- --watch"
   },
   "dependencies": {
     "@doge/helpers": "*"
@@ -39,7 +36,6 @@
     "chai": "^4.1.2",
     "debug": "^3.1.0",
     "mocha": "^4.0.1",
-    "nyc": "^11.3.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.52.0",
     "rollup-plugin-commonjs": "^8.2.6",
@@ -49,22 +45,5 @@
     "source-map-support": "^0.5.0",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.2"
-  },
-  "nyc": {
-    "extension": [
-      ".ts"
-    ],
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "**/*.d.ts",
-      "**/*.spec.ts"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "all": true
   }
 }
