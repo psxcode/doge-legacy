@@ -61,26 +61,3 @@ export function subscribeEx (observer: IObserverEx | ((chunk: IEEValue) => void)
     }
   }
 }
-
-export const subscribeReadable = (next: (chunk: string | Buffer) => void,
-                                  error?: (err: Error) => void,
-                                  complete?: () => void) =>
-  (...streams: ReadableStream[]) => {
-    function onReadable (this: ReadableStream) {
-      const chunk = this.read()
-      if (chunk) {
-        next(chunk)
-      }
-    }
-    const onComplete = voidify(all(unsubscribe, complete || noop))
-    const unsub = [
-      on('readable')(onReadable)(...streams),
-      error ? on('error')(error)(...streams) : noop,
-      onceAll('end')(onComplete)(...streams)
-    ]
-    return unsubscribe
-
-    function unsubscribe () {
-      unsub.forEach(u => u())
-    }
-  }
