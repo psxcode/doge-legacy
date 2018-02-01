@@ -3,18 +3,26 @@ import { Readable, ReadableOptions } from 'stream'
 import { emptyRaw } from './empty'
 import { subscribe } from './subscribe'
 
-export const mergeRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]) => {
-  let subscriptions: any[]
+export const mergeRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
+  let unsubscribe: (() => void) | undefined
   return streams.length
     ? new Readable({
       ...opts,
       read () {
-        if (!subscriptions) {
-          const next = this.push.bind(this)
-          const error = this.emit.bind(this, 'error')
-          subscriptions = streams.map(subscribe(next, error))
+        if (!unsubscribe) {
+          unsubscribe = subscribe({
+            next: (value: any) => this.push(value),
+            error: (e?: any) => this.emit('error', e),
+            complete: () => this.push(null)
+          })(...streams)
         }
+      },
+      destroy () {
+        unsubscribe && unsubscribe()
+        unsubscribe = undefined
       }
     })
-    : emptyRaw(opts)
+    : emptyRaw(opts)()
 }
+
+export const merge = mergeRaw({ objectMode: true })
