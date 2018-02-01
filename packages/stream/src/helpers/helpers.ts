@@ -1,7 +1,6 @@
 /* tslint:disable no-conditional-assignment no-empty */
 import * as debug from 'debug'
 import { EventEmitter } from 'events'
-import { Readable, Writable } from 'stream'
 import { expect } from 'chai'
 import { wait as waitRaw, bind } from '@doge/helpers'
 import { onceRacePromise } from '../events'
@@ -60,7 +59,7 @@ export interface IReadableConsumer {
   eager?: boolean
 }
 
-export const makeOnReadableConsumer = <T> (stream: Readable,
+export const makeOnReadableConsumer = <T> (stream: ReadableStream,
                                            sink: (data: T) => void,
                                            { delayMs, readSize, eager }: IReadableConsumer) => {
   const dbg = debug('stream-test:readable-consumer')
@@ -68,13 +67,13 @@ export const makeOnReadableConsumer = <T> (stream: Readable,
   const eagerReader = (i: number) => {
     let chunk: T
     dbg('eager read at %d begin', i)
-    while (chunk = stream.read(readSize)) sink(chunk)
+    while (chunk = stream.read(readSize) as any) sink(chunk)
     dbg('eager read at %d done', i)
   }
   const lazyReader = (i: number) => {
     let chunk: T
     dbg('lazy read at %d begin', i);
-    (chunk = stream.read()) && sink(chunk)
+    (chunk = stream.read() as any) && sink(chunk)
     dbg('lazy read at %d done', i)
   }
   const asyncHandler = () => {
@@ -134,7 +133,7 @@ export interface IWritableProducer {
 }
 
 export const makeWritableProducer = <T> ({ eager }: IWritableProducer = {}) =>
-  (iterator: Iterator<T>, maxLength = 0) => (stream: Writable) => {
+  (iterator: Iterator<T>, maxLength = 0) => (stream: WritableStream) => {
     const dbg = debug('stream-test:data-producer')
     let i = 0
     const noop = () => {
@@ -158,7 +157,7 @@ export const makeWritableProducer = <T> ({ eager }: IWritableProducer = {}) =>
         return false
       } else {
         dbg('writing %d', i)
-        const backpressure = stream.write(iteratorResult.value, cb)
+        const backpressure = stream.write(iteratorResult.value as any, cb)
         if (!backpressure) {
           dbg('backpressure at %d', i)
         }
@@ -209,8 +208,8 @@ export const makeMediumRange = makeRangeIterable(64)
 export const makeLargeRange = makeRangeIterable(256)
 
 export const makeReadableTest = <T> (data: Iterable<T>,
-                                     makeReadable: (data: Iterable<T>) => Readable,
-                                     makeConsumer: (stream: Readable, sink: (data: T) => void) => () => any,
+                                     makeReadable: (data: Iterable<T>) => ReadableStream,
+                                     makeConsumer: (stream: ReadableStream, sink: (data: T) => void) => () => any,
                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return it('should work', async function () {
     const spy = makeDataSpy<T>()
@@ -224,15 +223,15 @@ export const makeReadableTest = <T> (data: Iterable<T>,
 }
 
 export const xmakeReadableTest = <T> (data: Iterable<T>,
-                                      makeReadable: (data: Iterable<T>) => Readable,
-                                      makeConsumer: (stream: Readable, spy: (data: T) => void) => () => any,
+                                      makeReadable: (data: Iterable<T>) => ReadableStream,
+                                      makeConsumer: (stream: ReadableStream, spy: (data: T) => void) => () => any,
                                       expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return void 0
 }
 
 export const makeWritableTest = <T> (data: Iterable<T>,
-                                     makeWritable: (spy: (data: T) => void) => Writable,
-                                     makeProducer: (stream: Writable, data: Iterable<T>) => () => void,
+                                     makeWritable: (spy: (data: T) => void) => WritableStream,
+                                     makeProducer: (stream: WritableStream, data: Iterable<T>) => () => void,
                                      expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return it('should work', async function () {
     const spy = makeDataSpy<T>()
@@ -246,8 +245,8 @@ export const makeWritableTest = <T> (data: Iterable<T>,
 }
 
 export const xmakeWritableTest = <T> (data: Iterable<T>,
-                                      makeWritable: (spy: (data: T) => void) => Writable,
-                                      makeProducer: (stream: Writable, data: Iterable<T>) => () => void,
+                                      makeWritable: (spy: (data: T) => void) => WritableStream,
+                                      makeProducer: (stream: WritableStream, data: Iterable<T>) => () => void,
                                       expectFn?: (data: Iterable<T>, spy: SpyFn<T>) => void) => {
   return void 0
 }
