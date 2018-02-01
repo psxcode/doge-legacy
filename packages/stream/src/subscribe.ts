@@ -21,9 +21,9 @@ export function subscribe (observer: IObserver | ((chunk: any) => void)) {
   return (...streams: ReadableStream[]) => {
     const onComplete = voidify(all(unsubscribe, complete || noop))
     const unsub = [
-      on(next)('data')(...streams),
-      error ? on(error)('error')(...streams) : noop,
-      onceAll(onComplete)('end')(...streams)
+      on('data')(next)(...streams),
+      error ? on('error')(error)(...streams) : noop,
+      onceAll('end')(onComplete)(...streams)
     ]
     return unsubscribe
 
@@ -45,9 +45,9 @@ export const subscribeReadable = (next: (chunk: string | Buffer) => void,
     }
     const onComplete = voidify(all(unsubscribe, complete || noop))
     const unsub = [
-      on(onReadable)('readable')(...streams),
-      error ? on(error)('error')(...streams) : noop,
-      onceAll(onComplete)('end')(...streams)
+      on('readable')(onReadable)(...streams),
+      error ? on('error')(error)(...streams) : noop,
+      onceAll('end')(onComplete)(...streams)
     ]
     return unsubscribe
 
