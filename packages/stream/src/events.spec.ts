@@ -13,7 +13,7 @@ import {
 } from './events'
 import { wait } from './helpers/helpers'
 
-describe('[ events ]', function () {
+xdescribe('[ events ]', function () {
   describe('[ on ]', function () {
     it('should work', async function () {
       const ee = new EventEmitter()
