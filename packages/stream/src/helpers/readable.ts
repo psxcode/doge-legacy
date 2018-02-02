@@ -69,9 +69,11 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }:
       })
       readable.on('removeListener', (name) => {
         dbg('removeListener for %s', name)
+        dbg('num listeners for %s: %d', name, readable.listenerCount(name))
       })
       readable.on('newListener', (name) => {
         dbg('newListener for %s', name)
+        dbg('num listeners for %s: %d', name, readable.listenerCount(name))
       })
       return readable
     }
