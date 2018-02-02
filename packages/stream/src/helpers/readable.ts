@@ -61,11 +61,18 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }:
           syncHandler.call(this)
         })
       }
-      return new Readable({
+      const readable = new Readable({
         ...readableOptions,
         read: isPositiveNumber(delayMs)
           ? asyncHandler
           : syncHandler
       })
+      readable.on('removeListener', (name) => {
+        dbg('removeListener for %s', name)
+      })
+      readable.on('newListener', (name) => {
+        dbg('newListener for %s', name)
+      })
+      return readable
     }
   }
