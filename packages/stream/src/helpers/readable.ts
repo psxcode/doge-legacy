@@ -10,9 +10,14 @@ export interface IMakeReadableOptions {
   eager?: boolean
 }
 
+const id = (() => {
+  let i = 0
+  return () => `${i++}`
+})()
+
 export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }: IMakeReadableOptions) =>
   (readableOptions: ReadableOptions) => {
-    const dbg = debug('stream-test:readable')
+    const dbg = debug(`stream-test:readable${id()}`)
     return (iterator: Iterator<T>, maxLength = 0) => {
       let i = 0
       let inProgress = false
@@ -68,12 +73,10 @@ export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }:
           : syncHandler
       })
       readable.on('removeListener', (name) => {
-        dbg('removeListener for %s', name)
-        dbg('num listeners for %s: %d', name, readable.listenerCount(name))
+        dbg('removeListener for \'%s\': %d', name, readable.listenerCount(name))
       })
       readable.on('newListener', (name) => {
-        dbg('newListener for %s', name)
-        dbg('num listeners for %s: %d', name, readable.listenerCount(name))
+        dbg('newListener for \'%s\': %d', name, readable.listenerCount(name) + 1)
       })
       return readable
     }
