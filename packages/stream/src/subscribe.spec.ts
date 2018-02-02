@@ -3,7 +3,7 @@ import * as sinon from 'sinon'
 import { iterate } from '@doge/helpers'
 import { makeReadable } from './helpers/readable'
 import { subscribe } from './subscribe'
-import { makeDataSpy, wait, waitForEndOrError } from './helpers/helpers'
+import { makeDataSpy, makeSmallRange, wait, waitForEndOrError } from './helpers/helpers'
 
 const gen = function* (n: number) {
   for (let i = 0; i < n; ++i) yield i
@@ -12,7 +12,7 @@ const gen = function* (n: number) {
 describe('[ subscribe ]', function () {
   describe('[ subscribe ]', function () {
     xit('should work with single stream', async function () {
-      const d1 = [0, 1, 2, 3, 4]
+      const d1 = makeSmallRange(2)
       const s1 = makeReadable({})({ objectMode: true })(iterate(d1))
       const spy = makeDataSpy()
 
@@ -20,7 +20,7 @@ describe('[ subscribe ]', function () {
       subscribe(spy)(s1)
 
       await waitForEndOrError(s1, 10)
-      expect(spy.data()).deep.eq(d1)
+      expect(spy.data()).deep.eq(Array.from(d1))
     })
 
     xit('should work with multiple streams', async function () {
@@ -54,7 +54,7 @@ describe('[ subscribe ]', function () {
     })
 
     xit('should work with unsubscribe', async function () {
-      const d1 = [0, 1, 2, 3, 4]
+      const d1 = makeSmallRange(2)
       const s1 = makeReadable({ delayMs: 10 })({ objectMode: true })(iterate(d1))
       const spy = makeDataSpy()
       const completeSpy = sinon.spy()
@@ -65,9 +65,8 @@ describe('[ subscribe ]', function () {
       await wait(30)
       unsub()
 
-      // await waitForEndOrError(s1, 10)
-      await wait(1500)
-      expect(spy.data().length).not.eq(d1.length)
+      await waitForEndOrError(s1, 10)
+      expect(spy.data().length).not.eq(Array.from(d1).length)
       sinon.assert.notCalled(completeSpy)
     })
   })
