@@ -14,9 +14,8 @@ export const combineRaw = (opts: ReadableOptions) => (...streams: ReadableStream
         if (!unsubscribe) {
           unsubscribe = subscribeEx({
             next: ({ value, index }: IEEValue) => {
-              latest = latest.slice()
               latest[index] = value
-              this.push(latest)
+              this.push(latest.slice())
             },
             error: ({ value }: IEEValue) => this.emit('error', value),
             complete: () => this.push(null)
