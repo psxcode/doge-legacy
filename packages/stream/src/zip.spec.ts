@@ -5,7 +5,7 @@ import { zip } from './zip'
 import { makeOnDataConsumer, makeReadableTest, xmakeReadableTest } from './helpers/helpers'
 
 describe('[ zip ]', function () {
-  makeReadableTest([0, 1, 2, 3, 4],
+  xmakeReadableTest([0, 1, 2, 3, 4],
     (data) => {
       const s1 = makeReadable({ delayMs: 30 })({ objectMode: true })(iterate(data))
       const s2 = makeReadable({ delayMs: 10 })({ objectMode: true })(iterate([0, 1, 2, 3, 4, 5, 6]))
