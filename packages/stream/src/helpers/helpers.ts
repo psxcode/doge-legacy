@@ -262,7 +262,7 @@ export const makeTransformTest = <T> (data: Iterable<T>,
     const writable = makeWritable(spy)
     const transform = makeTransform()
     await wait(100)
-    const stream = pipe(readable as ReadWriteStream, transform, writable as ReadWriteStream) as PipedStream
+    const stream = pipe(readable as ReadWriteStream, transform, writable as ReadWriteStream)
     await waitForEndOrError(stream.tail, 10)
     expectFn && expectFn(data, spy)
   })
