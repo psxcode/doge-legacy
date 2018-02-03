@@ -4,7 +4,7 @@ import { makeReadable } from './helpers/readable'
 import { merge } from './merge'
 import { makeOnDataConsumer, makeReadableTest, xmakeReadableTest } from './helpers/helpers'
 
-describe('[ concat ]', function () {
+describe('[ merge ]', function () {
   xmakeReadableTest([0, 1, 2, 3, 4],
     (data) => {
       const s1 = makeReadable({ delayMs: 50 })({ objectMode: true })(iterate(data))
