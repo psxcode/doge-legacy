@@ -16,7 +16,7 @@ const isEqual = (value: number) => (arg: number) => value === arg
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 
 describe('[ pipe ]', function () {
-  makeTransformTest<number>(makeSmallRange(4),
+  xmakeTransformTest<number>(makeSmallRange(4),
     (data) => makeReadable({})({ objectMode: true })(iterate(data)),
     (spy) => makeWritable({})({ objectMode: true })(spy),
     () => pipe(filter(isEqual(10)), first(), map(multiply(2))),
