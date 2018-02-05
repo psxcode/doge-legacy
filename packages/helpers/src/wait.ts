@@ -1,4 +1,4 @@
-export const wait = (setTimeout: (cb: () => void, ms: number) => any, clearTimeout: (id: number) => void) =>
+export const wait = (setTimeout: (cb: () => void, ms: number) => any, clearTimeout: (id: any) => void) =>
   (ms: number) => (cb: () => void) => {
     const id = setTimeout(cb, ms)
     return () => {
