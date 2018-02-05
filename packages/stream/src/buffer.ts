@@ -1,7 +1,8 @@
 import { Transform, TransformOptions } from 'stream'
+import { wait } from '@doge/helpers'
 
 export const bufferRaw = (opts: TransformOptions) =>
-  (subscribeToFlush: (flush: () => void) => () => void) => {
+  (wait: (cb: () => void) => () => void) => {
     let buf: any[] = []
     let unsubscribe: any
     return new Transform({
@@ -9,7 +10,8 @@ export const bufferRaw = (opts: TransformOptions) =>
       transform (chunk, encoding, callback) {
         buf.push(chunk)
         if (!unsubscribe) {
-          unsubscribe = subscribeToFlush(() => {
+          unsubscribe = wait(() => {
+            unsubscribe = undefined
             this.push(buf)
             buf = []
           })
@@ -24,3 +26,8 @@ export const bufferRaw = (opts: TransformOptions) =>
   }
 
 export const buffer = bufferRaw({ objectMode: true })
+
+export const bufferTimeRaw = (opts: TransformOptions) =>
+  (ms: number) => bufferRaw(opts)(wait(setTimeout, clearTimeout)(ms))
+
+export const bufferTime = bufferTimeRaw({ objectMode: true })
