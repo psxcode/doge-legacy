@@ -2,14 +2,14 @@
 import * as debug from 'debug'
 import { EventEmitter } from 'events'
 import { expect } from 'chai'
-import { wait as waitRaw, bind } from '@doge/helpers'
+import { waitPromise, bind } from '@doge/helpers'
 import { onceRacePromise } from '../events'
 import { pipe, PipedStream } from '../pipe'
 import ReadableStream = NodeJS.ReadableStream
 import WritableStream = NodeJS.WritableStream
 import ReadWriteStream = NodeJS.ReadWriteStream
 
-export const wait = waitRaw(setTimeout)
+export const wait = waitPromise(setTimeout)
 const doWait = (ms: number) => bind(ms)(wait)
 
 export const waitForEnd = (ee: EventEmitter, waitAfterMs = 0) =>

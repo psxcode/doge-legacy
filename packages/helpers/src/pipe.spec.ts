@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { pipe, pipeAsync, all, allAsync } from './pipe'
-import { wait as waitRaw } from './wait'
+import { waitPromise } from './wait'
 
 const add = (arg0: number) => (arg1: number): number => arg0 + arg1
 const addAsync = (arg0: number) => (arg1: number): Promise<number> => Promise.resolve(arg0 + arg1)
@@ -12,7 +12,7 @@ const toNumber = (arg: string): number => Number(arg)
 const throwing = (message: string) => (): any => {
   throw new Error(message)
 }
-const wait = waitRaw(setTimeout)
+const wait = waitPromise(setTimeout)
 
 describe('[ pipe ]', function () {
   describe('[ pipe ]', function () {
