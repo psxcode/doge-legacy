@@ -26,31 +26,25 @@ export const throttleRaw = (opts: TransformOptions) => (subscribeToInterval: (do
 
 export const throttle = throttleRaw({ objectMode: true })
 
-export const throttleTimeRaw = (opts: TransformOptions) => (setTimeout: (cb: () => void, ms: number) => any, clearTimeout: (id: any) => void) =>
-  (ms: number) => {
+export const throttleTimeRaw = (opts: TransformOptions) =>
+  (wait: (cb: () => void) => () => void) => {
     let lastChunk: any
-    let inProgress = false
-    let timeoutId: any
+    let unsubscribe: any
     return new Transform({
       ...opts,
       transform (chunk, encoding, callback) {
         lastChunk = chunk
-        if (!inProgress) {
-          inProgress = true
-          timeoutId = setTimeout(() => {
-            inProgress = false
-            if (lastChunk != null) {
-              this.push(lastChunk)
-              lastChunk = undefined
-            }
-          }, ms)
+        if (!unsubscribe) {
+          unsubscribe = wait(() => {
+            unsubscribe = undefined
+            this.push(lastChunk)
+            lastChunk = undefined
+          })
         }
         callback()
       },
       flush (callback) {
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-        }
+        unsubscribe && unsubscribe()
         callback(null, lastChunk)
       }
     })
