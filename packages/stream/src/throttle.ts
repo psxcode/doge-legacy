@@ -1,32 +1,7 @@
 import { Transform, TransformOptions } from 'stream'
+import { wait } from '@doge/helpers'
 
-export const throttleRaw = (opts: TransformOptions) => (subscribeToInterval: (doNext: () => void) => () => void) => {
-  let lastChunk: any
-  let unsubscribe: any
-  return new Transform({
-    ...opts,
-    transform (chunk, encoding, callback) {
-      lastChunk = chunk
-      if (unsubscribe == null) {
-        unsubscribe = subscribeToInterval(() => {
-          if (lastChunk != null) {
-            this.push(lastChunk)
-            lastChunk = undefined
-          }
-        })
-      }
-      callback()
-    },
-    flush (callback) {
-      unsubscribe && unsubscribe()
-      callback(null, lastChunk)
-    }
-  })
-}
-
-export const throttle = throttleRaw({ objectMode: true })
-
-export const throttleTimeRaw = (opts: TransformOptions) =>
+export const throttleRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
     let lastChunk: any
     let unsubscribe: any
@@ -49,5 +24,10 @@ export const throttleTimeRaw = (opts: TransformOptions) =>
       }
     })
   }
+
+export const throttle = throttleRaw({ objectMode: true })
+
+export const throttleTimeRaw = (opts: TransformOptions) =>
+  (ms: number) => throttleRaw(opts)(wait(setTimeout, clearTimeout)(ms))
 
 export const throttleTime = throttleTimeRaw({ objectMode: true })

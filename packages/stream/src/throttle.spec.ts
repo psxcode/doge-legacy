@@ -7,23 +7,24 @@ import { throttle, throttleTime } from './throttle'
 describe('[ throttle ]', function () {
   const interval = (next: () => void) => {
     console.log('subscribe')
-    const id = setInterval(next, 30)
+    const id = setTimeout(next, 30)
     return () => {
       console.log('clear')
-      clearInterval(id)
+      clearTimeout(id)
     }
   }
 
-  xmakeTransformTest<number>(makeSmallRange(4),
-    (data) => makeReadable({ delayMs: 0 })({ objectMode: true })(iterate(data)),
-    (spy) => makeWritable({})({ objectMode: true })(spy),
-    () => throttle(interval))
-})
+  describe('[throttle]', function () {
+    xmakeTransformTest<number>(makeSmallRange(4),
+      (data) => makeReadable({ delayMs: 0 })({ objectMode: true })(iterate(data)),
+      (spy) => makeWritable({})({ objectMode: true })(spy),
+      () => throttle(interval))
+  })
 
-describe('[ throttleTime ]', function () {
-
-  xmakeTransformTest<number>(makeSmallRange(4),
-    (data) => makeReadable({ delayMs: 10 })({ objectMode: true })(iterate(data)),
-    (spy) => makeWritable({})({ objectMode: true })(spy),
-    () => throttleTime(setTimeout, clearTimeout)(30))
+  describe('[ throttleTime ]', function () {
+    xmakeTransformTest<number>(makeSmallRange(4),
+      (data) => makeReadable({ delayMs: 0 })({ objectMode: true })(iterate(data)),
+      (spy) => makeWritable({})({ objectMode: true })(spy),
+      () => throttleTime(30))
+  })
 })
