@@ -1,13 +1,13 @@
 /* tslint:disable no-empty */
 import { Readable, ReadableOptions } from 'stream'
 
-export const ofRaw = <T> (opts: ReadableOptions) => (...args: T[]) => {
+export const ofRaw = <T> (opts: ReadableOptions) => (...values: T[]) => {
   let i = 0
   return new Readable({
     ...opts,
     read () {
-      while (i < args.length && this.push(args[i++])) {}
-      if (i >= args.length) this.push(null)
+      while (i < values.length && this.push(values[i++]));
+      if (i >= values.length) this.push(null)
     }
   })
 }
