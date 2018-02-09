@@ -1,5 +1,16 @@
 import { expect } from 'chai'
-import { filter, iterate, length, map, reduce, scan, unique } from './iterable'
+import {
+  filter,
+  filterEx,
+  iterate,
+  length,
+  map,
+  mapEx,
+  reduce,
+  reduceEx,
+  scan, scanEx,
+  unique
+} from './iterable'
 import { makeSpy } from './test-helpers'
 import { pipe } from './pipe'
 
@@ -7,7 +18,7 @@ const multBy = (x: number) => (val: number) => val * x
 const mult1 = multBy(1)
 const mult2 = multBy(2)
 const isEven = (x: number) => x % 2 === 0
-const add = (a: number, b: number) => a + b
+const add = (a: number = 0, b: number = 0) => a + b
 const gen = function* (n: number) {
   for (let i = 0; i < n; ++i) yield i
 }
@@ -72,6 +83,45 @@ describe('[ iterable ]', function () {
     })
   })
 
+  describe('[ mapEx ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(mult2)
+      expect(spy.callCount()).eq(0)
+      const result = [...mapEx(spy)(data)]
+      expect(result).deep.eq([2, 4, 6, 8, 10])
+      expect(spy.callCount()).eq(data.length)
+    })
+
+    it('works with Sets', function () {
+      const data = new Set([1, 2, 3, 4, 5])
+      const spy = makeSpy(mult1)
+      expect(spy.callCount()).eq(0)
+      for (let val of mapEx(spy)(data)) {
+        expect(data.has(val)).eq(true)
+      }
+      expect(spy.callCount()).eq(5)
+    })
+
+    it('works with Generators', function () {
+      const iterator = gen(5)
+      const spy = makeSpy(mult2)
+      expect(spy.callCount()).eq(0)
+      const result = [...mapEx(spy)(iterator)]
+      expect(result).deep.eq([0, 2, 4, 6, 8])
+      expect(spy.callCount()).eq(5)
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(mult2)
+      expect(spy.callCount()).eq(0)
+      const result = [...pipe(mapEx(multBy(2)), mapEx(spy))(data)]
+      expect(result).deep.eq([4, 8, 12, 16, 20])
+      expect(spy.callCount()).eq(data.length)
+    })
+  })
+
   describe('[ filter ]', function () {
     it('works with arrays', function () {
       const data = [1, 2, 3, 4, 5]
@@ -101,12 +151,70 @@ describe('[ iterable ]', function () {
     })
   })
 
+  describe('[ filterEx ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(isEven)
+      expect(spy.callCount()).eq(0)
+      const result = [...filterEx(spy)(data)]
+      expect(result).deep.eq([2, 4])
+      expect(spy.callCount()).eq(data.length)
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(isEven)
+      expect(spy.callCount()).eq(0)
+      const result = [...pipe(filterEx(spy), map(mult2))(data)]
+      expect(result).deep.eq([4, 8])
+      expect(spy.callCount()).eq(data.length)
+    })
+
+    it('works with Generators', function () {
+      const iterator = gen(5)
+      const spy = makeSpy(isEven)
+      expect(spy.callCount()).eq(0)
+      const result = [...filterEx(spy)(iterator)]
+      expect(result).deep.eq([0, 2, 4])
+      expect(spy.callCount()).eq(5)
+    })
+  })
+
   describe('[ reduce ]', function () {
     it('works with arrays', function () {
       const data = [1, 2, 3, 4, 5]
       const spy = makeSpy(add)
       expect(spy.callCount()).eq(0)
-      const result = [...reduce(spy, 0)(data)]
+      const result = [...reduce(spy)(data)]
+      expect(spy.callCount()).eq(data.length + 1)
+      expect(result).deep.eq([15])
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(add)
+      expect(spy.callCount()).eq(0)
+      const result = [...pipe(reduce(spy), map(mult2))(data)]
+      expect(spy.callCount()).eq(data.length + 1)
+      expect(result).deep.eq([30])
+    })
+
+    it('works with Generators', function () {
+      const data = gen(6)
+      const spy = makeSpy(add)
+      expect(spy.callCount()).eq(0)
+      const result = [...reduce(spy)(data)]
+      expect(spy.callCount()).eq(6 + 1)
+      expect(result).deep.eq([15])
+    })
+  })
+
+  describe('[ reduceEx ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(add)
+      expect(spy.callCount()).eq(0)
+      const result = [...reduceEx(0, spy)(data)]
       expect(spy.callCount()).eq(data.length)
       expect(result).deep.eq([15])
     })
@@ -115,7 +223,7 @@ describe('[ iterable ]', function () {
       const data = [1, 2, 3, 4, 5]
       const spy = makeSpy(add)
       expect(spy.callCount()).eq(0)
-      const result = [...pipe(reduce(spy, 0), map(mult2))(data)]
+      const result = [...pipe(reduceEx(0, spy), map(mult2))(data)]
       expect(spy.callCount()).eq(data.length)
       expect(result).deep.eq([30])
     })
@@ -124,7 +232,7 @@ describe('[ iterable ]', function () {
       const data = gen(6)
       const spy = makeSpy(add)
       expect(spy.callCount()).eq(0)
-      const result = [...reduce(spy, 0)(data)]
+      const result = [...reduceEx(0, spy)(data)]
       expect(spy.callCount()).eq(6)
       expect(result).deep.eq([15])
     })
@@ -135,7 +243,36 @@ describe('[ iterable ]', function () {
       const data = [1, 2, 3, 4, 5]
       const spy = makeSpy(add)
       expect(spy.callCount()).eq(0)
-      const result = [...scan(spy, 0)(data)]
+      const result = [...scan(spy)(data)]
+      expect(spy.callCount()).eq(data.length + 1)
+      expect(result).deep.eq([1, 3, 6, 10, 15])
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(add)
+      expect(spy.callCount()).eq(0)
+      const result = [...pipe(scan(spy), map(mult2))(data)]
+      expect(spy.callCount()).eq(data.length + 1)
+      expect(result).deep.eq([2, 6, 12, 20, 30])
+    })
+
+    it('works with Generators', function () {
+      const data = gen(6)
+      const spy = makeSpy(add)
+      expect(spy.callCount()).eq(0)
+      const result = [...scan(spy)(data)]
+      expect(spy.callCount()).eq(6 + 1)
+      expect(result).deep.eq([0, 1, 3, 6, 10, 15])
+    })
+  })
+
+  describe('[ scanEx ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const spy = makeSpy(add)
+      expect(spy.callCount()).eq(0)
+      const result = [...scanEx(0, spy)(data)]
       expect(spy.callCount()).eq(data.length)
       expect(result).deep.eq([1, 3, 6, 10, 15])
     })
@@ -144,7 +281,7 @@ describe('[ iterable ]', function () {
       const data = [1, 2, 3, 4, 5]
       const spy = makeSpy(add)
       expect(spy.callCount()).eq(0)
-      const result = [...pipe(scan(spy, 0), map(mult2))(data)]
+      const result = [...pipe(scanEx(0, spy), map(mult2))(data)]
       expect(spy.callCount()).eq(data.length)
       expect(result).deep.eq([2, 6, 12, 20, 30])
     })
@@ -153,7 +290,7 @@ describe('[ iterable ]', function () {
       const data = gen(6)
       const spy = makeSpy(add)
       expect(spy.callCount()).eq(0)
-      const result = [...scan(spy, 0)(data)]
+      const result = [...scanEx(0, spy)(data)]
       expect(spy.callCount()).eq(6)
       expect(result).deep.eq([0, 1, 3, 6, 10, 15])
     })

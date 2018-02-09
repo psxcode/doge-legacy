@@ -4,7 +4,10 @@ export function* iterate (iterable: Iterable<any>) {
   }
 }
 
-export const map = <T, R> (xf: (arg: T) => R) => (iterable: Iterable<T>): Iterable<R> => ({
+export type TransformFn<T, R> = (arg: T) => R
+export type TransformExFn<T, R> = (arg: T, i: number, iterable: Iterable<T>) => R
+
+export const map = <T, R> (xf: TransformFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
   [Symbol.iterator]: function* () {
     for (let value of iterable) {
       yield xf(value)
@@ -12,7 +15,19 @@ export const map = <T, R> (xf: (arg: T) => R) => (iterable: Iterable<T>): Iterab
   }
 })
 
-export const filter = <T> (pred: (arg: T) => boolean) => (iterable: Iterable<T>): Iterable<T> => ({
+export const mapEx = <T, R> (xf: TransformExFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
+  [Symbol.iterator]: function* () {
+    let i = 0
+    for (let value of iterable) {
+      yield xf(value, i++, iterable)
+    }
+  }
+})
+
+export type PredicateFn<T> = (arg: T) => boolean
+export type PredicateExFn<T> = (arg: T, i: number, iterable: Iterable<T>) => boolean
+
+export const filter = <T> (pred: PredicateFn<T>) => (iterable: Iterable<T>): Iterable<T> => ({
   [Symbol.iterator]: function* () {
     for (let value of iterable) {
       if (pred(value)) yield(value)
@@ -20,9 +35,21 @@ export const filter = <T> (pred: (arg: T) => boolean) => (iterable: Iterable<T>)
   }
 })
 
-export const reduce = <T, R> (reducer: (acc: R, val: T) => R, initial: R) => (iterable: Iterable<T>): Iterable<R> => ({
+export const filterEx = <T> (pred: PredicateExFn<T>) => (iterable: Iterable<T>): Iterable<T> => ({
   [Symbol.iterator]: function* () {
-    let state = initial
+    let i = 0
+    for (let value of iterable) {
+      if (pred(value, i++, iterable)) yield(value)
+    }
+  }
+})
+
+export type ReducerFn<T, R> = (acc?: R, val?: T) => R
+export type ReducerExFn<T, R> = (acc: R, val: T, i: number, iterable: Iterable<T>) => R
+
+export const reduce = <T, R> (reducer: ReducerFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
+  [Symbol.iterator]: function* () {
+    let state = reducer()
     for (let value of iterable) {
       state = reducer(state, value)
     }
@@ -30,11 +57,32 @@ export const reduce = <T, R> (reducer: (acc: R, val: T) => R, initial: R) => (it
   }
 })
 
-export const scan = <T, R> (reducer: (acc: R, val: T) => R, initial: R) => (iterable: Iterable<T>): Iterable<R> => ({
+export const reduceEx = <T, R> (initial: R, reducer: ReducerExFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
   [Symbol.iterator]: function* () {
     let state = initial
+    let i = 0
+    for (let value of iterable) {
+      state = reducer(state, value, i++, iterable)
+    }
+    yield state
+  }
+})
+
+export const scan = <T, R> (reducer: ReducerFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
+  [Symbol.iterator]: function* () {
+    let state = reducer()
     for (let value of iterable) {
       yield state = reducer(state, value)
+    }
+  }
+})
+
+export const scanEx = <T, R> (initial: R, reducer: ReducerExFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
+  [Symbol.iterator]: function* () {
+    let state = initial
+    let i = 0
+    for (let value of iterable) {
+      yield state = reducer(state, value, i++, iterable)
     }
   }
 })
@@ -53,7 +101,7 @@ export const length = (maxLength = Number.POSITIVE_INFINITY) => {
   }
 }
 
-export const unique = (iterable: Iterable<any>) => ({
+export const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
   [Symbol.iterator]: function* () {
     const buffer: any[] = []
     for (let value of iterable) {
