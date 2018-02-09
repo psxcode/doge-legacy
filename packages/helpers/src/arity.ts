@@ -1,3 +1,5 @@
+import { IHash, NamedFn, PositionalFn } from './types'
+
 export const nullary = <R> (fn: (...args: any[]) => R) =>
   (..._: any[]): R => fn()
 
@@ -19,23 +21,23 @@ export const spread = (fn: (...args: any[]) => any) =>
 export const gather = (fn: (args: any[]) => any) =>
   (...args: any[]): any => fn(args)
 
-export const named = (...propNames: string[]) => (fn: (props: { [key: string]: any }) => any) =>
-  (...args: any[]): any => fn(propNames.reduce((res: { [key: string]: any }, name, i) => {
+export const named = (keys: () => string[]) => (fn: NamedFn<any>) =>
+  (...args: any[]) => fn(keys().reduce((res: IHash, name, i) => {
     res[name] = args[i]
     return res
   }, {}))
 
-export const positional = (...propNames: string[]) => (fn: (...args: any[]) => any) =>
-  (props: { [key: string]: any }): any => fn(...propNames.map((name) => props[name]))
+export const positional = (keys = Object.keys) => (fn: PositionalFn<any>) =>
+    (props: IHash) => fn(...keys(props).map((name) => props[name]))
 
 export const bind = (...args0: any[]) =>
   (fn: (...args: any[]) => any) =>
     (...args1: any[]) => fn(...args0, ...args1)
 
-export const bindCtx = (ctx: { [k: string]: any }) =>
+export const bindCtx = (ctx: IHash) =>
   (fn: (...args: any[]) => any) =>
     (...args: any[]) => fn.apply(ctx, args)
 
-export const withArgs = (args0: { [k: string]: any }) =>
-  (fn: (args: { [k: string]: any }) => any) =>
-    (args1: { [k: string]: any } = {}) => fn({ ...args0, ...args1 })
+export const withArgs = (props0: IHash) =>
+  (fn: (props: IHash) => any) =>
+    (props1: IHash = {}) => fn({ ...props0, ...props1 })

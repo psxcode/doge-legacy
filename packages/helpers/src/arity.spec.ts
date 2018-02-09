@@ -90,7 +90,7 @@ describe('[ arity ]', function () {
   describe('[ named ]', function () {
     it('should work', function () {
       const spy = makeSpy()
-      const f = named('a', 'b', 'c')(spy)
+      const f = named(() => ['a', 'b', 'c'])(spy)
       f(1, 2, 3)
       sinon.assert.calledOnce(spy)
       sinon.assert.calledWithExactly(spy, { a: 1, b: 2, c: 3 })
@@ -100,10 +100,17 @@ describe('[ arity ]', function () {
   describe('[ positional ]', function () {
     it('should work', function () {
       const spy = makeSpy()
-      const f = positional('a', 'b', 'c')(spy)
+      const f = positional()(spy)
       f({ a: 1, b: 2, c: 3 })
       sinon.assert.calledOnce(spy)
       sinon.assert.calledWithExactly(spy, 1, 2, 3)
+    })
+    it('should work', function () {
+      const spy = makeSpy()
+      const f = positional(() => ['b', 'a'])(spy)
+      f({ a: 1, b: 2, c: 3 })
+      sinon.assert.calledOnce(spy)
+      sinon.assert.calledWithExactly(spy, 2, 1)
     })
   })
 
