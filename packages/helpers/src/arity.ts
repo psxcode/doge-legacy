@@ -27,3 +27,15 @@ export const named = (...propNames: string[]) => (fn: (props: { [key: string]: a
 
 export const positional = (...propNames: string[]) => (fn: (...args: any[]) => any) =>
   (props: { [key: string]: any }): any => fn(...propNames.map((name) => props[name]))
+
+export const bind = (...args0: any[]) =>
+  (fn: (...args: any[]) => any) =>
+    (...args1: any[]) => fn(...args0, ...args1)
+
+export const bindCtx = (ctx: { [k: string]: any }) =>
+  (fn: (...args: any[]) => any) =>
+    (...args: any[]) => fn.apply(ctx, args)
+
+export const withArgs = (args0: { [k: string]: any }) =>
+  (fn: (args: { [k: string]: any }) => any) =>
+    (args1: { [k: string]: any } = {}) => fn({ ...args0, ...args1 })

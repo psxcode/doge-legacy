@@ -10,9 +10,12 @@ import {
   spread,
   ternary,
   unary,
-  voidify
+  voidify,
+  bind,
+  bindCtx, withArgs
 } from './arity'
 import { identity } from './identity'
+import { pipe } from './pipe'
 
 const makeSpy = () => sinon.spy()
 
@@ -101,6 +104,64 @@ describe('[ arity ]', function () {
       f({ a: 1, b: 2, c: 3 })
       sinon.assert.calledOnce(spy)
       sinon.assert.calledWithExactly(spy, 1, 2, 3)
+    })
+  })
+
+  const id = (value: any) => value
+  const add = (a: number, b: number) => a + b
+  const addNamed = (a: string, b: string) => (p: {[k: string]: any}) => p[a] + p[b]
+  const sum = (...args: number[]) => args.reduce(add)
+  const getCtx = function () {
+    return this
+  }
+
+  describe('[ bind ]', function () {
+    it('should work as a constant', function () {
+      const binded = bind(10)(id)
+      expect(binded()).eq(10)
+    })
+
+    it('should work', function () {
+      const binded = bind(10)(add)
+      expect(binded(10)).eq(20)
+    })
+
+    it('should work with pipe', function () {
+      const binded = pipe(bind(10, 20), bind(10), bind(2))(sum)
+      expect(binded()).eq(42)
+    })
+  })
+
+  describe('[ bindCtx ]', function () {
+    it('should work as a constant', function () {
+      const ctx = {
+        value: 10
+      }
+      const binded = bindCtx(ctx)(getCtx)
+      expect(binded()).deep.eq(ctx)
+    })
+
+    it('should work with pipe', function () {
+      const ctx = {
+        value: 10
+      }
+      const ctx2 = {
+        value: 20
+      }
+      const binded = pipe(bindCtx(ctx), bindCtx(ctx2))(getCtx)
+      expect(binded()).deep.eq(ctx)
+    })
+  })
+
+  describe('[ withArgs ]', function () {
+    it('should work as a constant', function () {
+      const binded = withArgs({ value0: 0 })(id)
+      expect(binded()).deep.eq({ value0: 0 })
+    })
+
+    it('should work', function () {
+      const binded = withArgs({ val0: 5 })(addNamed('val0', 'val1'))
+      expect(binded({ val1: 10 })).eq(15)
     })
   })
 })
