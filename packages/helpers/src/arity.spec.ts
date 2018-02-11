@@ -12,9 +12,13 @@ import {
   unary,
   voidify,
   bind,
-  bindCtx, withArgs
+  bindCtx,
+  withArgs,
+  identity,
+  identityAsync,
+  constant,
+  constantAsync
 } from './arity'
-import { identity } from './identity'
 import { pipe } from './pipe'
 
 const makeSpy = () => sinon.spy()
@@ -169,6 +173,30 @@ describe('[ arity ]', function () {
     it('should work', function () {
       const binded = withArgs({ val0: 5 })(addNamed('val0', 'val1'))
       expect(binded({ val1: 10 })).eq(15)
+    })
+  })
+
+  describe('[ identity ]', function () {
+    it('should return same value', function () {
+      expect(identity(42)).eq(42)
+    })
+  })
+
+  describe('[ identityAsync ]', function () {
+    it('should return same value', async function () {
+      expect(await identityAsync(42)).eq(42)
+    })
+  })
+
+  describe('[ constant ]', function () {
+    it('should return same value', function () {
+      expect(constant(42)()).eq(42)
+    })
+  })
+
+  describe('[ constantAsync ]', function () {
+    it('should return same value', async function () {
+      expect(await constantAsync(42)()).eq(42)
     })
   })
 })

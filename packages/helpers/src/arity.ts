@@ -41,3 +41,11 @@ export const bindCtx = (ctx: IHash) =>
 export const withArgs = (props0: IHash) =>
   (fn: (props: IHash) => any) =>
     (props1: IHash = {}) => fn({ ...props0, ...props1 })
+
+export const identity = <T> (arg: T) => arg
+
+export const identityAsync = <T> (arg: T) => Promise.resolve(arg)
+
+export const constant = <T> (arg: T) => () => arg
+
+export const constantAsync = <T> (arg: T) => () => Promise.resolve(arg)
