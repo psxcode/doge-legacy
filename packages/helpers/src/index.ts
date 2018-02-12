@@ -1,4 +1,3 @@
-export * from './identity'
 export * from './pipe'
 export * from './entries'
 export * from './promisify'
