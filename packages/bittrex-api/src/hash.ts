@@ -1,5 +1,7 @@
 import { createHmac } from 'crypto'
+import { makeJsonSerializer, makeObjectCache, memoize } from '@doge/helpers'
 
-export const hash = (secret: string) => (value: string) => {
-  return createHmac('sha512', secret).update(value).digest('hex')
-}
+export const hash = (secret: string) =>
+  memoize<string, string>(makeObjectCache(), makeJsonSerializer())(
+    (value: string) => createHmac('sha512', secret).update(value).digest('hex')
+  )
