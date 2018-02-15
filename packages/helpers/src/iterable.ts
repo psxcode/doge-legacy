@@ -169,6 +169,14 @@ export const distinct = <T> (iterable: Iterable<T>): Iterable<T> => ({
   }
 })
 
+export const concat = <T> (...iterables: Iterable<T>[]): Iterable<T> => ({
+  [Symbol.iterator]: function* () {
+    for (let it of iterables) {
+      yield* iterate(it)
+    }
+  }
+})
+
 export const resolve = (iter: Iterator<any>) => {
   const handle = (ir: IteratorResult<any>) => {
     if (!ir.done) {
