@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import {
+  distinct,
   filter,
   filterEx,
   iterate,
@@ -8,7 +9,10 @@ import {
   mapEx,
   reduce,
   reduceEx,
-  scan, scanEx,
+  scan,
+  scanEx,
+  skip, slice,
+  take,
   unique
 } from './iterable'
 import { makeSpy } from './test-helpers'
@@ -296,6 +300,66 @@ describe('[ iterable ]', function () {
     })
   })
 
+  describe('[ skip ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const result = [...skip(2)(data)]
+      expect(result).deep.eq([3, 4, 5])
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const result = [...pipe(skip(2), map(mult2))(data)]
+      expect(result).deep.eq([6, 8, 10])
+    })
+
+    it('works with Generators', function () {
+      const data = gen(5)
+      const result = [...skip(2)(data)]
+      expect(result).deep.eq([2, 3, 4])
+    })
+  })
+
+  describe('[ take ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const result = [...take(3)(data)]
+      expect(result).deep.eq([1, 2, 3])
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const result = [...pipe(map(mult2), take(2))(data)]
+      expect(result).deep.eq([2, 4])
+    })
+
+    it('works with Generators', function () {
+      const data = gen(5)
+      const result = [...take(2)(data)]
+      expect(result).deep.eq([0, 1])
+    })
+  })
+
+  describe('[ slice ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 2, 3, 4, 5]
+      const result = [...slice(1, 3)(data)]
+      expect(result).deep.eq([2, 3, 4])
+    })
+
+    it('works chained', function () {
+      const data = [1, 2, 3, 4, 5]
+      const result = [...pipe(map(mult2), slice(2, 2))(data)]
+      expect(result).deep.eq([6, 8])
+    })
+
+    it('works with Generators', function () {
+      const data = gen(5)
+      const result = [...slice(2, 1)(data)]
+      expect(result).deep.eq([2])
+    })
+  })
+
   describe('[ length ]', function () {
     it('should work with arrays', function () {
       const data = [1, 2, 3, 4, 5]
@@ -345,6 +409,20 @@ describe('[ iterable ]', function () {
       const data = [1, 1, 3, 4, 3]
       const result = [...pipe(map(mult2), unique)(data)]
       expect(result).deep.eq([2, 6, 8])
+    })
+  })
+
+  describe('[ distinct ]', function () {
+    it('works with arrays', function () {
+      const data = [1, 1, 3, 3, 4, 3]
+      const result = [...distinct(data)]
+      expect(result).deep.eq([1, 3, 4, 3])
+    })
+
+    it('works chained', function () {
+      const data = [1, 1, 3, 3, 4, 3]
+      const result = [...pipe(map(mult2), distinct)(data)]
+      expect(result).deep.eq([2, 6, 8, 6])
     })
   })
 })

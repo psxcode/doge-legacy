@@ -1,3 +1,7 @@
+import { pipe } from './pipe'
+import { isFunction } from 'util'
+import { unshift } from './array'
+
 export function* iterate (iterable: Iterable<any>) {
   for (let value of iterable) {
     yield value
@@ -87,6 +91,46 @@ export const scanEx = <T, R> (initial: R, reducer: ReducerExFn<T, R>) => (iterab
   }
 })
 
+export const skip = <T> (n: number) => (iterable: Iterable<T>): Iterable<T> => ({
+  [Symbol.iterator]: function* () {
+    const it = iterate(iterable)
+    let i = 0
+    while (i++ < n && !it.next().done);
+    for (let value of it) {
+      yield value
+    }
+  }
+})
+
+export const take = <T> (n: number) => (iterable: Iterable<T>): Iterable<T> => ({
+  [Symbol.iterator]: function* () {
+    const it = iterate(iterable)
+    let i = 0
+    let ir: any
+    while (i++ < n && !(ir = it.next()).done) {
+      yield ir.value
+    }
+  }
+})
+
+export const slice = <T> (numSkip: number, numTake: number) => pipe(skip<T>(numSkip), take<T>(numTake))
+
+export const lastn = <T> (n: number) => (iterable: Iterable<T>): Iterable<T> => ({
+  [Symbol.iterator]: function* () {
+    const last = new Array<T>(n)
+    for (let value of iterable) {
+      unshift.call(last, value)
+    }
+    for (let value of last) {
+      yield value
+    }
+  }
+})
+
+export const first = take(1)
+
+export const last = lastn(1)
+
 export const length = (maxLength = Number.POSITIVE_INFINITY) => {
   if (maxLength < 0) {
     maxLength = Number.POSITIVE_INFINITY
@@ -103,7 +147,7 @@ export const length = (maxLength = Number.POSITIVE_INFINITY) => {
 
 export const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
   [Symbol.iterator]: function* () {
-    const buffer: any[] = []
+    const buffer: T[] = []
     for (let value of iterable) {
       if (!buffer.includes(value)) {
         buffer.push(value)
@@ -112,3 +156,25 @@ export const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
     }
   }
 })
+
+export const distinct = <T> (iterable: Iterable<T>): Iterable<T> => ({
+  [Symbol.iterator]: function* () {
+    let last: T
+    for (let value of iterable) {
+      if (value !== last!) {
+        last = value
+        yield value
+      }
+    }
+  }
+})
+
+export const resolve = (iter: Iterator<any>) => {
+  const handle = (ir: IteratorResult<any>) => {
+    if (!ir.done) {
+      Promise.resolve(ir.value)
+        .then(val => handle(iter.next(val)))
+    }
+  }
+  handle(iter.next())
+}
