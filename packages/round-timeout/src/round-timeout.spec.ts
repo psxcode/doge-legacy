@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { spy, assert as sinonAssert } from 'sinon'
 import { roundTimeout } from './round-timeout'
-import { timeframes } from './timeframes'
+import { Timeframe, timeframes } from './timeframes'
 import { roundValue } from './round-value'
 
 const noop = () => void 0
@@ -20,7 +20,7 @@ const timeoutSpy = (expectedCallback: any, expectedMs: number, next: any) =>
 
 nows.forEach((now) => {
   describe(`[ roundTimeout ] [now = ${now}]`, function () {
-    Object.keys(timeframes).forEach((timeframeName) => {
+    Object.keys(timeframes).forEach((timeframeName: Timeframe) => {
       it(`should call back within time aligned to ${timeframeName}`, function (done) {
         const startTime = now
         const timeStep = timeframes[timeframeName]
@@ -28,7 +28,7 @@ nows.forEach((now) => {
         const expectedEndTime = roundValue(timeStep, Math.ceil)(startTime + 1)
         const spy = timeoutSpy(noop, expectedEndTime - startTime, done)
 
-        roundTimeout(spy, noop)(timeStep)(noop)(startTime)
+        roundTimeout(spy)(timeStep)(noop)(startTime)
       })
     })
   })
@@ -36,14 +36,13 @@ nows.forEach((now) => {
 
 describe('[ roundTimeout ]', function () {
   it('should properly cancel timeout', function () {
-    const timeoutSpy = (resolve: any, ms: number) => 10
     const clearSpy = spy()
-    const cancel = roundTimeout(timeoutSpy, clearSpy)(0)(noop)(0)
+    const wait = (cb: any, ms: number) => clearSpy
+    const cancel = roundTimeout(wait)(0)(noop)(0)
 
     /* invoke cancel */
     cancel()
 
     sinonAssert.calledOnce(clearSpy)
-    sinonAssert.calledWith(clearSpy, 10)
   })
 })

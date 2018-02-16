@@ -1,8 +1,7 @@
-import { ClearTimeoutFunction, SetTimeoutFunction } from './types'
 import { roundTimeout } from './round-timeout'
 
-export const roundTimeoutPromise = (timeoutFn: SetTimeoutFunction, clearFn: ClearTimeoutFunction) =>
+export const roundTimeoutPromise = (wait: (cb: () => void, ms: number) => () => void) =>
   (ms: number) => {
-    const at = roundTimeout(timeoutFn, clearFn)(ms)
+    const at = roundTimeout(wait)(ms)
     return (initialTime: number) => new Promise((resolve) => at(resolve)(initialTime))
   }

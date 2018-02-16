@@ -1,11 +1,8 @@
 import { roundValue } from './round-value'
-import { CallbackFn, ClearTimeoutFunction, SetTimeoutFunction } from './types'
 
-export const roundTimeout = (timeoutFn: SetTimeoutFunction, clearFn: ClearTimeoutFunction) =>
+export const roundTimeout = (wait: (cb: () => void, ms: number) => () => void) =>
   (alignStep: number) => {
     const ceilTime = roundValue(alignStep, Math.ceil)
-    return (cb: CallbackFn) => (initialTime: number) => {
-      const timeoutId = timeoutFn(cb, Math.max(ceilTime(initialTime + 0.5) - initialTime, 0))
-      return () => clearFn(timeoutId)
-    }
+    return (cb: () => void) => (initialTime: number) =>
+      wait(cb, Math.max(ceilTime(initialTime + 0.5) - initialTime, 0))
   }

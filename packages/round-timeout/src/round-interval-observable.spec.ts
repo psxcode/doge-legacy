@@ -1,18 +1,20 @@
 import * as sinon from 'sinon'
 import { roundIntervalObservable } from './round-interval-observable'
+import { waitPromise } from '@doge/helpers'
 
 const noop = () => void 0
-const now = (offset: number) => () => 0
+const now = () => 0
+const wait = waitPromise(setTimeout)
 
 describe(`[ roundIntervalObservable ]`, function () {
 
-  it(`should call back within time aligned to `, function (done) {
-    const timeoutSpy = sinon.spy(() => 42)
+  it(`should call back within time aligned to `, function () {
     const clearSpy = sinon.spy()
+    const timeoutSpy = sinon.spy(() => clearSpy)
     const nextSpy = sinon.spy()
     const completeSpy = sinon.spy()
 
-    const sub = roundIntervalObservable(timeoutSpy, clearSpy, now)(1000, 0)
+    const sub = roundIntervalObservable(timeoutSpy, now)(1000)
       .subscribe(nextSpy, noop, completeSpy)
 
     sub.unsubscribe()
@@ -21,29 +23,26 @@ describe(`[ roundIntervalObservable ]`, function () {
     sinon.assert.notCalled(completeSpy)
     sinon.assert.calledOnce(timeoutSpy)
     sinon.assert.calledOnce(clearSpy)
-    sinon.assert.calledWith(clearSpy, 42)
-    done()
   })
 
-  it(`should call back within time aligned to `, function (done) {
+  it(`should call back within time aligned to `, async function () {
+    const clearSpy = sinon.spy()
     const timeoutSpy = sinon.spy((cb: any) => {
       setImmediate(cb)
-      return 42
+      return clearSpy
     })
-    const clearSpy = sinon.spy()
     const nextSpy = sinon.spy()
     const completeSpy = sinon.spy()
 
-    roundIntervalObservable(timeoutSpy, clearSpy, now)(1000, 0)
+    roundIntervalObservable(timeoutSpy, now)(1000)
       .take(2)
       .subscribe(nextSpy, noop, completeSpy)
 
-    setTimeout(() => {
-      sinon.assert.calledTwice(nextSpy)
-      sinon.assert.calledOnce(completeSpy)
-      sinon.assert.calledTwice(timeoutSpy)
-      sinon.assert.notCalled(clearSpy)
-      done()
-    }, 100)
+    await wait(100)
+
+    sinon.assert.calledTwice(nextSpy)
+    sinon.assert.calledOnce(completeSpy)
+    sinon.assert.calledTwice(timeoutSpy)
+    sinon.assert.notCalled(clearSpy)
   })
 })
