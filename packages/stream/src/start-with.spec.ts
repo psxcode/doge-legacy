@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 import { makeReadable } from './helpers/readable'
 import { startWith } from './start-with'
 import { makeOnDataConsumer, makeReadableTest, xmakeReadableTest } from './helpers/helpers'

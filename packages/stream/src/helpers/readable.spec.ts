@@ -10,7 +10,7 @@ import {
   expectSameData
 } from './helpers'
 import { makeReadable } from './readable'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 
 /**
  * LAZY-PRODUCER

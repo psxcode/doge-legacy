@@ -1,6 +1,6 @@
 /* tslint:disable no-conditional-assignment */
 import { Readable, ReadableOptions } from 'stream'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 
 export const fromRaw = <T>(opts: ReadableOptions) => (iterable: Iterable<T>) => {
   const iterator = iterate(iterable)

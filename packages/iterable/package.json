@@ -1,0 +1,62 @@
+{
+  "name": "@doge/iterable",
+  "version": "0.0.0",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "psxcode <psxcode@gmail.com> (https://github.com/psxcode)",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "yarn clean && yarn rollup -c rollup.config.js",
+    "clean": "rimraf dist",
+    "test": "nyc yarn mocha --opts mocha.opts",
+    "test:watch": "yarn mocha --opts mocha.opts --watch"
+  },
+  "dependencies": {
+    "@doge/helpers": "*"
+  },
+  "devDependencies": {
+    "@std/esm": "*",
+    "@types/chai": "*",
+    "@types/mocha": "*",
+    "@types/node": "*",
+    "@types/node-fetch": "*",
+    "@types/sinon": "*",
+    "chai": "*",
+    "mocha": "*",
+    "nyc": "*",
+    "rimraf": "*",
+    "rollup": "*",
+    "rollup-plugin-commonjs": "*",
+    "rollup-plugin-node-resolve": "*",
+    "rollup-plugin-typescript2": "*",
+    "sinon": "*",
+    "source-map-support": "*",
+    "ts-node": "*",
+    "typescript": "*"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "all": true
+  }
+}

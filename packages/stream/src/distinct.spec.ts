@@ -3,7 +3,7 @@ import { makeReadable } from './helpers/readable'
 import { makeWritable } from './helpers/writable'
 import { makeTransformTest, xmakeTransformTest } from './helpers/helpers'
 import { distinct, distinctUntilChanged } from './distinct'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 
 describe('[ distinct ]', function () {
   const isEqual = (a: any, b: any) => a === b

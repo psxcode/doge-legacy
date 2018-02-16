@@ -8,7 +8,7 @@ import {
   wait
 } from './helpers/helpers'
 import { delay } from './delay'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 
 describe('[ delay ]', function () {
   xmakeTransformTest<number>(makeSmallRange(4),

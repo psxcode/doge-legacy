@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
 import { pipe } from './pipe'

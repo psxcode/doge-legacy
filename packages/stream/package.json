@@ -23,7 +23,8 @@
     "test:watch": "yarn mocha -- --watch"
   },
   "dependencies": {
-    "@doge/helpers": "*"
+    "@doge/helpers": "*",
+    "@doge/iterable": "*"
   },
   "devDependencies": {
     "@std/esm": "*",

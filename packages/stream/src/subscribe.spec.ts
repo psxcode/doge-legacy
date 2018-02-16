@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 import { makeReadable } from './helpers/readable'
 import { subscribe } from './subscribe'
 import { makeDataSpy, makeSmallRange, wait, waitForEndOrError } from './helpers/helpers'

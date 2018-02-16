@@ -7,7 +7,7 @@ import {
   xmakeWritableTest
 } from './helpers'
 import { makeWritable } from './writable'
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 
 describe('[ writable ]', function () {
   this.slow(1000)

@@ -1,4 +1,4 @@
-import { iterate } from '@doge/helpers'
+import { iterate } from '@doge/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
 import { makeSmallRange, makeTransformTest, xmakeTransformTest } from './helpers/helpers'
