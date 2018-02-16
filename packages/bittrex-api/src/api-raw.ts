@@ -21,8 +21,8 @@ import {
   IBittrexParams,
   IBittrexResponse,
   BittrexWithdrawPromise,
-  ICredentialsApi,
-  IPublicApi
+  ICredentialsApiRaw,
+  IPublicApiRaw
 } from './types'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response } from 'node-fetch'
@@ -41,7 +41,7 @@ const apiRequest = (request: FetchFn) => (baseUrl: string) => (path: string): Bi
   }
 }
 
-export function getPublicApi (request: FetchFn): IPublicApi {
+export function getPublicApi (request: FetchFn): IPublicApiRaw {
   const v1 = apiRequest(request)(BASE_URL_API_V1)
   const v2 = apiRequest(request)(BASE_URL_API_V2)
 
@@ -68,7 +68,7 @@ export function getPublicApi (request: FetchFn): IPublicApi {
   }
 }
 
-export function getCredentialsApi (request: FetchFn): ICredentialsApi {
+export function getCredentialsApi (request: FetchFn): ICredentialsApiRaw {
   const v1 = apiRequest(request)(BASE_URL_API_V1)
 
   const buylimit = v1('market/buylimit') as BittrexBuySellPromise

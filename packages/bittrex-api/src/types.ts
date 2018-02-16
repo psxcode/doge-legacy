@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs/Observable'
+import { Timeframe } from '@doge/round-timeout'
 
 export type JsonObject = {
   [key: string]: string | string[] | number | number[] | boolean | boolean[]
@@ -37,7 +38,7 @@ export interface IBittrexGetMarketsResponse extends IBittrexResponse {
 }
 
 export type BittrexGetMarketsPromise = () => Promise<IBittrexGetMarketsResponse>
-export type BittrexGetMarketsObservable = () => Observable<IBittrexGetMarketsResponse>
+export type BittrexGetMarketsObservable = (updateInterval?: Timeframe) => Observable<IBittrexGetMarketsResponse>
 
 /**
  * GetCurrencies
@@ -484,7 +485,7 @@ export interface IBittrexGetDepositHistoryResponse extends IBittrexResponse {
 export type BittrexGetDepositHistoryPromise = (params: IBittrexGetDepositHistoryParams) => Promise<IBittrexGetDepositHistoryResponse>
 export type BittrexGetDepositHistoryObservable = (params: IBittrexGetDepositHistoryParams) => Observable<IBittrexGetDepositHistoryResponse>
 
-export interface IPublicApi {
+export interface IPublicApiRaw {
   getmarkets: BittrexGetMarketsPromise,
   getcurrencies: BittrexGetCurrenciesPromise,
   getticker: BittrexGetTickerPromise,
@@ -496,7 +497,7 @@ export interface IPublicApi {
   getmarkethistory: BittrexGetMarketHistoryPromise
 }
 
-export interface ICredentialsApi {
+export interface ICredentialsApiRaw {
   buylimit: BittrexBuySellPromise,
   buymarket: BittrexBuySellPromise,
   selllimit: BittrexBuySellPromise,
@@ -511,4 +512,13 @@ export interface ICredentialsApi {
   getorderhistory: BittrexGetOrderHistoryPromise,
   getorder: BittrexGetOrderPromise,
   withdraw: BittrexWithdrawPromise
+}
+
+export interface IPublicApi {
+
+}
+
+export interface ICredentialApiInit {
+  apikey: string,
+  apisecret: string
 }

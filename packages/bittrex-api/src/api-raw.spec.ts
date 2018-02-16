@@ -2,7 +2,7 @@ import { getCredentialsApi, getPublicApi } from './api-raw'
 import { API_V1, API_V2, BASE_URL } from './config'
 import { Response } from 'node-fetch'
 import { SinonSpy, mock, assert } from 'sinon'
-import { IBittrexParams, ICredentialsApi, IPublicApi } from './types'
+import { IBittrexParams, ICredentialsApiRaw, IPublicApiRaw } from './types'
 import { URL, URLSearchParams } from 'url'
 
 const makeRequestSpy = () => mock().returns(Promise.resolve(new Response('{}', { status: 200 })))
@@ -17,7 +17,7 @@ const setUriParams = (params: IBittrexParams, baseUrl: string) => {
 
 describe('[ raw-api ]', function () {
 
-  let api: IPublicApi
+  let api: IPublicApiRaw
   let spy: SinonSpy
 
   beforeEach(() => {
@@ -152,7 +152,7 @@ describe('[ raw-api ]', function () {
 describe('[ credentials-api ]', function () {
 
   let spy: SinonSpy
-  let api: ICredentialsApi
+  let api: ICredentialsApiRaw
 
   beforeEach(() => {
     spy = makeRequestSpy()
