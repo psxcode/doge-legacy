@@ -38,7 +38,7 @@ export function subscribe (observer: IObserver | ((chunk: any) => void)) {
     return unsubscribe
 
     function unsubscribe () {
-      unsub.forEach(u => u())
+      for (let u of unsub) u()
     }
   }
 }
