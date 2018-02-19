@@ -6,13 +6,14 @@ import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/interval'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
+import { waitPromise } from '@doge/helpers'
 import { fromStream } from './from-stream'
 import { Readable, ReadableOptions } from 'stream'
 
 const makeReadable = (data: string[], opts: ReadableOptions = {}) => {
   let i = 0
   return new Readable({
-    encoding: 'utf8',
+    ...opts,
     read () {
       this.push(i >= data.length ? null : data[i++])
     }
@@ -20,35 +21,36 @@ const makeReadable = (data: string[], opts: ReadableOptions = {}) => {
 }
 const makeErrorReadable = (opts: ReadableOptions = {}) => {
   return new Readable({
-    encoding: 'utf8',
+    ...opts,
     read () {
       this.emit('error')
     }
   })
 }
-const makeDataSpy = <T> (data: T[]) => {
+const makeDataSpy = <T> (expectedData: T[]) => {
   let i = 0
   return sinon.spy((chunk: T) => {
-    if (i >= data.length) {
-      throw new Error(`Num calls limit reached\ndata.length = ${data.length}`)
+    if (i >= expectedData.length) {
+      throw new Error(`Num calls limit reached, expectedData.length = ${expectedData.length}`)
     }
-    expect(chunk).eq(data[i])
+    expect(chunk).eq(expectedData[i])
     ++i
   })
 }
-const delayPromise = (delay: number) =>
-  new Promise(resolve => setTimeout(resolve, delay))
+const wait = waitPromise(setTimeout)
 
 describe('[ rx-node / from-stream ]', function () {
+  this.slow(200)
+
   it('should work with simple readable', async function () {
     const data = 'this is test'.split(' ')
-    const source = makeReadable(data)
+    const source = makeReadable(data, { encoding: 'utf8' })
     const dataSpy = makeDataSpy(data)
     const errSpy = sinon.spy()
     const endSpy = sinon.spy()
     fromStream(source).subscribe(dataSpy, errSpy, endSpy)
 
-    await delayPromise(20)
+    await wait(100)
     sinon.assert.callCount(dataSpy, data.length)
     sinon.assert.calledOnce(endSpy)
     sinon.assert.notCalled(errSpy)
@@ -61,7 +63,7 @@ describe('[ rx-node / from-stream ]', function () {
     const endSpy = sinon.spy()
     fromStream(source).subscribe(dataSpy, errSpy, endSpy)
 
-    await delayPromise(20)
+    await wait(100)
     sinon.assert.notCalled(dataSpy)
     sinon.assert.notCalled(endSpy)
     sinon.assert.calledOnce(errSpy)
