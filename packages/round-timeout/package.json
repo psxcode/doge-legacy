@@ -16,9 +16,8 @@
   "scripts": {
     "build": "yarn clean && yarn rollup -c rollup.config.js",
     "clean": "rimraf dist",
-    "test": "nyc yarn mocha",
-    "test:watch": "yarn mocha -- --watch",
-    "mocha": "mocha --opts mocha.opts"
+    "test": "nyc yarn mocha --opts mocha.opts",
+    "test:watch": "yarn mocha --watch --opts mocha.opts"
   },
   "dependencies": {
     "@doge/helpers": "*",
