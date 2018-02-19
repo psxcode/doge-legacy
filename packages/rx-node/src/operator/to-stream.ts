@@ -7,7 +7,6 @@ export function toStream<T> (this: Observable<T>, opts: ReadableOptions = {}) {
   let sub: Subscription
   return new Readable({
     ...opts,
-    encoding: opts.encoding || 'utf8',
     read () {
       if (!sub) {
         sub = source.subscribe(
