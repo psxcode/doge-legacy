@@ -14,16 +14,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn rollup",
+    "build": "yarn clean && yarn rollup -c rollup.config.js",
     "clean": "rimraf dist",
-    "tsc": "tsc",
-    "rollup": "rollup -c rollup.config.js",
-    "mocha": "mocha --opts mocha.opts",
-    "test": "yarn test:once",
-    "test:once": "nyc yarn mocha",
-    "test:watch": "yarn mocha -- --watch",
-    "test:coverage:generate": "nyc report --reporter=json",
-    "test:coverage:report": "codecov -f coverage/*.json"
+    "test": "nyc yarn mocha --opts mocha.opts",
+    "test:watch": "yarn mocha --watch --opts mocha.opts"
   },
   "dependencies": {
     "@doge/helpers": "*"
