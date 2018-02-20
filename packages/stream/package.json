@@ -44,5 +44,6 @@
     "source-map-support": "*",
     "ts-node": "*",
     "typescript": "*"
-  }
+  },
+  "@std/esm": "cjs"
 }

@@ -15,5 +15,5 @@ export default {
     commonjs()
   ],
 
-  external: ['stream'],
+  external: ['stream', '@doge/helpers', '@doge/iterable'],
 }
