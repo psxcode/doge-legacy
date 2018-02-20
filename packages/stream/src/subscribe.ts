@@ -1,6 +1,6 @@
 import ReadableStream = NodeJS.ReadableStream
 import { IEEValue, on, onceAll, onEx } from './events'
-import { all, voidify } from '@doge/helpers'
+import { all, voidify, bindCtx } from '@doge/helpers'
 
 const noop = () => void 0
 
@@ -16,19 +16,18 @@ export interface IObserverEx {
   complete?: () => void
 }
 
-export const isObserver = (obj: any): obj is IObserver => {
-  return 'next' in obj && typeof obj.next === 'function'
+export const bindObserver = (observer: IObserver) => {
+  const binded = bindCtx(observer)
+  const { next, error, complete } = observer
+  return {
+    next: binded(next),
+    error: error && binded(error),
+    complete: complete && binded(complete)
+  }
 }
 
-export const isObserverEx = (obj: any): obj is IObserverEx => {
-  return 'next' in obj && typeof obj.next === 'function'
-}
-
-export function subscribe (observer: IObserver | ((chunk: any) => void)) {
-  const { next, error, complete } = isObserver(observer)
-    ? observer
-    : { next: observer, error: undefined, complete: undefined }
-  return (...streams: ReadableStream[]) => {
+export const subscribe = ({ next, error, complete }: IObserver) =>
+  (...streams: ReadableStream[]) => {
     const onComplete = voidify(all(unsubscribe, complete || noop))
     const unsub = [
       on('data')(next)(...streams),
@@ -41,13 +40,9 @@ export function subscribe (observer: IObserver | ((chunk: any) => void)) {
       for (let u of unsub) u()
     }
   }
-}
 
-export function subscribeEx (observer: IObserverEx | ((chunk: IEEValue) => void)) {
-  const { next, error, complete } = isObserverEx(observer)
-    ? observer
-    : { next: observer, error: undefined, complete: undefined }
-  return (...streams: ReadableStream[]) => {
+export const subscribeEx = ({ next, error, complete }: IObserverEx) =>
+  (...streams: ReadableStream[]) => {
     const onComplete = voidify(all(unsubscribe, complete || noop))
     const unsub = [
       onEx('data')(next)(...streams),
@@ -60,4 +55,3 @@ export function subscribeEx (observer: IObserverEx | ((chunk: IEEValue) => void)
       unsub.forEach(u => u())
     }
   }
-}

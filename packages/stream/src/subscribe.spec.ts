@@ -17,7 +17,7 @@ describe('[ subscribe ]', function () {
       const spy = makeDataSpy()
 
       await wait(100)
-      subscribe(spy)(s1)
+      subscribe({ next: spy })(s1)
 
       await waitForEndOrError(s1, 10)
       expect(spy.data()).deep.eq(Array.from(d1))
@@ -31,7 +31,7 @@ describe('[ subscribe ]', function () {
       const spy = makeDataSpy()
 
       await wait(100)
-      subscribe(spy)(s1, s2)
+      subscribe({ next: spy })(s1, s2)
 
       await waitForEndOrError(s2, 10)
       expect(spy.data().length).eq(10)
