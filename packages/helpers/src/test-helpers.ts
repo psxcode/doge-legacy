@@ -8,6 +8,6 @@ export const makeSpy = (fn: (...args: any[]) => any): SpyFn => {
     ++i
     return fn(...args)
   }
-  (wrapper as SpyFn).callCount = () => i;
+  (wrapper as SpyFn).callCount = () => i
   return (wrapper as SpyFn)
 }
