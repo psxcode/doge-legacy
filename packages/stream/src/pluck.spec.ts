@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { iterate, map as mapIterable } from '@doge/helpers'
+import { iterate, map as mapIterable } from '@doge/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
 import { filter } from './filter'
