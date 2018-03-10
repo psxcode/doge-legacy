@@ -13,11 +13,11 @@ import {
   voidify,
   bind,
   bindCtx,
-  withArgs,
+  bindProps,
   identity,
   identityAsync,
   constant,
-  constantAsync
+  constantAsync, curry, branch
 } from './arity'
 import { pipe } from './pipe'
 
@@ -164,15 +164,26 @@ describe('[ arity ]', function () {
     })
   })
 
-  describe('[ withArgs ]', function () {
+  describe('[ bindProps ]', function () {
     it('should work as a constant', function () {
-      const binded = withArgs({ value0: 0 })(id)
+      const binded = bindProps({ value0: 0 })(id)
       expect(binded()).deep.eq({ value0: 0 })
     })
 
     it('should work', function () {
-      const binded = withArgs({ val0: 5 })(addNamed('val0', 'val1'))
+      const binded = bindProps({ val0: 5 })(addNamed('val0', 'val1'))
       expect(binded({ val1: 10 })).eq(15)
+    })
+  })
+
+  describe('[ curry ]', function () {
+    it('should work', function () {
+      let binded = curry(sum, 2)
+      expect(typeof binded).eq('function')
+      binded = binded(2)
+      expect(typeof binded).eq('function')
+      binded = binded(3)
+      expect(typeof binded).eq('number')
     })
   })
 
@@ -197,6 +208,14 @@ describe('[ arity ]', function () {
   describe('[ constantAsync ]', function () {
     it('should return same value', async function () {
       expect(await constantAsync(42)()).eq(42)
+    })
+  })
+
+  describe('[ branch ]', function () {
+    it('should work', async function () {
+      const br = branch(x => x === 1, (x) => x, (x) => x * 2)
+      expect(br(1)).eq(1)
+      expect(br(2)).eq(4)
     })
   })
 })
