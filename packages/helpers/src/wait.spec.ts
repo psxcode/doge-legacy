@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { waitRaw, waitPromiseRaw, pingRaw } from './wait'
+import { waitRaw, waitPromiseRaw, ping, waitTimePromise } from './wait'
 
 const timeoutId = 42
 const expectedTimeoutMs = 1000
@@ -22,10 +22,11 @@ describe('[ wait ]', function () {
       waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, done)()
     })
 
-    it('should cancel', function () {
+    it('should cancel', async function () {
       const spy = sinon.spy()
       const unsub = waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, spy)()
       unsub()
+      await waitTimePromise(10)
       sinon.assert.notCalled(spy)
     })
   })
@@ -36,18 +37,19 @@ describe('[ wait ]', function () {
     })
   })
 
-  describe('[ pingRaw ]', function () {
+  describe.only('[ ping ]', function () {
     it('should work', async function () {
       let i = 0
-      await new Promise(res => {
-        const unsub = pingRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, () => {
-          if (i++ > 2) {
+      const maxCount = 2
+      await new Promise(resolve => {
+        const unsub = ping(waitRaw(timeoutSpy, clearTimeoutSpy))(getTimeoutMs, () => {
+          if (++i >= maxCount) {
             unsub()
-            res()
+            resolve()
           }
         })()
       }).then(() => {
-        expect(i > 0).eq(true)
+        expect(i).eq(maxCount)
       })
     })
   })
