@@ -1,26 +1,54 @@
 import { expect } from 'chai'
-import { wait, waitPromise } from './wait'
+import * as sinon from 'sinon'
+import { waitRaw, waitPromiseRaw, pingRaw } from './wait'
 
-const timeoutSpy = (expectMs: number, returnId: any) => (cb: any, ms: number) => {
-  expect(expectMs).eq(ms)
-  cb()
-  return returnId
+const timeoutId = 42
+const expectedTimeoutMs = 1000
+const getTimeoutMs = () => expectedTimeoutMs
+
+const timeoutSpy = (cb: any, ms: number) => {
+  expect(expectedTimeoutMs).eq(ms)
+  setImmediate(cb)
+  return timeoutId
 }
 
-const clearTimeoutSpy = (expectId: any) => (id: any) => {
-  expect(expectId).eq(id)
+const clearTimeoutSpy = (id: any) => {
+  expect(timeoutId).eq(id)
 }
 
 describe('[ wait ]', function () {
-  describe('[ wait ]', function () {
+  describe('[ waitRaw ]', function () {
     it('should work', function (done) {
-      wait(timeoutSpy(1000, 42), clearTimeoutSpy(42))(1000)(done)
+      waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, done)()
+    })
+
+    it('should cancel', function () {
+      const spy = sinon.spy()
+      const unsub = waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, spy)()
+      unsub()
+      sinon.assert.notCalled(spy)
     })
   })
 
-  describe('[ wait ]', function () {
-    it('should work', function (done) {
-      waitPromise(timeoutSpy(1000, null))(1000).then(done)
+  describe('[ waitPromiseRaw ]', function () {
+    it('should work', async function () {
+      await waitPromiseRaw(timeoutSpy)(getTimeoutMs)()
+    })
+  })
+
+  describe('[ pingRaw ]', function () {
+    it('should work', async function () {
+      let i = 0
+      await new Promise(res => {
+        const unsub = pingRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, () => {
+          if (i++ > 2) {
+            unsub()
+            res()
+          }
+        })()
+      }).then(() => {
+        expect(i > 0).eq(true)
+      })
     })
   })
 })
