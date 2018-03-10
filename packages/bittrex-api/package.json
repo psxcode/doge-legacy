@@ -22,7 +22,6 @@
   "dependencies": {
     "@doge/fetch": "*",
     "@doge/helpers": "*",
-    "@doge/round-timeout": "*",
     "@doge/rx-node": "*",
     "node-fetch": "*",
     "rxjs": "*",
