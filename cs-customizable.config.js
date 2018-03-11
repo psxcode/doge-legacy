@@ -10,11 +10,12 @@ module.exports = {
   ],
 
   scopes: [
-    {name: 'build'},
-    {name: 'bittrex-http-api'},
-    {name: 'align-time'},
-    {name: 'uri-params'},
-    {name: 'build'},
+    {name: 'bittrex-api'},
+    {name: 'fetch'},
+    {name: 'helpers'},
+    {name: 'iterable'},
+    {name: 'rx-node'},
+    {name: 'stream'},
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
