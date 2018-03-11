@@ -1,5 +1,5 @@
 import { Transform, TransformOptions } from 'stream'
-import { wait } from '@doge/helpers'
+import { wait, constant, bind } from '@doge/helpers'
 
 export const throttleRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
@@ -28,6 +28,6 @@ export const throttleRaw = (opts: TransformOptions) =>
 export const throttle = throttleRaw({ objectMode: true })
 
 export const throttleTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => throttleRaw(opts)(wait(setTimeout, clearTimeout)(ms))
+  (ms: number) => throttleRaw(opts)(bind(constant(ms))(wait))
 
 export const throttleTime = throttleTimeRaw({ objectMode: true })

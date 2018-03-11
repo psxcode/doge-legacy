@@ -1,5 +1,5 @@
 import { Transform, TransformOptions } from 'stream'
-import { wait } from '@doge/helpers'
+import { wait, bind, constant } from '@doge/helpers'
 
 export const debounceRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
@@ -27,6 +27,6 @@ export const debounceRaw = (opts: TransformOptions) =>
 export const debounce = debounceRaw({ objectMode: true })
 
 export const debounceTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => debounceRaw(opts)(wait(setTimeout, clearTimeout)(ms))
+  (ms: number) => debounceRaw(opts)(bind(constant(ms))(wait))
 
 export const debounceTime = debounceTimeRaw({ objectMode: true })

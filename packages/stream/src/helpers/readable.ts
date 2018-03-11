@@ -1,7 +1,8 @@
 /* tslint:disable no-conditional-assignment no-empty */
 import * as debug from 'debug'
 import { Readable, ReadableOptions } from 'stream'
-import { wait, isPositiveNumber } from './helpers'
+import { waitTimePromise as wait } from '@doge/helpers'
+import { isPositiveNumber } from './helpers'
 
 export interface IMakeReadableOptions {
   errorAtStep?: number

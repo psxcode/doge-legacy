@@ -1,5 +1,5 @@
 import { Transform, TransformOptions } from 'stream'
-import { wait } from '@doge/helpers'
+import { wait, bind, constant } from '@doge/helpers'
 
 export const bufferRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
@@ -28,6 +28,6 @@ export const bufferRaw = (opts: TransformOptions) =>
 export const buffer = bufferRaw({ objectMode: true })
 
 export const bufferTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => bufferRaw(opts)(wait(setTimeout, clearTimeout)(ms))
+  (ms: number) => bufferRaw(opts)(bind(constant(ms))(wait))
 
 export const bufferTime = bufferTimeRaw({ objectMode: true })

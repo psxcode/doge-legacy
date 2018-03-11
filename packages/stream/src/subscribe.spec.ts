@@ -3,7 +3,7 @@ import * as sinon from 'sinon'
 import { iterate } from '@doge/iterable'
 import { makeReadable } from './helpers/readable'
 import { subscribe } from './subscribe'
-import { makeDataSpy, makeSmallRange, wait, waitForEndOrError } from './helpers/helpers'
+import { makeDataSpy, makeSmallRange, waitTimePromise as wait, waitForEndOrError } from './helpers/helpers'
 
 const gen = function* (n: number) {
   for (let i = 0; i < n; ++i) yield i

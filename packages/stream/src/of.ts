@@ -1,6 +1,6 @@
 /* tslint:disable no-empty */
 import { Readable, ReadableOptions } from 'stream'
-import { wait } from '@doge/helpers'
+import { wait, bind, constant } from '@doge/helpers'
 
 export const ofRaw = <T> (opts: ReadableOptions) => (...values: T[]) => {
   let i = 0
@@ -38,6 +38,6 @@ export const ofAsyncRaw = <T> (opts: ReadableOptions) =>
 export const ofAsync = ofAsyncRaw<any>({ objectMode: true })
 
 export const ofTimeRaw = <T> (opts: ReadableOptions) =>
-  (ms: number) => ofAsyncRaw<T>(opts)(wait(setTimeout, clearTimeout)(ms))
+  (ms: number) => ofAsyncRaw<T>(opts)(bind(constant(ms))(wait))
 
 export const ofTime = ofTimeRaw<any>({ objectMode: true })
