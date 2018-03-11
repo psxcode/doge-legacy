@@ -6,7 +6,7 @@ import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/interval'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
-import { waitPromise } from '@doge/helpers'
+import { waitTimePromise as wait } from '@doge/helpers'
 import { toStream } from './to-stream'
 
 const makeDataSpy = <T> (expectedData: T[]) => {
@@ -19,7 +19,6 @@ const makeDataSpy = <T> (expectedData: T[]) => {
     ++i
   })
 }
-const wait = waitPromise(setTimeout)
 
 describe('[ rx-node / to-stream ]', function () {
   this.slow(200)

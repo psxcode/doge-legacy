@@ -7,7 +7,7 @@ import 'rxjs/add/observable/throw'
 import 'rxjs/add/observable/interval'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
-import { waitPromise } from '@doge/helpers'
+import { waitTimePromise as wait } from '@doge/helpers'
 import { toEventEmitter } from './to-event-emitter'
 
 const makeDataSpy = <T> (expectedData: T[]) => {
@@ -19,7 +19,6 @@ const makeDataSpy = <T> (expectedData: T[]) => {
     expect(chunk).eq(expectedData[i++])
   })
 }
-const wait = waitPromise(setTimeout)
 
 describe('[ rx-node / to-event-emitter ]', function () {
   this.slow(200)

@@ -1,12 +1,11 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/interval'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
-import { waitPromise } from '@doge/helpers'
+import { waitTimePromise as wait } from '@doge/helpers'
 import { fromStream } from './from-stream'
 import { Readable, ReadableOptions } from 'stream'
 
@@ -37,7 +36,6 @@ const makeDataSpy = <T> (expectedData: T[]) => {
     ++i
   })
 }
-const wait = waitPromise(setTimeout)
 
 describe('[ rx-node / from-stream ]', function () {
   this.slow(200)
