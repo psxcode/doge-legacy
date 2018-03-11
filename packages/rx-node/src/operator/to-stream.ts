@@ -10,21 +10,13 @@ export function toStream<T> (this: Observable<T>, opts: ReadableOptions = {}) {
     read () {
       if (!sub) {
         sub = source.subscribe(
-          (data: T) => {
-            if (!this.push(data)) {
-              sub && sub.unsubscribe()
-              this.emit('error', new Error('Buffer limit reached'))
-              this.push(null)
-            }
-          },
+          (data: T) => this.push(data),
           (e) => {
             sub && sub.unsubscribe()
             this.emit('error', e)
             this.push(null)
           },
-          () => {
-            this.push(null)
-          }
+          () => this.push(null)
         )
       }
     },
