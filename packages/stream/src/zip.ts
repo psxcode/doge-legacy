@@ -8,8 +8,9 @@ export const zipRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]):
   let unsubscribe: (() => void) | undefined
   let unsubscribeEnd: (() => void) | undefined
   let latest: any[][] = streams.map(() => [])
-  let done = streams.map(() => false)
+  let done: boolean[] = streams.map(() => false)
   const checkDone = () => done.some((d, i) => d && !latest[i].length)
+  const hasValueForZip = () => latest.every(l => l.length > 0)
   const unsub = () => {
     unsubscribe && unsubscribe()
     unsubscribeEnd && unsubscribeEnd()
@@ -23,7 +24,7 @@ export const zipRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]):
           unsubscribe = subscribeEx({
             next: ({ value, index }: IEEValue) => {
               latest[index].push(value)
-              if (latest.every(l => l.length > 0)) {
+              if (hasValueForZip()) {
                 this.push(latest.map(l => l.shift()))
                 if (checkDone()) {
                   this.push(null)
@@ -33,7 +34,7 @@ export const zipRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]):
             },
             error: ({ value }: IEEValue) => this.emit('error', value)
           })(...streams)
-          unsubscribeEnd = onEx('end')(({ index }) => {
+          unsubscribeEnd = onEx('end')(({ index }: IEEValue) => {
             done[index] = true
             if (checkDone()) {
               this.push(null)

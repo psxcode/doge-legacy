@@ -9,34 +9,30 @@ export const withLatestRaw = (opts: ReadableOptions) =>
     let unsubscribeMain: (() => void) | undefined
     let unsubscribeRest: (() => void) | undefined
     let latest = new Array(streams.length)
+    const unsub = () => {
+      unsubscribeMain && unsubscribeMain()
+      unsubscribeRest && unsubscribeRest()
+      unsubscribeMain = unsubscribeRest = undefined
+    }
     return streams.length
       ? new Readable({
         ...opts,
         read () {
           if (!unsubscribeMain) {
             unsubscribeMain = subscribe({
-              next: (value: any) => {
-                this.push([value, ...latest])
-              },
-              error: (e: any) => this.emit('error', e),
+              next: value => this.push([value, ...latest]),
+              error: e => this.emit('error', e),
               complete: () => {
                 this.push(null)
-                unsubscribeMain && unsubscribeMain()
-                unsubscribeRest && unsubscribeRest()
-                unsubscribeMain = unsubscribeRest = undefined
+                unsub()
               }
             })(main)
-
-            unsubscribeRest = subscribeEx(
-              ({ value, index }: IEEValue) => latest[index] = value
-            )(...streams)
+            unsubscribeRest = subscribeEx({
+              next: ({ value, index }: IEEValue) => latest[index] = value
+            })(...streams)
           }
         },
-        destroy () {
-          unsubscribeMain && unsubscribeMain()
-          unsubscribeRest && unsubscribeRest()
-          unsubscribeMain = unsubscribeRest = undefined
-        }
+        destroy: unsub
       })
       : emptyRaw(opts)()
   }
