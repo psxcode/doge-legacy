@@ -4,14 +4,12 @@ import { constant } from './arity'
 export type SetTimeoutFn = (cb: () => void, ms: number) => any
 export type ClearTimeoutFn = (id: any) => void
 
-export const alignedTimeGetter = (alignTimeframe: number) => {
-  const ceilTime = round(alignTimeframe, Math.ceil)
-  return (currentTimeGetter: () => number) =>
-    (): number => {
-      const currentTime = currentTimeGetter()
-      return Math.max(ceilTime(currentTime + 0.5) - currentTime, 0)
-    }
-}
+export const alignedTimeGetter = (currentTimeGetter: () => number) =>
+  (alignTimeframe: number) => {
+    const ceilTime = round(alignTimeframe, Math.ceil)
+    const calcTime = (currentTime: number) => Math.max(ceilTime(currentTime + 0.5) - currentTime, 0)
+    return (): number => calcTime(currentTimeGetter())
+  }
 
 export const waitRaw = (setTimeout: SetTimeoutFn, clearTimeout: ClearTimeoutFn) =>
   (timeGetter: () => number, cb: () => void) => () => {
@@ -35,7 +33,7 @@ export const waitTime = (cb: () => void) => (ms: number) => wait(constant(ms), c
 
 export const waitTimePromise = (ms: number) => waitPromise(constant(ms))()
 
-export const ping = (waitFn: typeof wait) =>
+export const pingRaw = (waitFn: typeof wait) =>
   (timeGetter: () => number, cb: () => void) => {
     let unsub: any
     let done = false
@@ -54,3 +52,5 @@ export const ping = (waitFn: typeof wait) =>
       }
     }
   }
+
+export const ping = pingRaw(wait)

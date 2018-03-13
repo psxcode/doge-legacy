@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { waitRaw, waitPromiseRaw, ping, waitTimePromise } from './wait'
+import { waitRaw, waitPromiseRaw, waitTimePromise, pingRaw } from './wait'
 
 const timeoutId = 42
 const expectedTimeoutMs = 1000
@@ -37,12 +37,12 @@ describe('[ wait ]', function () {
     })
   })
 
-  describe.only('[ ping ]', function () {
+  describe.only('[ pingRaw ]', function () {
     it('should work', async function () {
       let i = 0
       const maxCount = 2
       await new Promise(resolve => {
-        const unsub = ping(waitRaw(timeoutSpy, clearTimeoutSpy))(getTimeoutMs, () => {
+        const unsub = pingRaw(waitRaw(timeoutSpy, clearTimeoutSpy))(getTimeoutMs, () => {
           if (++i >= maxCount) {
             unsub()
             resolve()
