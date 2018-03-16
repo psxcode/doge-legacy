@@ -1,1 +1,1 @@
-export const nonce = () => Date.now()
+export const nonce = Date.now
