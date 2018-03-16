@@ -19,12 +19,12 @@ const clearTimeoutSpy = (id: any) => {
 describe('[ wait ]', function () {
   describe('[ waitRaw ]', function () {
     it('should work', function (done) {
-      waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, done)()
+      waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs)(done)()
     })
 
     it('should cancel', async function () {
       const spy = sinon.spy()
-      const unsub = waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs, spy)()
+      const unsub = waitRaw(timeoutSpy, clearTimeoutSpy)(getTimeoutMs)(spy)()
       unsub()
       await waitTimePromise(10)
       sinon.assert.notCalled(spy)
@@ -37,12 +37,12 @@ describe('[ wait ]', function () {
     })
   })
 
-  describe.only('[ pingRaw ]', function () {
+  describe('[ pingRaw ]', function () {
     it('should work', async function () {
       let i = 0
       const maxCount = 2
       await new Promise(resolve => {
-        const unsub = pingRaw(waitRaw(timeoutSpy, clearTimeoutSpy))(getTimeoutMs, () => {
+        const unsub = pingRaw(waitRaw(timeoutSpy, clearTimeoutSpy))(getTimeoutMs)(() => {
           if (++i >= maxCount) {
             unsub()
             resolve()
