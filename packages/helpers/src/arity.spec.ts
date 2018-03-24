@@ -17,7 +17,7 @@ import {
   identity,
   identityAsync,
   constant,
-  constantAsync, curry, branch
+  constantAsync, curry, branch, and, or
 } from './arity'
 import { pipe } from './pipe'
 
@@ -216,6 +216,40 @@ describe('[ arity ]', function () {
       const br = branch(x => x === 1, (x) => x, (x) => x * 2)
       expect(br(1)).eq(1)
       expect(br(2)).eq(4)
+    })
+  })
+
+  describe('[ and ]', function () {
+    it('should work', async function () {
+      const pred = and(x => x === 1, x => x !== 1)
+      expect(pred(1)).eq(false)
+    })
+
+    it('should work', async function () {
+      const pred = and(x => x === 1, () => true)
+      expect(pred(1)).eq(true)
+    })
+
+    it('should work', async function () {
+      const pred = and(x => x === 1, x => x! > 0)
+      expect(pred(1)).eq(true)
+    })
+  })
+
+  describe('[ or ]', function () {
+    it('should work', async function () {
+      const pred = or(x => x === 1, x => x !== 1)
+      expect(pred(1)).eq(true)
+    })
+
+    it('should work', async function () {
+      const pred = or(x => x === 1, () => false)
+      expect(pred(0)).eq(false)
+    })
+
+    it('should work', async function () {
+      const pred = or(x => x === 1, x => x! > 0)
+      expect(pred(5)).eq(true)
     })
   })
 })

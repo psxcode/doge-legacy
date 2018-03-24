@@ -66,3 +66,9 @@ export const constantAsync = <T> (arg: T) => () => Promise.resolve(arg)
 
 export const branch = <T> (pred: (arg?: T) => boolean, fn0: AnyFn, fn1: AnyFn) =>
   (arg?: T) => pred(arg) ? fn0(arg) : fn1(arg)
+
+export const and = <T> (...preds: Array<(arg?: T) => boolean>) =>
+  (arg?: T): boolean => preds.every(pred => pred(arg))
+
+export const or = <T> (...preds: Array<(arg?: T) => boolean>) =>
+  (arg?: T): boolean => preds.some(pred => pred(arg))
