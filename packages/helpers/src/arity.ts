@@ -54,7 +54,7 @@ export const curry = (fn: AnyFn, fnLength = fn.length) => {
   }
 }
 
-export const noop = () => {}
+export const noop = (...args: any[]) => {}
 
 export const identity = <T> (arg: T) => arg
 
@@ -66,6 +66,19 @@ export const constantAsync = <T> (arg: T) => () => Promise.resolve(arg)
 
 export const branch = <T> (pred: (arg?: T) => boolean, fn0: AnyFn, fn1: AnyFn) =>
   (arg?: T) => pred(arg) ? fn0(arg) : fn1(arg)
+
+export const swtch = (...fns: AnyFn[]) => {
+  if (fns.length < 2) return noop
+  const dflt = fns.length % 2 !== 0 ? fns[fns.length - 1] : noop
+  const predicates = fns.slice(0, fns.length - 1).filter((_, i) => i % 2 === 0)
+  const ops = fns.filter((_, i) => i % 2 !== 0)
+
+  return (arg?: any) => {
+    let res: any
+    predicates.some((pred, i) => pred(arg) && ((res = ops[i](arg)), true)) || (res = dflt(arg))
+    return res
+  }
+}
 
 export const and = <T> (...preds: Array<(arg?: T) => boolean>) =>
   (arg?: T): boolean => preds.every(pred => pred(arg))
