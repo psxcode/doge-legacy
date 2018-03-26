@@ -1,19 +1,14 @@
-export interface IPushConsumer <T> {
-  next (value: Iterable<T> | null): Promise<boolean>
-  error (e: any): void
-  complete (): void
-}
+export type AsyncIteratorResult <T> = Promise<IteratorResult<T>>
 
-export interface IPushProducer <T> {
-  subscribe (consumer: IPushConsumer<T>): () => void
-}
+export type PushConsumer <T> = (value: AsyncIteratorResult<T>) => Promise<boolean>
 
-export interface IPullProducer <T> {
-  next (): Promise<Iterable<T> | null>
-  error (e: any): void
-  complete (): void
-}
+export type PushProducer <T> = (consumer: PushConsumer<T>) => void
 
-export interface IPullConsumer <T> {
-  consume (producer: IPullProducer<T>): void
+export type PullProducer <T> = () => AsyncIteratorResult<T>
+
+export type PullConsumer <T> = (producer: PullProducer<T>) => void
+
+export interface IPool <T> {
+  push: PushConsumer<T>,
+  pull: PullProducer<T>
 }
