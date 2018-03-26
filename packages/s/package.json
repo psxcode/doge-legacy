@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@doge/helpers": "*",
+    "@doge/stream": "*",
     "@doge/iterable": "*"
   },
   "devDependencies": {
