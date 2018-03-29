@@ -1,6 +1,6 @@
 --ui bdd
 --recursive
---require @std/esm
+--require esm
 --require tshook.js
 --require source-map-support/register
 --watch-extensions ts
