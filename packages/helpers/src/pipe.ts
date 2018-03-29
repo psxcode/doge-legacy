@@ -26,6 +26,32 @@ export function pipeAsync (...fns: AsyncPipeFn<any, any>[]): AsyncFn<any, any> {
   return (initial: any) => fns.reduce((arg, fn) => arg.then(fn), Promise.resolve(initial))
 }
 
+export function compose<A> (): (arg: A) => A
+export function compose<A, B> (fn: PipeFn<A, B>): PipeFn<A, B>
+export function compose<A, B, C> (fn0: PipeFn<B, C>, fn1: PipeFn<A, B>): PipeFn<A, C>
+export function compose<A, B, C, D> (fn0: PipeFn<C, D>, fn1: PipeFn<B, C>, fn2: PipeFn<A, B>): PipeFn<A, D>
+export function compose<A, B, C, D, E> (fn0: PipeFn<D, E>, fn1: PipeFn<C, D>, fn2: PipeFn<B, C>, fn3: PipeFn<A, B>): PipeFn<A, E>
+export function compose<A, B, C, D, E, F> (fn0: PipeFn<E, F>, fn1: PipeFn<D, E>, fn2: PipeFn<C, D>, fn3: PipeFn<B, C>, fn4: PipeFn<A, B>): PipeFn<A, F>
+export function compose<A, B, C, D, E, F, G> (fn0: PipeFn<F, G>, fn1: PipeFn<E, F>, fn2: PipeFn<D, E>, fn3: PipeFn<D, C>, fn4: PipeFn<B, C>, fn5: PipeFn<A, B>): PipeFn<A, G>
+export function compose<A, B, C, D, E, F, G, H> (fn0: PipeFn<G, H>, fn1: PipeFn<F, G>, fn2: PipeFn<E, F>, fn3: PipeFn<D, E>, fn4: PipeFn<C, D>, fn5: PipeFn<B, C>, fn6: PipeFn<A, B>): PipeFn<A, H>
+export function compose<A, B, C, D, E, F, G, H, I> (fn0: PipeFn<H, I>, fn1: PipeFn<G, H>, fn2: PipeFn<F, G>, fn3: PipeFn<E, F>, fn4: PipeFn<D, E>, fn5: PipeFn<C, D>, fn6: PipeFn<B, C>, fn7: PipeFn<A, B>): PipeFn<A, I>
+export function compose (...fns: PipeFn<any, any>[]) {
+  return (initial: any) => fns.reduceRight((arg, fn) => fn(arg), initial)
+}
+
+export function composeAsync<A> (): (arg: A) => A
+export function composeAsync<A, B> (fn: AsyncPipeFn<A, B>): AsyncPipeFn<A, B>
+export function composeAsync<A, B, C> (fn0: AsyncPipeFn<B, C>, fn1: AsyncPipeFn<A, B>): AsyncPipeFn<A, C>
+export function composeAsync<A, B, C, D> (fn0: AsyncPipeFn<C, D>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<A, B>): AsyncPipeFn<A, D>
+export function composeAsync<A, B, C, D, E> (fn0: AsyncPipeFn<D, E>, fn1: AsyncPipeFn<C, D>, fn2: AsyncPipeFn<B, C>, fn3: AsyncPipeFn<A, B>): AsyncPipeFn<A, E>
+export function composeAsync<A, B, C, D, E, F> (fn0: AsyncPipeFn<E, F>, fn1: AsyncPipeFn<D, E>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<B, C>, fn4: AsyncPipeFn<A, B>): AsyncPipeFn<A, F>
+export function composeAsync<A, B, C, D, E, F, G> (fn0: AsyncPipeFn<F, G>, fn1: AsyncPipeFn<E, F>, fn2: AsyncPipeFn<D, E>, fn3: AsyncPipeFn<D, C>, fn4: AsyncPipeFn<B, C>, fn5: AsyncPipeFn<A, B>): AsyncPipeFn<A, G>
+export function composeAsync<A, B, C, D, E, F, G, H> (fn0: AsyncPipeFn<G, H>, fn1: AsyncPipeFn<F, G>, fn2: AsyncPipeFn<E, F>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<C, D>, fn5: AsyncPipeFn<B, C>, fn6: AsyncPipeFn<A, B>): AsyncPipeFn<A, H>
+export function composeAsync<A, B, C, D, E, F, G, H, I> (fn0: AsyncPipeFn<H, I>, fn1: AsyncPipeFn<G, H>, fn2: AsyncPipeFn<F, G>, fn3: AsyncPipeFn<E, F>, fn4: AsyncPipeFn<D, E>, fn5: AsyncPipeFn<C, D>, fn6: AsyncPipeFn<B, C>, fn7: AsyncPipeFn<A, B>): AsyncPipeFn<A, I>
+export function composeAsync (...fns: AsyncPipeFn<any, any>[]) {
+  return (initial: any) => fns.reduceRight((arg, fn) => arg.then(fn), Promise.resolve(initial))
+}
+
 export function all<A> (): (arg: A) => [A]
 export function all<A, B> (fn: PipeFn<A, B>): PipeFn<A, [B]>
 export function all<A, B, C> (fn0: PipeFn<A, B>, fn1: PipeFn<A, C>): PipeFn<A, [B, C]>
