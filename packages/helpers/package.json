@@ -19,15 +19,18 @@
     "test": "nyc yarn mocha --opts mocha.opts",
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/node": "*",
+    "typescript": "*"
+  },
   "devDependencies": {
-    "@std/esm": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",
     "@types/node-fetch": "*",
     "@types/sinon": "*",
     "chai": "*",
+    "esm": "*",
     "mocha": "*",
     "nyc": "*",
     "rimraf": "*",

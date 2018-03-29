@@ -28,13 +28,13 @@
     "tough-cookie": "*"
   },
   "devDependencies": {
-    "@std/esm": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",
     "@types/node-fetch": "*",
     "@types/sinon": "*",
     "chai": "*",
+    "esm": "*",
     "mocha": "*",
     "nyc": "*",
     "rimraf": "*",

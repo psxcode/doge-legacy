@@ -23,7 +23,6 @@
     "@doge/helpers": "*"
   },
   "devDependencies": {
-    "@std/esm": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",
@@ -31,6 +30,7 @@
     "@types/sinon": "*",
     "@types/tough-cookie": "*",
     "chai": "*",
+    "esm": "*",
     "mocha": "*",
     "node-fetch": "*",
     "nyc": "*",

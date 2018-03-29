@@ -25,12 +25,12 @@
     "rxjs": "*"
   },
   "devDependencies": {
-    "@std/esm": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",
     "@types/sinon": "*",
     "chai": "*",
+    "esm": "*",
     "mocha": "*",
     "nyc": "*",
     "rimraf": "*",

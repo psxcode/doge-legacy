@@ -25,7 +25,6 @@
     "@doge/iterable": "*"
   },
   "devDependencies": {
-    "@std/esm": "*",
     "@types/chai": "*",
     "@types/debug": "*",
     "@types/mocha": "*",
@@ -33,6 +32,7 @@
     "@types/node-fetch": "*",
     "@types/sinon": "*",
     "chai": "*",
+    "esm": "*",
     "debug": "*",
     "mocha": "*",
     "rimraf": "*",

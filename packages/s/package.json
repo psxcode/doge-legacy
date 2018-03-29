@@ -26,7 +26,6 @@
     "@doge/iterable": "*"
   },
   "devDependencies": {
-    "@std/esm": "*",
     "@types/chai": "*",
     "@types/debug": "*",
     "@types/mocha": "*",
@@ -35,6 +34,7 @@
     "@types/sinon": "*",
     "chai": "*",
     "debug": "*",
+    "esm": "*",
     "mocha": "*",
     "rimraf": "*",
     "rollup": "*",
