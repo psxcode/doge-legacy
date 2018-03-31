@@ -5,7 +5,7 @@ import { length } from './length'
 describe('[ length ]', function () {
   it('should work with arrays', function () {
     const data = [1, 2, 3, 4, 5]
-    const result = length()(data)
+    const result = length(Number.MAX_SAFE_INTEGER)(data)
     expect(result).eq(data.length)
   })
 
@@ -18,7 +18,7 @@ describe('[ length ]', function () {
   it('should work negative maxLength', function () {
     const data = [1, 2, 3, 4, 5]
     const result = length(-2)(data)
-    expect(result).eq(data.length)
+    expect(result).eq(0)
   })
 
   it('should work maxLength === 0', function () {
@@ -29,13 +29,13 @@ describe('[ length ]', function () {
 
   it('should work with Sets', function () {
     const data = new Set([1, 2, 3, 4, 5])
-    const result = length()(data)
+    const result = length(Number.MAX_SAFE_INTEGER)(data)
     expect(result).eq(5)
   })
 
   it('should work with Generators', function () {
     const data = gen(5)
-    const result = length()(data)
+    const result = length(Number.MAX_SAFE_INTEGER)(data)
     expect(result).eq(5)
   })
 })
