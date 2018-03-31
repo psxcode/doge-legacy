@@ -20,8 +20,6 @@
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
   "dependencies": {
-    "@types/node": "*",
-    "typescript": "*"
   },
   "devDependencies": {
     "@types/chai": "*",
