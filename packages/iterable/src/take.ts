@@ -1,7 +1,7 @@
 import { iterate } from './iterate'
 
-export const take = <T> (n: number) => (iterable: Iterable<T>): Iterable<T> => ({
-  [Symbol.iterator]: function* () {
+export const take = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
+  * [Symbol.iterator] () {
     const it = iterate(iterable)
     let i = 0
     let ir: any

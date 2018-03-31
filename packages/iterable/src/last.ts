@@ -1,7 +1,7 @@
 import { unshift } from '@doge/helpers'
 
-export const lastn = <T> (n: number) => (iterable: Iterable<T>): Iterable<T> => ({
-  [Symbol.iterator]: function* () {
+export const lastn = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
+  * [Symbol.iterator] () {
     const last = new Array<T>(n)
     for (let value of iterable) {
       unshift.call(last, value)
@@ -12,4 +12,4 @@ export const lastn = <T> (n: number) => (iterable: Iterable<T>): Iterable<T> => 
   }
 })
 
-export const last = <T> (iterable: Iterable<T>): Iterable<T> => lastn<T>(1)(iterable)
+export const last = lastn(1)

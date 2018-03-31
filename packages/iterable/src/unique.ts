@@ -1,5 +1,5 @@
 export const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
-  [Symbol.iterator]: function* () {
+  * [Symbol.iterator] () {
     const buffer: T[] = []
     for (let value of iterable) {
       if (!buffer.includes(value)) {

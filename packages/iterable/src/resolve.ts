@@ -1,8 +1,8 @@
-export const resolve = (iter: Iterator<any>) => {
-  const handle = async (ir: IteratorResult<any>) => {
+export const resolve = <T> (iterator: Iterator<T>) => {
+  const handle = async (ir: IteratorResult<T>) => {
     if (!ir.done) {
-      handle(iter.next(await ir.value))
+      handle(iterator.next(await ir.value))
     }
   }
-  return handle(iter.next())
+  return handle(iterator.next())
 }
