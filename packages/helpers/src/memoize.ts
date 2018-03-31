@@ -1,3 +1,5 @@
+import { IHash } from './types'
+
 export interface ICache<K, V> {
   get (key: K): V | undefined
   set (key: K, value: V): this
@@ -9,7 +11,10 @@ export interface ISerializer<K, V> {
 }
 
 export class ObjectCache <V> implements ICache<string, V> {
-  cache = Object.create(null)
+  cache: IHash<any>
+  constructor (cache: IHash<any> = Object.create(null)) {
+    this.cache = cache
+  }
   get (key: string) {
     return this.cache[key]
   }
@@ -22,7 +27,7 @@ export class ObjectCache <V> implements ICache<string, V> {
   }
 }
 
-export const makeObjectCache = <V> (): ICache<string, V> => new ObjectCache<V>()
+export const makeObjectCache = <V> (cache?: IHash<any>): ICache<string, V> => new ObjectCache<V>(cache)
 
 export const makeMapCache = <K, V> (): ICache<K, V> => new Map<K, V>()
 

@@ -1,20 +1,17 @@
 /* tslint:disable no-unused-expression no-empty */
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { ICache, makeObjectCache, memoize } from './memoize'
+import { ICache, makeMapCache, makeObjectCache, memoize } from './memoize'
+import { IHash } from './types'
 
-const jsonSerializer = (value: any) => JSON.stringify(value)
-const identitySerializer = (value: any) => value
-const makeMapCache = (): ICache<any, any> => new Map()
-const cacheFactories = [makeObjectCache, makeMapCache]
-
-const makeSpyCache = (cache: { [k: string]: any } = {}): ICache<any, any> => {
-  const c = {
+const makeSpyCache = (cache: IHash<any> = {}) => {
+  const c: ICache<any, any> = {
     get (key: any) {
       return cache[key]
     },
     set (key: any, value: any) {
       cache[key] = value
+      return this
     },
     has (key: any) {
       return Object.prototype.hasOwnProperty.call(cache, key)
@@ -28,7 +25,7 @@ const makeSpyCache = (cache: { [k: string]: any } = {}): ICache<any, any> => {
 
 describe('[ memoize ]', function () {
 
-  cacheFactories.forEach((makeCache: () => ICache<any, any>) => {
+  [makeObjectCache, makeMapCache].forEach((makeCache: () => ICache<any, any>) => {
     describe(`[ cache ]`, function () {
       describe('[ get ]', function () {
         it('should return undefined', function () {
