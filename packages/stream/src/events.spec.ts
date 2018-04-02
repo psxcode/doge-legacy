@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
+import { waitTimePromise as wait } from '@doge/helpers'
 import { EventEmitter } from 'events'
 import {
   onceAllPromise,
@@ -11,7 +12,6 @@ import {
   onceAll,
   onceRacePromiseEx
 } from './events'
-import { wait } from './helpers/helpers'
 
 xdescribe('[ events ]', function () {
   describe('[ on ]', function () {
