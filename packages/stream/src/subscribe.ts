@@ -1,3 +1,4 @@
+/* tslint:disable no-conditional-assignment */
 import ReadableStream = NodeJS.ReadableStream
 import { IEEValue, on, onceAll, onEx } from './events'
 import { all, voidify, bindCtx } from '@doge/helpers'
@@ -52,6 +53,46 @@ export const subscribeEx = ({ next, error, complete }: IObserverEx) =>
     return unsubscribe
 
     function unsubscribe () {
-      unsub.forEach(u => u())
+      for (let u of unsub) u()
+    }
+  }
+
+export const subscribeReadable = ({ next, error, complete }: IObserver) =>
+  (...streams: ReadableStream[]) => {
+    const onComplete = voidify(all(unsubscribe, complete || noop))
+    const unsub = [
+      onEx('readable')(({ ee }) => {
+        let chunk
+        while (chunk = (ee as ReadableStream).read()) {
+          next(chunk)
+        }
+      })(...streams),
+      error ? on('error')(error)(...streams) : noop,
+      onceAll('end')(onComplete)(...streams)
+    ]
+    return unsubscribe
+
+    function unsubscribe () {
+      for (let u of unsub) u()
+    }
+  }
+
+export const subscribeReadableEx = ({ next, error, complete }: IObserverEx) =>
+  (...streams: ReadableStream[]) => {
+    const onComplete = voidify(all(unsubscribe, complete || noop))
+    const unsub = [
+      onEx('readable')(({ index, ee }) => {
+        let value
+        while (value = (ee as ReadableStream).read()) {
+          next({ value, index, ee })
+        }
+      })(...streams),
+      error ? on('error')(error)(...streams) : noop,
+      onceAll('end')(onComplete)(...streams)
+    ]
+    return unsubscribe
+
+    function unsubscribe () {
+      for (let u of unsub) u()
     }
   }
