@@ -1,6 +1,6 @@
-import { AsyncIteratorResult, IPool } from './types'
+import { AsyncIteratorResult, IAsyncPool } from './types'
 
-export const pool = <T> (): IPool<T> => {
+export const pool = <T> (): IAsyncPool<T> => {
   let data: AsyncIteratorResult<T>[] = []
   let onData: (() => void) | undefined
   let pullPromise: AsyncIteratorResult<T> | undefined

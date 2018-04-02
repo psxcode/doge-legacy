@@ -1,6 +1,6 @@
-import { AsyncIteratorResult, PullProducer, PushConsumer } from './types'
+import { AsyncIteratorResult, AsyncPullProducer, AsyncPushConsumer } from './types'
 
-export const pump = <T> (producer: PullProducer<T>) => async (consumer: PushConsumer<T>) => {
+export const pump = <T> (producer: AsyncPullProducer<T>) => async (consumer: AsyncPushConsumer<T>) => {
   let air: AsyncIteratorResult<T>
   while (await consumer(air = producer()) && !(await air).done);
 }
