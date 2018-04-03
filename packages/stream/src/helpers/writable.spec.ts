@@ -14,6 +14,6 @@ describe('[ writable ]', function () {
 
   xmakeWritableTest(makeMediumStrings(),
     (spy) => makeWritable({ delayMs: 10 })({ highWaterMark: 256, decodeStrings: false })(spy),
-    (stream, data) => makeWritableProducer<string>({ eager: true })(iterate(data))(stream),
+    (stream, data) => makeWritableProducer({ eager: true })(iterate(data))(stream),
     expectSameCallCount)
 })

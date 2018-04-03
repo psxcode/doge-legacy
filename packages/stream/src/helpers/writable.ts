@@ -8,10 +8,10 @@ export interface IWritableConsumer {
   errorAtStep?: number
 }
 
-export const makeWritable = <T>({ delayMs, errorAtStep }: IWritableConsumer = {}) =>
+export const makeWritable = ({ delayMs, errorAtStep }: IWritableConsumer = {}) =>
   (writableOptions: WritableOptions = {}) => {
     const dbg = debug('stream-test:writable')
-    return (sink: (data: T) => void) => {
+    return <T> (sink: (data: T) => void) => {
       let i = 0
 
       const syncHandler = (chunk: T, encoding: string, cb: (err?: Error) => void) => {

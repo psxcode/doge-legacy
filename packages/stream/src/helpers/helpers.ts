@@ -24,9 +24,7 @@ export const isPositiveNumber = (num: any): num is number => {
 
 export interface SpyFn<T> {
   (data?: T): void
-
   callCount (): number
-
   data (): T[]
 }
 
@@ -129,12 +127,10 @@ export interface IWritableProducer {
   eager?: boolean
 }
 
-export const makeWritableProducer = <T> ({ eager }: IWritableProducer = {}) =>
-  (iterator: Iterator<T>, maxLength = 0) => (stream: WritableStream) => {
+export const makeWritableProducer = ({ eager }: IWritableProducer = {}) =>
+  <T> (iterator: Iterator<T>, maxLength = 0) => (stream: WritableStream) => {
     const dbg = debug('stream-test:data-producer')
     let i = 0
-    const noop = () => {
-    }
     const eagerWriter = () => {
       dbg('eager writing begin at %d', i)
       while (writeChunk(iterator.next())) {

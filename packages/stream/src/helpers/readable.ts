@@ -16,10 +16,10 @@ const id = (() => {
   return () => `${i++}`
 })()
 
-export const makeReadable = <T> ({ errorAtStep, errorBehavior, eager, delayMs }: IMakeReadableOptions) =>
+export const makeReadable = ({ errorAtStep, errorBehavior, eager, delayMs }: IMakeReadableOptions) =>
   (readableOptions: ReadableOptions) => {
     const dbg = debug(`stream-test:readable${id()}`)
-    return (iterator: Iterator<T>, maxLength = 0) => {
+    return <T> (iterator: Iterator<T>, maxLength = 0) => {
       let i = 0
       let inProgress = false
       const push = function (this: Readable, iteratorResult: IteratorResult<T>, i: number) {
