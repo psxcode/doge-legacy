@@ -9,7 +9,7 @@ export const scan = <T, R> (reducer: ReducerFn<T, R>) => (iterable: Iterable<T>)
   }
 })
 
-export const scanEx = <T, R> (initial: R, reducer: ReducerExFn<T, R>) => (iterable: Iterable<T>): Iterable<R> => ({
+export const scanEx = <T, R> (reducer: ReducerExFn<T, R>, initial: R) => (iterable: Iterable<T>): Iterable<R> => ({
   * [Symbol.iterator] () {
     let state = initial
     let i = 0

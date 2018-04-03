@@ -38,7 +38,7 @@ describe('[ scanEx ]', function () {
     const data = [1, 2, 3, 4, 5]
     const spy = makeSpy(add)
     expect(spy.callCount()).eq(0)
-    const result = [...scanEx(0, spy)(data)]
+    const result = [...scanEx(spy, 0)(data)]
     expect(spy.callCount()).eq(data.length)
     expect(result).deep.eq([1, 3, 6, 10, 15])
   })
@@ -47,7 +47,7 @@ describe('[ scanEx ]', function () {
     const data = [1, 2, 3, 4, 5]
     const spy = makeSpy(add)
     expect(spy.callCount()).eq(0)
-    const result = [...pipe(scanEx(0, spy), map(mult2))(data)]
+    const result = [...pipe(scanEx(spy, 0), map(mult2))(data)]
     expect(spy.callCount()).eq(data.length)
     expect(result).deep.eq([2, 6, 12, 20, 30])
   })
@@ -56,7 +56,7 @@ describe('[ scanEx ]', function () {
     const data = gen(6)
     const spy = makeSpy(add)
     expect(spy.callCount()).eq(0)
-    const result = [...scanEx(0, spy)(data)]
+    const result = [...scanEx(spy, 0)(data)]
     expect(spy.callCount()).eq(6)
     expect(result).deep.eq([0, 1, 3, 6, 10, 15])
   })
