@@ -1,5 +1,6 @@
 import { expect } from 'chai'
-import { pipe, bind } from '@doge/helpers'
+import { pipe } from '@doge/compose'
+import { bind } from '@doge/helpers'
 import { mult2 } from './test-helpers'
 import { map } from './map'
 import { concat } from './concat'

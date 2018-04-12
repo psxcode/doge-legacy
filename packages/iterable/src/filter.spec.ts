@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { pipe } from '@doge/helpers'
+import { pipe } from '@doge/compose'
 import { makeSpy, isEven, mult2, gen } from './test-helpers'
 import { map } from './map'
 import { filter, filterEx } from './filter'

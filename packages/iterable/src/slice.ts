@@ -1,4 +1,4 @@
-import { pipe } from '@doge/helpers'
+import { pipe } from '@doge/compose'
 import { skip } from './skip'
 import { take } from './take'
 
