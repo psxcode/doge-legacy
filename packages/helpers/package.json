@@ -22,6 +22,7 @@
   "dependencies": {
   },
   "devDependencies": {
+    "@doge/compose": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",

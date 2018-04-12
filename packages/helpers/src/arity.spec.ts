@@ -2,24 +2,29 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
 import {
+  and,
   binary,
-  gather,
-  named,
-  nullary,
-  positional,
-  spread,
-  ternary,
-  unary,
-  voidify,
   bind,
   bindCtx,
   bindProps,
+  branch,
+  constant,
+  constantAsync,
+  curry,
+  gather,
   identity,
   identityAsync,
-  constant,
-  constantAsync, curry, branch, and, or, swtch
+  named,
+  nullary,
+  or,
+  positional,
+  spread,
+  swtch,
+  ternary,
+  unary,
+  voidify
 } from './arity'
-import { pipe } from './pipe'
+import { pipe } from '@doge/compose'
 
 const makeSpy = () => sinon.spy()
 
