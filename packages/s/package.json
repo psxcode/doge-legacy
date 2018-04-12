@@ -1,8 +1,8 @@
 {
   "name": "@doge/s",
   "version": "0.0.0",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -14,7 +14,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn clean && yarn rollup -c rollup.config.js",
+    "build": "yarn clean && yarn tsc",
     "clean": "rimraf dist",
     "test": "yarn test:once",
     "test:once": "DEBUG=stream-test:* mocha --opts mocha.opts",
@@ -37,10 +37,6 @@
     "esm": "*",
     "mocha": "*",
     "rimraf": "*",
-    "rollup": "*",
-    "rollup-plugin-commonjs": "*",
-    "rollup-plugin-node-resolve": "*",
-    "rollup-plugin-typescript2": "*",
     "sinon": "*",
     "source-map-support": "*",
     "ts-node": "*",
