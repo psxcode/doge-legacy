@@ -1,5 +1,3 @@
-export * from './array'
-export * from './pipe'
 export * from './entries'
 export * from './promisify'
 export * from './arity'
