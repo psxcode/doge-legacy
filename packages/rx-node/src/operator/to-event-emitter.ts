@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription'
 
 declare module 'events' {
   export interface EventEmitter {
-    publish (): Subscription
+    publish?: () => Subscription
   }
 }
 
