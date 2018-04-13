@@ -1,0 +1,55 @@
+{
+  "name": "@doge/wait",
+  "version": "0.0.0",
+  "main": "dist/index",
+  "module": "dist/index",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "psxcode <psxcode@gmail.com> (https://github.com/psxcode)",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "yarn clean && yarn tsc",
+    "clean": "rimraf dist",
+    "test": "nyc yarn mocha --opts mocha.opts",
+    "test:watch": "yarn mocha --opts mocha.opts --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "*",
+    "@types/mocha": "*",
+    "@types/node": "*",
+    "@types/sinon": "*",
+    "chai": "*",
+    "esm": "*",
+    "mocha": "*",
+    "nyc": "*",
+    "rimraf": "*",
+    "sinon": "*",
+    "source-map-support": "*",
+    "ts-node": "*",
+    "typescript": "*"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "all": true
+  }
+}
