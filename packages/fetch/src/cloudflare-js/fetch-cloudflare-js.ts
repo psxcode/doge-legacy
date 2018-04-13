@@ -1,7 +1,7 @@
 import { Request, RequestInit, Response } from 'node-fetch'
 import { URL, URLSearchParams } from 'url'
 import { FetchFn } from '../types'
-import { pipe } from '@doge/helpers'
+import { pipe } from '@doge/compose'
 import {
   evalChallenge,
   getChallengeId,

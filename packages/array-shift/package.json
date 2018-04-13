@@ -1,8 +1,8 @@
 {
   "name": "@doge/array-shift",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index",
+  "module": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -19,8 +19,7 @@
     "test": "nyc yarn mocha --opts mocha.opts",
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "*",
     "@types/mocha": "*",

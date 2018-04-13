@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs/Observable'
-import { bindCtx, ping, alignTime } from '@doge/helpers'
+import { bindCtx } from '@doge/arity'
+import { ping } from '@doge/wait'
+import { alignTime } from '@doge/align-time'
 import { Timeframe, timeframes } from './timeframes'
 
 export const alignTimeObservable = (currentTimeGetter: () => number) =>

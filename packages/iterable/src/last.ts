@@ -1,4 +1,4 @@
-import { unshift } from '@doge/helpers'
+import { unshift } from '@doge/array-shift'
 
 export const lastn = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
   * [Symbol.iterator] () {

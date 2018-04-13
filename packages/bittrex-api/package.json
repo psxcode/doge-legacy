@@ -1,8 +1,8 @@
 {
   "name": "@doge/bittrex-api",
   "version": "0.0.0",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
+  "main": "dist/index",
+  "module": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@doge/fetch": "*",
-    "@doge/helpers": "*",
-    "@doge/rx-node": "*",
+    "@doge/arity": "*",
+    "@psxcode/node-rx": "*",
     "node-fetch": "*",
     "rxjs": "*",
     "tough-cookie": "*"

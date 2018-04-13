@@ -1,8 +1,8 @@
 {
-  "name": "@doge/iterable",
+  "name": "@psxcode/iterable",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index",
+  "module": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -20,7 +20,8 @@
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
   "dependencies": {
-    "@doge/helpers": "*"
+    "@doge/arity": "*",
+    "@doge/array-shift": "*"
   },
   "devDependencies": {
     "@doge/compose": "*",
