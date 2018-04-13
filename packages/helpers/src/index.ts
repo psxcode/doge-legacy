@@ -1,7 +1,0 @@
-export * from './entries'
-export * from './promisify'
-export * from './arity'
-export * from './memoize'
-export * from './wait'
-export * from './types'
-export * from './round'
