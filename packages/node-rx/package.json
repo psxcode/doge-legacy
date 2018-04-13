@@ -1,8 +1,8 @@
 {
-  "name": "@doge/rx-node",
+  "name": "@psxcode/node-rx",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index",
+  "module": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -20,8 +20,8 @@
     "test:watch": "yarn mocha --watch --opts mocha.opts"
   },
   "dependencies": {
-    "@doge/helpers": "*",
-    "@doge/stream": "*",
+    "@doge/arity": "*",
+    "@psxcode/node-stream": "*",
     "rxjs": "*"
   },
   "devDependencies": {
