@@ -1,6 +1,6 @@
 import { Writable, WritableOptions } from 'stream'
 import * as debug from 'debug'
-import { waitTimePromise as wait } from '@doge/helpers'
+import { waitTimePromise as wait } from '@doge/wait'
 import { isPositiveNumber } from './helpers'
 
 export interface IWritableConsumer {

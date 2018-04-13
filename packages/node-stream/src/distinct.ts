@@ -16,7 +16,7 @@ export const distinctRaw = <T> (opts: TransformOptions) => (isEqual: (a: T, b: T
 
 export const distinct = distinctRaw<any>({ objectMode: true })
 
-const isEqual = <T>(a: T, b: T) => a === b
-export const distinctUntilChangedRaw = <T>(opts: TransformOptions) => distinctRaw(opts)(isEqual)
+const isEqual = <T> (a: T, b: T) => a === b
+export const distinctUntilChangedRaw = <T> (opts: TransformOptions) => distinctRaw(opts)(isEqual)
 
 export const distinctUntilChanged = () => distinctUntilChangedRaw<any>({ objectMode: true })

@@ -1,5 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
-import { wait, constant, bind } from '@doge/helpers'
+import { constant, bind } from '@doge/arity'
+import { wait } from '@doge/wait'
 
 export const throttleRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {

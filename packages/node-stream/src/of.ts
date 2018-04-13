@@ -1,6 +1,7 @@
 /* tslint:disable no-empty */
 import { Readable, ReadableOptions } from 'stream'
-import { wait, bind, constant } from '@doge/helpers'
+import { wait } from '@doge/wait'
+import { bind, constant } from '@doge/arity'
 
 export const ofRaw = <T> (opts: ReadableOptions) => (...values: T[]) => {
   let i = 0

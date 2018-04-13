@@ -1,5 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
-import { wait, bind, constant } from '@doge/helpers'
+import { bind, constant } from '@doge/arity'
+import { wait } from '@doge/wait'
 
 export const debounceRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {

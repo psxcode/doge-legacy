@@ -1,5 +1,5 @@
 {
-  "name": "@doge/stream",
+  "name": "@psxcode/node-stream",
   "version": "0.0.0",
   "main": "dist/index",
   "module": "dist/index",
@@ -22,9 +22,7 @@
   },
   "dependencies": {
     "@doge/arity": "*",
-    "@doge/compose": "*",
-    "@psxcode/iterable": "*",
-    "@psxcode/node-stream": "*"
+    "@psxcode/iterable": "*"
   },
   "devDependencies": {
     "@types/chai": "*",

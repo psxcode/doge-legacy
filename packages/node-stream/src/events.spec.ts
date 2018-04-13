@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { waitTimePromise as wait } from '@doge/helpers'
+import { waitTimePromise as wait } from '@doge/wait'
 import { EventEmitter } from 'events'
 import {
   onceAllPromise,
