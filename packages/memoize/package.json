@@ -1,8 +1,8 @@
 {
-  "name": "@doge/helpers",
+  "name": "@doge/memoize",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index",
+  "module": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
