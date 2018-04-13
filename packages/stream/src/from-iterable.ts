@@ -1,5 +1,5 @@
-import { iterate } from '@doge/iterable'
-import { identityAsync } from '@doge/helpers'
+import { iterate } from '@psxcode/iterable'
+import { identityAsync } from '@doge/arity'
 import {
   AsyncPullProducer,
   AsyncPushConsumer,

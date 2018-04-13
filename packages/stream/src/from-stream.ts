@@ -1,8 +1,8 @@
 /* tslint:disable no-conditional-assignment */
 import ReadableStream = NodeJS.ReadableStream
 import { PushConsumer, PushProducer } from './types'
-import { on } from '@doge/stream'
-import { all } from '@doge/helpers'
+import { on } from '@psxcode/node-stream'
+import { all } from '@doge/compose'
 import { asyncIteratorResult, doneAsyncIteratorResult, errorAsyncIteratorResult } from './helpers'
 
 export const pushFromStream = <T> (stream: ReadableStream): PushProducer<Iterable<T>> =>
