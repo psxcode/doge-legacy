@@ -10,7 +10,7 @@ import {
 } from './types'
 
 export const push = <T> (iterable: Iterable<T>): PushProducer<T> =>
-  async (consumer: PushConsumer<T>) => {
+  (consumer: PushConsumer<T>) => {
     const it = iterate(iterable)
     let ir: IteratorResult<T>
     while (consumer(ir = it.next()) && !ir.done);
