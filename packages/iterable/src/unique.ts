@@ -1,4 +1,4 @@
-export const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
+const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
   * [Symbol.iterator] () {
     const buffer: T[] = []
     for (let value of iterable) {
@@ -9,3 +9,5 @@ export const unique = <T> (iterable: Iterable<T>): Iterable<T> => ({
     }
   }
 })
+
+export default unique

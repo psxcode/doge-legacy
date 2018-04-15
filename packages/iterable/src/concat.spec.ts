@@ -1,9 +1,11 @@
 import { expect } from 'chai'
 import { pipe } from '@doge/compose'
-import { bind } from '@doge/helpers'
-import { mult2 } from './test-helpers'
-import { map } from './map'
-import { concat } from './concat'
+import { bind } from '@doge/arity'
+import map from './map'
+import concat from './concat'
+
+const multBy = (x: number) => (val: number) => val * x
+const mult2 = multBy(2)
 
 describe('[ concat ]', function () {
   it('works with arrays', function () {

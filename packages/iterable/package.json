@@ -20,10 +20,10 @@
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
   "dependencies": {
-    "@doge/arity": "*",
     "@doge/array-shift": "*"
   },
   "devDependencies": {
+    "@doge/arity": "*",
     "@doge/compose": "*",
     "@types/chai": "*",
     "@types/mocha": "*",

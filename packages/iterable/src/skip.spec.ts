@@ -1,8 +1,13 @@
 import { expect } from 'chai'
 import { pipe } from '@doge/compose'
-import { gen, mult2 } from './test-helpers'
-import { map } from './map'
-import { skip } from './skip'
+import map from './map'
+import skip from './skip'
+
+const gen = function* (n: number) {
+  for (let i = 0; i < n; ++i) yield i
+}
+const multBy = (x: number) => (val: number) => val * x
+const mult2 = multBy(2)
 
 describe('[ skip ]', function () {
   it('works with arrays', function () {

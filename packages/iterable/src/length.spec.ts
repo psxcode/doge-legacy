@@ -1,6 +1,9 @@
 import { expect } from 'chai'
-import { gen } from './test-helpers'
-import { length } from './length'
+import length from './length'
+
+const gen = function* (n: number) {
+  for (let i = 0; i < n; ++i) yield i
+}
 
 describe('[ length ]', function () {
   it('should work with arrays', function () {

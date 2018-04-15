@@ -1,6 +1,9 @@
 import { expect } from 'chai'
-import { gen } from './test-helpers'
-import { iterate } from './iterate'
+import iterate from './iterate'
+
+const gen = function* (n: number) {
+  for (let i = 0; i < n; ++i) yield i
+}
 
 describe('[ iterate ]', function () {
   it('should work with arrays', function () {

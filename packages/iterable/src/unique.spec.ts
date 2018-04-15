@@ -1,8 +1,10 @@
 import { expect } from 'chai'
 import { pipe } from '@doge/compose'
-import { mult2 } from './test-helpers'
-import { map } from './map'
-import { unique } from './unique'
+import map from './map'
+import unique from './unique'
+
+const multBy = (x: number) => (val: number) => val * x
+const mult2 = multBy(2)
 
 describe('[ unique ]', function () {
   it('works with arrays', function () {

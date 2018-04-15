@@ -1,4 +1,4 @@
-export const distinct = <T> (iterable: Iterable<T>): Iterable<T> => ({
+const distinct = <T> (iterable: Iterable<T>): Iterable<T> => ({
   * [Symbol.iterator] () {
     let last: T
     for (let value of iterable) {
@@ -9,3 +9,5 @@ export const distinct = <T> (iterable: Iterable<T>): Iterable<T> => ({
     }
   }
 })
+
+export default distinct

@@ -1,3 +1,5 @@
-import { take } from './take'
+import take from './take'
 
-export const first = take(1)
+const first = take(1)
+
+export default first
