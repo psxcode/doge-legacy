@@ -6,9 +6,9 @@ import {
   xmakeReadableTest,
   makeReadableTest
 } from './helpers/helpers'
-import { empty } from './empty'
+import empty from './empty'
 
-describe('[ empty ]', function () {
+describe('[ empty ]', () => {
   xmakeReadableTest(makeSmallStrings(3),
     empty,
     makeOnDataConsumer,

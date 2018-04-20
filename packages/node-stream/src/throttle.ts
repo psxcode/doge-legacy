@@ -1,6 +1,4 @@
 import { Transform, TransformOptions } from 'stream'
-import { constant, bind } from '@doge/arity'
-import { wait } from '@doge/wait'
 
 export const throttleRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
@@ -26,9 +24,6 @@ export const throttleRaw = (opts: TransformOptions) =>
     })
   }
 
-export const throttle = throttleRaw({ objectMode: true })
+const throttle = throttleRaw({ objectMode: true })
 
-export const throttleTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => throttleRaw(opts)(bind(constant(ms))(wait))
-
-export const throttleTime = throttleTimeRaw({ objectMode: true })
+export default throttle

@@ -9,7 +9,7 @@ import {
   expectSameData
 } from './helpers'
 import { makeReadable } from './readable'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 
 /**
  * LAZY-PRODUCER

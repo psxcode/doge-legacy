@@ -1,19 +1,19 @@
 import { expect } from 'chai'
 import { identity } from '@doge/arity'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
+import map from './map'
 import {
   expectSameCallCount,
   makeSmallRange,
   makeSmallStrings,
   xmakeTransformTest
 } from './helpers/helpers'
-import { map } from './map'
 
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 
-describe('[ map ]', function () {
+describe('[ map ]', () => {
   xmakeTransformTest<string>(makeSmallStrings(6),
     (data) => makeReadable({})({ encoding: 'utf8' })(iterate(data)),
     (spy) => makeWritable({})({ decodeStrings: false })(spy),

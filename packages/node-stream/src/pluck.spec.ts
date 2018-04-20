@@ -1,18 +1,18 @@
 import { expect } from 'chai'
-import { iterate, map as mapIterable } from '@doge/iterable'
+import { iterate, map as mapIterable } from '@psxcode/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
-import { filter } from './filter'
-import { pipe } from './pipe'
-import { first } from './first'
-import { pluck } from './pluck'
-import { map } from './map'
+import filter from './filter'
+import pipe from './pipe'
+import first from './first'
+import pluck from './pluck'
+import map from './map'
 import { makeSmallRange, makeTransformTest, xmakeTransformTest } from './helpers/helpers'
 
 const isEqual = (value: number) => (arg: number) => value === arg
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 
-describe('[ pluck ]', function () {
+describe('[ pluck ]', () => {
   xmakeTransformTest(mapIterable(value => ({ value }))(makeSmallRange(4)),
     (data) => makeReadable({})({ objectMode: true })(iterate(data)),
     (spy) => makeWritable({})({ objectMode: true })(spy),

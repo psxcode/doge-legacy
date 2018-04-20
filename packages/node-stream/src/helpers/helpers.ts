@@ -3,9 +3,8 @@ import * as debug from 'debug'
 import { EventEmitter } from 'events'
 import { expect } from 'chai'
 import { waitTimePromise as wait } from '@doge/wait'
-import { bind } from '@doge/arity'
 import { onceRacePromise } from '../events'
-import { pipe, PipedStream } from '../pipe'
+import { default as pipe, PipedStream } from '../pipe'
 import ReadableStream = NodeJS.ReadableStream
 import WritableStream = NodeJS.WritableStream
 import ReadWriteStream = NodeJS.ReadWriteStream

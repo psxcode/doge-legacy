@@ -1,6 +1,6 @@
 /* tslint:disable no-conditional-assignment */
 import { Readable, ReadableOptions } from 'stream'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 
 export const fromRaw = <T>(opts: ReadableOptions) => (iterable: Iterable<T>) => {
   const iterator = iterate(iterable)
@@ -18,4 +18,6 @@ export const fromRaw = <T>(opts: ReadableOptions) => (iterable: Iterable<T>) => 
   })
 }
 
-export const from = fromRaw<any>({ objectMode: true })
+const from = fromRaw<any>({ objectMode: true })
+
+export default from

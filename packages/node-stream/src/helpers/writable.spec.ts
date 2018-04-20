@@ -7,7 +7,7 @@ import {
   xmakeWritableTest
 } from './helpers'
 import { makeWritable } from './writable'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 
 describe('[ writable ]', function () {
   this.slow(1000)

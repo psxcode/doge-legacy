@@ -1,7 +1,7 @@
 import ReadableStream = NodeJS.ReadableStream
 import { Readable, ReadableOptions } from 'stream'
 import { emptyRaw } from './empty'
-import { subscribeEx } from './subscribe'
+import subscribeEx from './subscribe-ex'
 import { IEEValue } from './events'
 
 export const combineRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
@@ -30,4 +30,6 @@ export const combineRaw = (opts: ReadableOptions) => (...streams: ReadableStream
     : emptyRaw(opts)()
 }
 
-export const combine = combineRaw({ objectMode: true })
+const combine = combineRaw({ objectMode: true })
+
+export default combine

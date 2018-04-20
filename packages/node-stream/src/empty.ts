@@ -8,4 +8,6 @@ export const emptyRaw = (opts: ReadableOptions) => () =>
     }
   })
 
-export const empty = emptyRaw({ objectMode: true })
+const empty = emptyRaw({ objectMode: true })
+
+export default empty

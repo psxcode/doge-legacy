@@ -6,9 +6,9 @@ import {
   makeSmallRange,
   xmakeReadableTest
 } from './helpers/helpers'
-import { from } from './from'
+import from from './from'
 
-describe('[ from ]', function () {
+describe('[ from ]', () => {
   xmakeReadableTest(makeMediumRange(),
     from,
     makeOnDataConsumer,

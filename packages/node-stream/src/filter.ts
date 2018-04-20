@@ -14,4 +14,6 @@ export const filterRaw = <T> (opts: TransformOptions) => (predicate: (value: T) 
     }
   })
 
-export const filter = filterRaw<any>({ objectMode: true })
+const filter = filterRaw<any>({ objectMode: true })
+
+export default filter

@@ -14,4 +14,6 @@ export const lastRaw = (opts: TransformOptions) => () => {
   })
 }
 
-export const last = lastRaw({ objectMode: true })
+const last = lastRaw({ objectMode: true })
+
+export default last

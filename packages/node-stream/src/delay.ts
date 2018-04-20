@@ -45,4 +45,6 @@ export const delayRaw = (opts: TransformOptions) => (wait: (ms: number) => Promi
   })
 }
 
-export const delay = delayRaw({ objectMode: true })
+const delay = delayRaw({ objectMode: true })
+
+export default delay

@@ -15,4 +15,6 @@ export const firstRaw = (opts: TransformOptions) => () => {
   })
 }
 
-export const first = firstRaw({ objectMode: true })
+const first = firstRaw({ objectMode: true })
+
+export default first

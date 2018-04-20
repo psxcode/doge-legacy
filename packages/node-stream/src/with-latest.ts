@@ -1,7 +1,8 @@
 import ReadableStream = NodeJS.ReadableStream
 import { Readable, ReadableOptions } from 'stream'
 import { emptyRaw } from './empty'
-import { subscribe, subscribeEx } from './subscribe'
+import subscribe from './subscribe'
+import subscribeEx from './subscribe-ex'
 import { IEEValue } from './events'
 
 export const withLatestRaw = (opts: ReadableOptions) =>
@@ -37,4 +38,6 @@ export const withLatestRaw = (opts: ReadableOptions) =>
       : emptyRaw(opts)()
   }
 
-export const withLatest = withLatestRaw({ objectMode: true })
+const withLatest = withLatestRaw({ objectMode: true })
+
+export default withLatest

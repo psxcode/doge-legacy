@@ -1,7 +1,7 @@
 import ReadableStream = NodeJS.ReadableStream
 import { Readable, ReadableOptions } from 'stream'
 import { emptyRaw } from './empty'
-import { subscribeEx } from './subscribe'
+import subscribeEx from './subscribe-ex'
 import { IEEValue, onEx } from './events'
 
 export const zipRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
@@ -48,4 +48,6 @@ export const zipRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]):
     : emptyRaw(opts)()
 }
 
-export const zip = zipRaw({ objectMode: true })
+const zip = zipRaw({ objectMode: true })
+
+export default zip

@@ -1,7 +1,7 @@
 import { Readable, ReadableOptions } from 'stream'
 import ReadableStream = NodeJS.ReadableStream
 import { emptyRaw } from './empty'
-import { subscribe } from './subscribe'
+import subscribe from './subscribe'
 
 export const concatRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
   let unsubscribe: (() => void) | undefined
@@ -34,4 +34,6 @@ export const concatRaw = (opts: ReadableOptions) => (...streams: ReadableStream[
     : emptyRaw(opts)()
 }
 
-export const concat = concatRaw({ objectMode: true })
+const concat = concatRaw({ objectMode: true })
+
+export default concat

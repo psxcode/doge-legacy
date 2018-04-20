@@ -1,5 +1,5 @@
 import EventEmitter = NodeJS.EventEmitter
-import { bind, all, voidify } from '@doge/helpers'
+import { bind } from '@doge/arity'
 
 export const on = (...events: string[]) => (cb: (value: any) => void) => (...emitters: EventEmitter[]) => {
   /* subscribe */
@@ -30,7 +30,10 @@ export const onEx = (...events: string[]) => (cb: (value: IEEValue) => void) => 
 }
 
 export const onceRace = (...events: string[]) => (cb: (value: any) => void) => (...emitters: EventEmitter[]) => {
-  const onData = voidify(all(unsubscribe, cb))
+  const onData = (value: any) => {
+    unsubscribe()
+    cb(value)
+  }
   function unsubscribe () {
     emitters.forEach(ee => events.forEach(e => ee.removeListener(e, onData)))
   }
@@ -42,7 +45,10 @@ export const onceRace = (...events: string[]) => (cb: (value: any) => void) => (
 export const onceRaceEx = (...events: string[]) => (cb: (value: IEEValue) => void) => (...emitters: EventEmitter[]) => {
   const cbs = new WeakMap<EventEmitter, any>(
     emitters.map((ee, index) =>
-      [ee, voidify(all(unsubscribe, toEEValue({ value: undefined, index, ee })(cb)))] as [EventEmitter, any])
+      [ee, () => {
+        unsubscribe()
+        toEEValue({ value: undefined, index, ee })(cb)
+      }] as [EventEmitter, any])
   )
   function unsubscribe () {
     emitters.forEach(ee => events.forEach(e => ee.removeListener(e, cbs.get(ee))))

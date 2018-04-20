@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const reduceRaw = <T, R> (opts: TransformOptions) => (reducer: (state: R, value: T) => R) => {
+export const reduceRaw = (opts: TransformOptions) => <T, R> (reducer: (state: R, value: T) => R) => {
   let state: any
   return new Transform({
     ...opts,
@@ -18,4 +18,6 @@ export const reduceRaw = <T, R> (opts: TransformOptions) => (reducer: (state: R,
   })
 }
 
-export const reduce = reduceRaw<any, any>({ objectMode: true })
+const reduce = reduceRaw({ objectMode: true })
+
+export default reduce

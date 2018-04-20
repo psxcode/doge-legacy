@@ -13,9 +13,9 @@ import {
   onceRacePromiseEx
 } from './events'
 
-xdescribe('[ events ]', function () {
-  describe('[ on ]', function () {
-    it('should work', async function () {
+xdescribe('[ events ]', () => {
+  describe('[ on ]', () => {
+    it('should work', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = on('e1', 'e2')(spy)(ee)
@@ -50,7 +50,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.callCount(spy, 3)
     })
 
-    it('should work with multiple ees', async function () {
+    it('should work with multiple ees', async () => {
       const ee0 = new EventEmitter()
       const ee1 = new EventEmitter()
       const ee2 = new EventEmitter()
@@ -88,8 +88,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onEx ]', function () {
-    it('should work', async function () {
+  describe('[ onEx ]', () => {
+    it('should work', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onEx('e1', 'e2')(spy)(ee)
@@ -124,7 +124,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.callCount(spy, 3)
     })
 
-    it('should work with multiple ees', async function () {
+    it('should work with multiple ees', async () => {
       const ee0 = new EventEmitter()
       const ee1 = new EventEmitter()
       const ee2 = new EventEmitter()
@@ -162,8 +162,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onceRace ]', function () {
-    it('should work', async function () {
+  describe('[ onceRace ]', () => {
+    it('should work', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onceRace('e1', 'e2')(spy)(ee)
@@ -196,7 +196,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.callCount(spy, 1)
     })
 
-    it('should work with multiple ees', async function () {
+    it('should work with multiple ees', async () => {
       const ee0 = new EventEmitter()
       const ee1 = new EventEmitter()
       const ee2 = new EventEmitter()
@@ -231,7 +231,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.callCount(spy, 1)
     })
 
-    it('should work with early unsubscribe', async function () {
+    it('should work with early unsubscribe', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onceRace('e1', 'e2')(spy)(ee)
@@ -256,8 +256,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onceRaceEx ]', function () {
-    it('should work', async function () {
+  describe('[ onceRaceEx ]', () => {
+    it('should work', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onceRaceEx('e1', 'e2')(spy)(ee)
@@ -290,7 +290,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.callCount(spy, 1)
     })
 
-    it('should work with multiple ees', async function () {
+    it('should work with multiple ees', async () => {
       const ee0 = new EventEmitter()
       const ee1 = new EventEmitter()
       const ee2 = new EventEmitter()
@@ -325,7 +325,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.callCount(spy, 1)
     })
 
-    it('should work with early unsubscribe', async function () {
+    it('should work with early unsubscribe', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onceRaceEx('e1', 'e2')(spy)(ee)
@@ -350,8 +350,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onceRacePromise ]', function () {
-    it('should resolve when one of events fires', async function () {
+  describe('[ onceRacePromise ]', () => {
+    it('should resolve when one of events fires', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       onceRacePromise('e1', 'e2')(ee).then(spy)
@@ -376,7 +376,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.calledOnce(spy)
     })
 
-    it('should resolve when one of events fires', async function () {
+    it('should resolve when one of events fires', async () => {
       const ee0 = new EventEmitter()
       const ee1 = new EventEmitter()
       const ee2 = new EventEmitter()
@@ -404,8 +404,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onceRacePromiseEx ]', function () {
-    it('should resolve when one of events fires', async function () {
+  describe('[ onceRacePromiseEx ]', () => {
+    it('should resolve when one of events fires', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       onceRacePromiseEx('e1', 'e2')(ee).then(spy)
@@ -431,7 +431,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.calledOnce(spy)
     })
 
-    it('should resolve when one of events fires', async function () {
+    it('should resolve when one of events fires', async () => {
       const ee0 = new EventEmitter()
       const ee1 = new EventEmitter()
       const ee2 = new EventEmitter()
@@ -459,8 +459,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onceAll ]', function () {
-    it('should work', async function () {
+  describe('[ onceAll ]', () => {
+    it('should work', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onceAll('e1', 'e2')(spy)(ee)
@@ -492,7 +492,7 @@ xdescribe('[ events ]', function () {
       sinon.assert.calledOnce(spy)
     })
 
-    it('should work with early unsubscribe', async function () {
+    it('should work with early unsubscribe', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       const unsub = onceAll('e1', 'e2')(spy)(ee)
@@ -517,8 +517,8 @@ xdescribe('[ events ]', function () {
     })
   })
 
-  describe('[ onceAllPromise ]', function () {
-    it('should resolve when all of events fires', async function () {
+  describe('[ onceAllPromise ]', () => {
+    it('should resolve when all of events fires', async () => {
       const ee = new EventEmitter()
       const spy = sinon.spy()
       onceAllPromise('event1', 'event2', 'event3')(ee).then(spy)

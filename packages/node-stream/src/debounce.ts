@@ -1,6 +1,4 @@
 import { Transform, TransformOptions } from 'stream'
-import { bind, constant } from '@doge/arity'
-import { wait } from '@doge/wait'
 
 export const debounceRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
@@ -25,9 +23,6 @@ export const debounceRaw = (opts: TransformOptions) =>
     })
   }
 
-export const debounce = debounceRaw({ objectMode: true })
+const debounce = debounceRaw({ objectMode: true })
 
-export const debounceTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => debounceRaw(opts)(bind(constant(ms))(wait))
-
-export const debounceTime = debounceTimeRaw({ objectMode: true })
+export default debounce

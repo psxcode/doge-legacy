@@ -1,6 +1,4 @@
 import { Transform, TransformOptions } from 'stream'
-import { bind, constant } from '@doge/arity'
-import { wait } from '@doge/wait'
 
 export const bufferRaw = (opts: TransformOptions) =>
   (wait: (cb: () => void) => () => void) => {
@@ -26,9 +24,6 @@ export const bufferRaw = (opts: TransformOptions) =>
     })
   }
 
-export const buffer = bufferRaw({ objectMode: true })
+const buffer = bufferRaw({ objectMode: true })
 
-export const bufferTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => bufferRaw(opts)(bind(constant(ms))(wait))
-
-export const bufferTime = bufferTimeRaw({ objectMode: true })
+export default buffer

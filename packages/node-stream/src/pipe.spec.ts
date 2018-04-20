@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/iterable'
-import { pipe } from './pipe'
-import { filter } from './filter'
-import { map } from './map'
-import { first } from './first'
+import { iterate } from '@psxcode/iterable'
+import pipe from './pipe'
+import filter from './filter'
+import map from './map'
+import first from './first'
 import {
   makeSmallRange,
   makeTransformTest,
@@ -15,7 +15,7 @@ import { makeWritable } from './helpers/writable'
 const isEqual = (value: number) => (arg: number) => value === arg
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 
-describe('[ pipe ]', function () {
+describe('[ pipe ]', () => {
   xmakeTransformTest<number>(makeSmallRange(4),
     (data) => makeReadable({})({ objectMode: true })(iterate(data)),
     (spy) => makeWritable({})({ objectMode: true })(spy),

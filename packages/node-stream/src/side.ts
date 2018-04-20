@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const sideRaw = <T, R> (opts: TransformOptions) => (sideFn: (value: T) => void) =>
+export const sideRaw = (opts: TransformOptions) => <T, R> (sideFn: (value: T) => void) =>
   new Transform({
     ...opts,
     transform (chunk: any, encoding, callback) {
@@ -13,4 +13,6 @@ export const sideRaw = <T, R> (opts: TransformOptions) => (sideFn: (value: T) =>
     }
   })
 
-export const side = sideRaw<any, any>({ objectMode: true })
+const side = sideRaw({ objectMode: true })
+
+export default side

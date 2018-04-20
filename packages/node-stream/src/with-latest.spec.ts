@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 import { makeReadable } from './helpers/readable'
-import { withLatest } from './with-latest'
+import withLatest from './with-latest'
 import {
   makeOnDataConsumer,
   makeReadableTest,
@@ -9,7 +9,7 @@ import {
   xmakeReadableTest
 } from './helpers/helpers'
 
-describe('[ withLatest ]', function () {
+describe('[ withLatest ]', () => {
   xmakeReadableTest(makeSmallRange(2),
     (data) => {
       const s1 = makeReadable({ delayMs: 5 })({ objectMode: true })(iterate(data))

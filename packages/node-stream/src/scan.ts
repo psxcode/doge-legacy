@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const scanRaw = <T, R> (opts: TransformOptions) => (reducer: (state: R, value: T) => R) => {
+export const scanRaw = (opts: TransformOptions) => <T, R> (reducer: (state: R, value: T) => R) => {
   let state: any
   return new Transform({
     ...opts,
@@ -15,4 +15,6 @@ export const scanRaw = <T, R> (opts: TransformOptions) => (reducer: (state: R, v
   })
 }
 
-export const scan = scanRaw<any, any>({ objectMode: true })
+const scan = scanRaw({ objectMode: true })
+
+export default scan

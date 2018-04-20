@@ -14,4 +14,6 @@ export const mapRaw = <T, R> (opts: TransformOptions) => (xf: (value: T) => R) =
     }
   })
 
-export const map = mapRaw<any, any>({ objectMode: true })
+const map = mapRaw<any, any>({ objectMode: true })
+
+export default map

@@ -1,6 +1,6 @@
 import { Transform } from 'stream'
-import { map } from './map'
+import map from './map'
 
-export const pluck = (propName: string) => {
-  return map((value: {[k: string]: any}) => value[propName])
-}
+const pluck = (propName: string) => map(value => value[propName])
+
+export default pluck

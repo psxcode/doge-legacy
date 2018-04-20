@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { identity } from '@doge/wait'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
 import {
@@ -9,15 +8,15 @@ import {
   makeSmallStrings,
   xmakeTransformTest
 } from './helpers/helpers'
-import { side } from './side'
+import side from './side'
 
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 
-describe('[ side ]', function () {
+describe('[ side ]', () => {
   xmakeTransformTest<string>(makeSmallStrings(6),
     (data) => makeReadable({})({ encoding: 'utf8' })(iterate(data)),
     (spy) => makeWritable({})({ decodeStrings: false })(spy),
-    () => side(identity),
+    () => side(x => x),
     expectSameCallCount)
 
   xmakeTransformTest<number>(makeSmallRange(4),

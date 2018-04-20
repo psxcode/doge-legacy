@@ -1,13 +1,13 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
 import { makeSmallRange, xmakeTransformTest } from './helpers/helpers'
-import { filter } from './filter'
+import filter from './filter'
 
 const isEven = (value: number) => value % 2 === 0
 
-describe('[ filter ]', function () {
+describe('[ filter ]', () => {
   xmakeTransformTest<number>(makeSmallRange(4),
     (data) => makeReadable({})({ objectMode: true })(iterate(data)),
     (spy) => makeWritable({})({ objectMode: true })(spy),

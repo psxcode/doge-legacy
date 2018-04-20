@@ -1,17 +1,17 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 import { makeWritable } from './helpers/writable'
 import { makeReadable } from './helpers/readable'
-import { pipe } from './pipe'
-import { filter } from './filter'
-import { first } from './first'
-import { map } from './map'
+import pipe from './pipe'
+import filter from './filter'
+import first from './first'
+import map from './map'
 import { makeSmallRange, makeTransformTest, xmakeTransformTest } from './helpers/helpers'
 
 const isEqual = (value: number) => (arg: number) => value === arg
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 
-describe('[ first ]', function () {
+describe('[ first ]', () => {
   xmakeTransformTest<number>(makeSmallRange(4),
     (data) => makeReadable({})({ objectMode: true })(iterate(data)),
     (spy) => makeWritable({})({ objectMode: true })(spy),

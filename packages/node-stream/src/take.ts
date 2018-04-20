@@ -1,7 +1,9 @@
 import { Transform } from 'stream'
-import { filter } from './filter'
+import filter from './filter'
 
-export const take = (numTake: number) => {
+const take = (numTake: number) => {
   let i = 0
   return filter(() => i++ < numTake)
 }
+
+export default take

@@ -1,5 +1,5 @@
 {
-  "name": "@psxcode/node-stream",
+  "name": "@psxcode/streams-forge",
   "version": "0.0.0",
   "main": "dist/index",
   "module": "dist/index",

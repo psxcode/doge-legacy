@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import { iterate } from '@doge/iterable'
+import { iterate } from '@psxcode/iterable'
 import { makeReadable } from './helpers/readable'
-import { combine } from './combine'
+import combine from './combine'
 import { makeOnDataConsumer, makeReadableTest, xmakeReadableTest } from './helpers/helpers'
 
-describe('[ combine ]', function () {
+describe('[ combine ]', () => {
   xmakeReadableTest([0, 1, 2, 3, 4],
     (data) => {
       const s1 = makeReadable({ delayMs: 12 })({ objectMode: true })(iterate(data))
