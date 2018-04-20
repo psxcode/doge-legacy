@@ -1,5 +1,5 @@
 {
-  "name": "@doge/stream",
+  "name": "@psxcode/stream",
   "version": "0.0.0",
   "main": "dist/index",
   "module": "dist/index",
