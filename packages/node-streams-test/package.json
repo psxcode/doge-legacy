@@ -1,0 +1,42 @@
+{
+  "name": "@psxcode/node-streams-test",
+  "version": "0.0.0",
+  "main": "dist/index",
+  "module": "dist/index",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "psxcode <psxcode@gmail.com> (https://github.com/psxcode)",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "yarn clean && yarn tsc",
+    "clean": "rimraf dist",
+    "test": "yarn test:once",
+    "test:once": "DEBUG=stream-test:* mocha --opts mocha.opts",
+    "test:watch": "yarn mocha --watch --opts mocha.opts"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/chai": "*",
+    "@types/debug": "*",
+    "@types/mocha": "*",
+    "@types/node": "*",
+    "@types/sinon": "*",
+    "chai": "*",
+    "debug": "*",
+    "esm": "*",
+    "mocha": "*",
+    "rimraf": "*",
+    "sinon": "*",
+    "source-map-support": "*",
+    "ts-node": "*",
+    "typescript": "*"
+  },
+  "@std/esm": "cjs"
+}
