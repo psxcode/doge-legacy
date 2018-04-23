@@ -21,10 +21,11 @@
   },
   "dependencies": {
     "@doge/arity": "*",
-    "@psxcode/node-stream": "*",
+    "@psxcode/node-streams": "*",
     "rxjs": "*"
   },
   "devDependencies": {
+    "@doge/wait": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",

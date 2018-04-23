@@ -22,7 +22,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@doge/compose": "*",
+    "@psxcode/compose": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",

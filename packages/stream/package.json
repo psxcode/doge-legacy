@@ -22,9 +22,9 @@
   },
   "dependencies": {
     "@doge/arity": "*",
-    "@doge/compose": "*",
+    "@psxcode/compose": "*",
     "@psxcode/iterable": "*",
-    "@psxcode/node-stream": "*"
+    "@psxcode/node-streams": "*"
   },
   "devDependencies": {
     "@types/chai": "*",
