@@ -1,5 +1,5 @@
-import throttle from './throttle'
 import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
+import throttle from './throttle'
 
 const interval = (next: () => void) => {
   console.log('subscribe')

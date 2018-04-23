@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import reduce from './reduce'
 import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
+import reduce from './reduce'
 
 const addAll = (acc = 0, value: number) => acc + value
 

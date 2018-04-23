@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import take from './take'
 import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
+import take from './take'
 
 describe.skip('[ take ]', () => {
   transformTest<number>(makeNumbers(8),

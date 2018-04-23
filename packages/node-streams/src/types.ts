@@ -1,5 +1,4 @@
 import EventEmitter = NodeJS.EventEmitter
-import ReadWriteStream = NodeJS.ReadWriteStream
 
 export type WaitFn = (cb: () => void) => () => void
 export type WaitPromiseFn = (ms: number) => Promise<any>
@@ -9,11 +8,6 @@ export interface IEEValue {
   value: any
   index: number
   ee: EventEmitter
-}
-
-export interface PipedStream {
-  head: ReadWriteStream
-  tail: ReadWriteStream
 }
 
 export interface IObserver {

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import merge from './merge'
 import { dataConsumer, readable, readableTest } from '@psxcode/node-streams-test'
+import merge from './merge'
 
 xdescribe('[ merge ]', () => {
   readableTest([0, 1, 2, 3, 4],

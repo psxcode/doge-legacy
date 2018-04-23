@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import startWith from './start-with'
 import { dataConsumer, readable, readableTest } from '@psxcode/node-streams-test'
+import startWith from './start-with'
 
 xdescribe('[ concat ]', () => {
   readableTest([5, 6, 7, 8, 9],

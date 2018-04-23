@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import empty from './empty'
 import { dataConsumer, makeStrings, readableTest } from '@psxcode/node-streams-test'
+import empty from './empty'
 
 xdescribe('[ empty ]', () => {
   readableTest(makeStrings(4),

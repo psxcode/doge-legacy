@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import ofTime from './of-time'
 import { dataConsumer, makeNumbers, readableTest } from '@psxcode/node-streams-test'
+import ofTime from './of-time'
 
 xdescribe('[ ofTime ]', () => {
   readableTest<number>(makeNumbers(4),

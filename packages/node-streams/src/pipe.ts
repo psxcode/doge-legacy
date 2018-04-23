@@ -1,24 +1,23 @@
+/* tslint:disable one-variable-per-declaration */
 import ReadWriteStream = NodeJS.ReadWriteStream
-import { PipedStream } from './types'
 
-export const isPipedStream = (stream: PipedStream | ReadWriteStream): stream is PipedStream =>
-  'head' in stream && 'tail' in stream
+const flatten = <T> (values: (T | T[])[]): T[] => {
+  let res = []
+  for (let v of values) {
+    Array.isArray(v) ? res.push(...flatten(v)) : res.push(v)
+  }
+  return res
+}
 
-const pipe = (
-  stream: PipedStream | ReadWriteStream,
-  ...streams: (PipedStream | ReadWriteStream)[]
-): PipedStream => {
-  const initial: PipedStream = isPipedStream(stream) ? stream : { head: stream, tail: stream }
-  return streams.reduce((acc: PipedStream, stream) => {
-    if (isPipedStream(stream)) {
-      acc.tail.pipe(stream.head)
-      acc.tail = stream.tail
-    } else {
-      acc.tail.pipe(stream)
-      acc.tail = stream
+const pipe = (...streams: (ReadWriteStream | ReadWriteStream[])[]): ReadWriteStream[] => {
+  const fls = flatten(streams)
+  for (let i = 0, l = fls.length; i < l; ++i) {
+    fls[i].unpipe()
+    if (i + 1 < l) {
+      fls[i].pipe(fls[i + 1])
     }
-    return acc
-  }, initial) as PipedStream
+  }
+  return fls
 }
 
 export default pipe

@@ -1,11 +1,11 @@
 import { expect } from 'chai'
-import withLatest from './with-latest'
 import {
   dataConsumer,
   makeNumbers,
   readable,
   readableTest
 } from '@psxcode/node-streams-test'
+import withLatest from './with-latest'
 
 xdescribe('[ withLatest ]', () => {
   readableTest(makeNumbers(8),

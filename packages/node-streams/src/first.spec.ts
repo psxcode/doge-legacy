@@ -1,8 +1,8 @@
 import { expect } from 'chai'
+import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
 import filter from './filter'
 import first from './first'
 import map from './map'
-import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
 
 const isEqual = (value: number) => (arg: number) => value === arg
 const multiply = (multiplier: number) => (value: number) => value * multiplier

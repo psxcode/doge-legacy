@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import side from './side'
 import {
   makeNumbers,
   makeStrings,
@@ -7,6 +6,7 @@ import {
   transformTest,
   writable
 } from '@psxcode/node-streams-test'
+import side from './side'
 
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 

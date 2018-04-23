@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import skip from './skip'
 import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
+import skip from './skip'
 
 xdescribe('[ skip ]', () => {
   transformTest<number>(makeNumbers(8),

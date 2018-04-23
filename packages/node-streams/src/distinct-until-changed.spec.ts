@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import distinctUntilChanged from './distinct-until-changed'
 import { readable, transformTest, writable } from '@psxcode/node-streams-test'
+import distinctUntilChanged from './distinct-until-changed'
 
 xdescribe('[ distinct ]', () => {
   transformTest<number>([0, 1, 2, 2, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 9],

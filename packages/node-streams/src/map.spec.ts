@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import map from './map'
 import {
   makeNumbers,
   makeStrings,
@@ -7,6 +6,7 @@ import {
   transformTest,
   writable
 } from '@psxcode/node-streams-test'
+import map from './map'
 
 const multiply = (multiplier: number) => (value: number) => value * multiplier
 const identity = <T> (x: T) => x

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import zip from './zip'
 import { dataConsumer, readable, readableTest } from '@psxcode/node-streams-test'
+import zip from './zip'
 
 xdescribe('[ zip ]', () => {
   readableTest([0, 1, 2, 3, 4],

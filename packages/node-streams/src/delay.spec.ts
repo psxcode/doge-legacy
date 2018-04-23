@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import delay from './delay'
 import { makeNumbers, readable, transformTest, wait, writable } from '@psxcode/node-streams-test'
+import delay from './delay'
 
 xdescribe('[ delay ]', () => {
   transformTest<number>(makeNumbers(8),

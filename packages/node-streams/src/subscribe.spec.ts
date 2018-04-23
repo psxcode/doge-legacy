@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import subscribe from './subscribe'
 import { makeNumbers, readable, wait, waitForEvents } from '@psxcode/node-streams-test'
+import subscribe from './subscribe'
 
 describe('[ subscribe ]', () => {
   xit('should work with single stream', async () => {

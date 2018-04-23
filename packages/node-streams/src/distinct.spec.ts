@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import distinct from './distinct'
 import { readable, transformTest, writable } from '@psxcode/node-streams-test'
+import distinct from './distinct'
 
 xdescribe('[ distinct ]', () => {
   const isEqual = <T> (a: T, b: T) => a === b

@@ -1,5 +1,5 @@
-import throttleTime from './throttle-time'
 import { makeNumbers, readable, transformTest, writable } from '@psxcode/node-streams-test'
+import throttleTime from './throttle-time'
 
 xdescribe('[ throttleTime ]', () => {
   transformTest<number>(makeNumbers(8),
