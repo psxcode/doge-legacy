@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import map from './map'
 import skip from './skip'
 
@@ -9,20 +9,20 @@ const gen = function* (n: number) {
 const multBy = (x: number) => (val: number) => val * x
 const mult2 = multBy(2)
 
-describe('[ skip ]', function () {
-  it('works with arrays', function () {
+describe('[ skip ]', () => {
+  it('works with arrays', () => {
     const data = [1, 2, 3, 4, 5]
     const result = [...skip(2)(data)]
     expect(result).deep.eq([3, 4, 5])
   })
 
-  it('works chained', function () {
+  it('works chained', () => {
     const data = [1, 2, 3, 4, 5]
     const result = [...pipe(skip(2), map(mult2))(data)]
     expect(result).deep.eq([6, 8, 10])
   })
 
-  it('works with Generators', function () {
+  it('works with Generators', () => {
     const data = gen(5)
     const result = [...skip(2)(data)]
     expect(result).deep.eq([2, 3, 4])

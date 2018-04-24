@@ -1,4 +1,4 @@
-import { unshift } from '@doge/array-shift'
+import { unshift } from '@psxcode/array-shift'
 
 const tail = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
   * [Symbol.iterator] () {

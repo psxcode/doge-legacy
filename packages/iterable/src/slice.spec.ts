@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import map from './map'
 import slice from './slice'
 

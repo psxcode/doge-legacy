@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import mapEx from './map'
 
 const gen = function* (n: number) {
@@ -10,8 +10,8 @@ const multBy = (x: number) => (val: number) => val * x
 const mult1 = multBy(1)
 const mult2 = multBy(2)
 
-describe('[ mapEx ]', function () {
-  it('works with arrays', function () {
+describe('[ mapEx ]', () => {
+  it('works with arrays', () => {
     const data = [1, 2, 3, 4, 5]
     const spy = sinon.spy(mult2)
     const result = [...mapEx(spy)(data)]
@@ -19,7 +19,7 @@ describe('[ mapEx ]', function () {
     expect(spy.callCount).eq(data.length)
   })
 
-  it('works with Sets', function () {
+  it('works with Sets', () => {
     const data = new Set([1, 2, 3, 4, 5])
     const spy = sinon.spy(mult1)
     for (let val of mapEx(spy)(data)) {
@@ -28,7 +28,7 @@ describe('[ mapEx ]', function () {
     expect(spy.callCount).eq(5)
   })
 
-  it('works with Generators', function () {
+  it('works with Generators', () => {
     const iterator = gen(5)
     const spy = sinon.spy(mult2)
     const result = [...mapEx(spy)(iterator)]
@@ -36,7 +36,7 @@ describe('[ mapEx ]', function () {
     expect(spy.callCount).eq(5)
   })
 
-  it('works chained', function () {
+  it('works chained', () => {
     const data = [1, 2, 3, 4, 5]
     const spy = sinon.spy(mult2)
     const result = [...pipe(mapEx(mult2), mapEx(spy))(data)]

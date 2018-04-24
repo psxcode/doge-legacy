@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import map from './map'
 import filter from './filter'
 
@@ -11,8 +11,8 @@ const multBy = (x: number) => (val: number) => val * x
 const mult2 = multBy(2)
 export const isEven = (x: number) => x % 2 === 0
 
-describe('[ filter ]', function () {
-  it('works with arrays', function () {
+describe('[ filter ]', () => {
+  it('works with arrays', () => {
     const data = [1, 2, 3, 4, 5]
     const spy = sinon.spy(isEven)
     const result = [...filter(spy)(data)]
@@ -20,7 +20,7 @@ describe('[ filter ]', function () {
     expect(spy.callCount).eq(data.length)
   })
 
-  it('works chained', function () {
+  it('works chained', () => {
     const data = [1, 2, 3, 4, 5]
     const spy = sinon.spy(isEven)
     const result = [...pipe(filter(spy), map(mult2))(data)]
@@ -28,7 +28,7 @@ describe('[ filter ]', function () {
     expect(spy.callCount).eq(data.length)
   })
 
-  it('works with Generators', function () {
+  it('works with Generators', () => {
     const iterator = gen(5)
     const spy = sinon.spy(isEven)
     const result = [...filter(spy)(iterator)]

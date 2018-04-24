@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import map from './map'
 import reduceEx from './reduce-ex'
 
@@ -11,8 +11,8 @@ export const add = (a = 0, b = 0) => a + b
 const multBy = (x: number) => (val: number) => val * x
 const mult2 = multBy(2)
 
-describe('[ reduceEx ]', function () {
-  it('works with arrays', function () {
+describe('[ reduceEx ]', () => {
+  it('works with arrays', () => {
     const data = [1, 2, 3, 4, 5]
     const spy = sinon.spy(add)
     const result = [...reduceEx(spy, 0)(data)]
@@ -20,7 +20,7 @@ describe('[ reduceEx ]', function () {
     expect(result).deep.eq([15])
   })
 
-  it('works chained', function () {
+  it('works chained', () => {
     const data = [1, 2, 3, 4, 5]
     const spy = sinon.spy(add)
     const result = [...pipe(reduceEx(spy, 0), map(mult2))(data)]
@@ -28,7 +28,7 @@ describe('[ reduceEx ]', function () {
     expect(result).deep.eq([30])
   })
 
-  it('works with Generators', function () {
+  it('works with Generators', () => {
     const data = gen(6)
     const spy = sinon.spy(add)
     const result = [...reduceEx(spy, 0)(data)]

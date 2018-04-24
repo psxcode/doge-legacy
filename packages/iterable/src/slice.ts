@@ -1,4 +1,4 @@
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import skip from './skip'
 import take from './take'
 
