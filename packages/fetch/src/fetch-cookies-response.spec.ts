@@ -36,8 +36,8 @@ const makeSetCookiesRequestSpy = () => sinon.mock()
 const makeSetCookiesSpy = () => sinon.spy()
 const getSetCookiesCookies = (spy: SinonSpy) => getCallArg(spy, 0)
 
-describe('[ fetch-set-cookies ]', function () {
-  it('should not touch url', async function () {
+describe('[ fetch-set-cookies ]', () => {
+  it('should not touch url', async () => {
     const spy = makeNoCookiesRequestSpy()
     const url = `${testUrl}/?param1=value1&param2=value2`
     await fetchCookiesResponse(ignoreSettingCookies)(spy)(url)
@@ -45,14 +45,14 @@ describe('[ fetch-set-cookies ]', function () {
     expect(getUrl(spy)).eq(url)
   })
 
-  it('should provide default init options', async function () {
+  it('should provide default init options', async () => {
     const spy = makeNoCookiesRequestSpy()
     await fetchCookiesResponse(ignoreSettingCookies)(spy)(testUrl)
 
     getInitOptions(spy)
   })
 
-  it('should not touch init options', async function () {
+  it('should not touch init options', async () => {
     const spy = makeNoCookiesRequestSpy()
     const opts = { body: 'body', size: 4 }
     await fetchCookiesResponse(ignoreSettingCookies)(spy)(testUrl, opts)
@@ -60,7 +60,7 @@ describe('[ fetch-set-cookies ]', function () {
     expect(getInitOptions(spy)).deep.eq(opts)
   })
 
-  it('should provide cookies to setCookies', async function () {
+  it('should provide cookies to setCookies', async () => {
     const spy = makeSetCookiesRequestSpy()
     const cookieSpy = makeSetCookiesSpy()
     await fetchCookiesResponse(cookieSpy)(spy)(testUrl)
@@ -69,7 +69,7 @@ describe('[ fetch-set-cookies ]', function () {
     expect(getSetCookiesCookies(cookieSpy)).eq(mockedCookie)
   })
 
-  it('should not call setCookies if no \'set-cookie\' header', async function () {
+  it('should not call setCookies if no \'set-cookie\' header', async () => {
     const spy = makeNoCookiesRequestSpy()
     const cookieSpy = makeSetCookiesSpy()
     await fetchCookiesResponse(cookieSpy)(spy)(testUrl)

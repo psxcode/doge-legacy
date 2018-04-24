@@ -1,8 +1,8 @@
 import * as sinon from 'sinon'
 import nullary from './nullary'
 
-describe('[ nullary ]', function () {
-  it('should work', function () {
+describe('[ nullary ]', () => {
+  it('should work', () => {
     const spy = sinon.spy()
     const un = nullary(spy)
     un('a', 'b', 'c')

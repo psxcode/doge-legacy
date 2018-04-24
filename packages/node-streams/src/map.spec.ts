@@ -16,7 +16,9 @@ xdescribe('[ map ]', () => {
     (data) => readable({})({ encoding: 'utf8' })(data),
     (spy) => writable({})({ decodeStrings: false })(spy),
     () => map(identity),
-    expectSameCallCount)
+    (data, spy) => {
+      expect(spy.callCount()).eq(Array.from(data).length)
+    })
 
   transformTest<number>(makeNumbers(4),
     (data) => readable({})({ objectMode: true })(data),

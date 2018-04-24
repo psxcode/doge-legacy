@@ -86,7 +86,7 @@ describe('[ stream-test / readable ]', function () {
    * Then stream 'ends'
    * Bad, not optimal
    */
-  describe('[ eager-readable consumer ]', function () {
+  describe('[ eager-readable consumer ]', () => {
     /* EAGER-SYNC-PRODUCER */
     readableTest(makeStrings(8),
       (data) => readable({ eager: true })({ encoding: 'utf8', highWaterMark: 64 })(data),

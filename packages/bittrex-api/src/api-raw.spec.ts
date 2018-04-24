@@ -15,7 +15,7 @@ const setUriParams = (params: IBittrexParams, baseUrl: string) => {
   return `${url}`
 }
 
-describe('[ raw-api ]', function () {
+describe('[ raw-api ]', () => {
 
   let api: IPublicApiRaw
   let spy: SinonSpy
@@ -25,9 +25,9 @@ describe('[ raw-api ]', function () {
     api = getPublicApi(spy)
   })
 
-  describe('[ raw-api / getmarkets ]', function () {
+  describe('[ raw-api / getmarkets ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getmarkets`
 
       await api.getmarkets()
@@ -37,9 +37,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getcurrencies ]', function () {
+  describe('[ raw-api / getcurrencies ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getcurrencies`
 
       await api.getcurrencies()
@@ -49,9 +49,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getticker ]', function () {
+  describe('[ raw-api / getticker ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getticker?market=BTC-DOGE`
 
       await api.getticker({
@@ -63,9 +63,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getmarketsummaries ]', function () {
+  describe('[ raw-api / getmarketsummaries ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getmarketsummaries`
 
       await api.getmarketsummaries()
@@ -75,9 +75,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getmarketsummary ]', function () {
+  describe('[ raw-api / getmarketsummary ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getmarketsummary?market=BTC-LTC`
 
       await api.getmarketsummary({
@@ -89,9 +89,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getorderbook ]', function () {
+  describe('[ raw-api / getorderbook ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getorderbook?market=BTC-LTC&type=both`
 
       await api.getorderbook({
@@ -104,9 +104,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getmarkethistory ]', function () {
+  describe('[ raw-api / getmarkethistory ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V1}/public/getmarkethistory?market=BTC-DOGE`
 
       await api.getmarkethistory({
@@ -118,9 +118,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getticks ]', function () {
+  describe('[ raw-api / getticks ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V2}/pub/market/getticks?marketname=BTC-DOGE&tickinterval=oneMin`
 
       await api.getticks({
@@ -133,9 +133,9 @@ describe('[ raw-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getlatesttick ]', function () {
+  describe('[ raw-api / getlatesttick ]', () => {
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = `${BASE_URL}/${API_V2}/pub/market/getlatesttick?marketname=BTC-DOGE&tickinterval=oneMin`
 
       await api.getlatesttick({
@@ -149,7 +149,7 @@ describe('[ raw-api ]', function () {
   })
 })
 
-describe('[ credentials-api ]', function () {
+describe('[ credentials-api ]', () => {
 
   let spy: SinonSpy
   let api: ICredentialsApiRaw
@@ -159,11 +159,11 @@ describe('[ credentials-api ]', function () {
     api = getCredentialsApi(spy)
   })
 
-  describe('[ raw-api / buylimit ]', function () {
+  describe('[ raw-api / buylimit ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/buylimit`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         market: 'BTC-DOGE',
         quantity: '1.2',
@@ -178,11 +178,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / buymarket ]', function () {
+  describe('[ raw-api / buymarket ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/buymarket`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         market: 'BTC-DOGE',
         quantity: '1.2',
@@ -197,11 +197,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / selllimit ]', function () {
+  describe('[ raw-api / selllimit ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/selllimit`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         market: 'BTC-DOGE',
         quantity: '1.2',
@@ -216,11 +216,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / sellmarket ]', function () {
+  describe('[ raw-api / sellmarket ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/sellmarket`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         market: 'BTC-DOGE',
         quantity: '1.2',
@@ -235,11 +235,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / cancel ]', function () {
+  describe('[ raw-api / cancel ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/cancel`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         uuid: 'UUID'
       }
@@ -252,11 +252,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getopenorders ]', function () {
+  describe('[ raw-api / getopenorders ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/getopenorders`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         market: 'BTC-DOGE'
       }
@@ -269,11 +269,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getbalances ]', function () {
+  describe('[ raw-api / getbalances ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/getbalances`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const expectedUrl = setUriParams({}, url)
 
       await api.getbalances()
@@ -283,11 +283,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getbalance ]', function () {
+  describe('[ raw-api / getbalance ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/market/getbalance`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         currency: 'DOGE'
       }
@@ -300,11 +300,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getwithdrawalhistory ]', function () {
+  describe('[ raw-api / getwithdrawalhistory ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/account/getwithdrawalhistory`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         currency: 'DOGE'
       }
@@ -317,11 +317,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getdepositaddress ]', function () {
+  describe('[ raw-api / getdepositaddress ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/account/getdepositaddress`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         currency: 'DOGE'
       }
@@ -334,11 +334,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getdeposithistory ]', function () {
+  describe('[ raw-api / getdeposithistory ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/account/getdeposithistory`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         currency: 'DOGE'
       }
@@ -351,11 +351,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getorderhistory ]', function () {
+  describe('[ raw-api / getorderhistory ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/account/getorderhistory`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         market: 'BTC-DOGE'
       }
@@ -368,11 +368,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / getorder ]', function () {
+  describe('[ raw-api / getorder ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/account/getorder`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         uuid: 'UUID'
       }
@@ -385,11 +385,11 @@ describe('[ credentials-api ]', function () {
     })
   })
 
-  describe('[ raw-api / withdraw ]', function () {
+  describe('[ raw-api / withdraw ]', () => {
 
     const url = `${BASE_URL}/${API_V1}/account/withdraw`
 
-    it('should call endpoint with proper params', async function () {
+    it('should call endpoint with proper params', async () => {
       const uriParams = {
         currency: 'DOGE',
         quantity: '42.0',

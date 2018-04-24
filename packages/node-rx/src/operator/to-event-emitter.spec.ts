@@ -23,7 +23,7 @@ const makeDataSpy = <T> (expectedData: T[]) => {
 describe('[ rx-node / to-event-emitter ]', function () {
   this.slow(200)
 
-  it('should work with single chunk', async function () {
+  it('should work with single chunk', async () => {
     const source$ = Observable.of('test')
     const dataSpy = makeDataSpy(['test'])
     const errSpy = sinon.spy()
@@ -40,7 +40,7 @@ describe('[ rx-node / to-event-emitter ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with custom \'data\' event name', async function () {
+  it('should work with custom \'data\' event name', async () => {
     const source$ = Observable.of('test')
     const dataSpy = makeDataSpy(['test'])
     const errSpy = sinon.spy()
@@ -57,7 +57,7 @@ describe('[ rx-node / to-event-emitter ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with multiple chunks', async function () {
+  it('should work with multiple chunks', async () => {
     const data = 'this is test'.split(' ')
     const source$ = Observable.from(data)
     const dataSpy = makeDataSpy(data)
@@ -75,7 +75,7 @@ describe('[ rx-node / to-event-emitter ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with errors', async function () {
+  it('should work with errors', async () => {
     const source$ = Observable.throw('Error')
     const dataSpy = sinon.spy()
     const errSpy = sinon.spy()
@@ -92,7 +92,7 @@ describe('[ rx-node / to-event-emitter ]', function () {
     sinon.assert.calledOnce(errSpy)
   })
 
-  it('should return subscription', async function () {
+  it('should return subscription', async () => {
     const source$ = Observable.interval(20)
     const dataSpy = sinon.spy()
     const errSpy = sinon.spy()

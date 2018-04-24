@@ -3,41 +3,41 @@ import { expect } from 'chai'
 import { makeMapCache, makeObjectCache } from './helpers'
 
 [makeObjectCache, makeMapCache].forEach((makeCache, i, arr) => {
-  describe(`[ ${arr[i].name} ]`, function () {
-    describe('[ get ]', function () {
-      it('should return undefined', function () {
+  describe(`[ ${arr[i].name} ]`, () => {
+    describe('[ get ]', () => {
+      it('should return undefined', () => {
         const cache = makeCache()
         expect(cache.get('key')).undefined
       })
 
-      it('should return proper value', function () {
+      it('should return proper value', () => {
         const cache = makeCache()
         cache.set('key', 'value')
         expect(cache.get('key')).eq('value')
       })
     })
 
-    describe('[ has ]', function () {
-      it('should return false', function () {
+    describe('[ has ]', () => {
+      it('should return false', () => {
         const cache = makeCache()
         expect(cache.has('key')).eq(false)
       })
 
-      it('should return true', function () {
+      it('should return true', () => {
         const cache = makeCache()
         cache.set('key', 'value')
         expect(cache.has('key')).eq(true)
       })
     })
 
-    describe('[ set ]', function () {
-      it('should work', function () {
+    describe('[ set ]', () => {
+      it('should work', () => {
         const cache = makeCache()
         cache.set('key', 'value')
         expect(cache.get('key')).eq('value')
       })
 
-      it('should replace', function () {
+      it('should replace', () => {
         const cache = makeCache()
         cache.set('key', 'value')
         cache.set('key', 'other value')

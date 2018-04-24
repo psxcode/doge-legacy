@@ -22,8 +22,8 @@ const makeSpyCache = (cache: { [k: string]: any } = {}) => {
   return c
 }
 
-describe('[ memoize ]', function () {
-  it('should set value to cache', function () {
+describe('[ memoize ]', () => {
+  it('should set value to cache', () => {
     const cache = makeSpyCache()
     const spy = sinon.mock().returns('value')
     const serializerSpy = sinon.mock().returns('key')
@@ -41,7 +41,7 @@ describe('[ memoize ]', function () {
     sinon.assert.notCalled(cache.get as sinon.SinonSpy)
   })
 
-  it('should get value from cache', function () {
+  it('should get value from cache', () => {
     const cache = makeSpyCache({ 'key': 'value' })
     const spy = sinon.mock().returns('value')
     const serializerSpy = sinon.mock().returns('key')

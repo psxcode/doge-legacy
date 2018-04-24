@@ -28,35 +28,35 @@ const getSpecificHeader = (spy: SinonSpy, key: string) => {
   return hdr
 }
 
-describe('[ fetch-apisign ]', function () {
-  it('should forward url', function () {
+describe('[ fetch-apisign ]', () => {
+  it('should forward url', () => {
     const spy = sinon.spy()
     fetchApisign(hash)(spy)(testUrl)
     expect(callArg(spy)).eq(testUrl)
   })
 
-  it('should forward url with path', function () {
+  it('should forward url with path', () => {
     const spy = sinon.spy()
     const url = `${testUrl}/custom/path`
     fetchApisign(hash)(spy)(url)
     expect(callArg(spy)).eq(url)
   })
 
-  it('should forward url with search', function () {
+  it('should forward url with search', () => {
     const spy = sinon.spy()
     const url = `${testUrl}/?param1=value1&param2=value2`
     fetchApisign(hash)(spy)(url)
     expect(callArg(spy)).eq(url)
   })
 
-  it('should provide default init options', function () {
+  it('should provide default init options', () => {
     const spy = sinon.spy()
     fetchApisign(hash)(spy)(testUrl)
 
     getOpts(spy)
   })
 
-  it('should merge init options', function () {
+  it('should merge init options', () => {
     const spy = sinon.spy()
     fetchApisign(hash)(spy)(testUrl, { body: 'body', size: 4 })
 
@@ -64,14 +64,14 @@ describe('[ fetch-apisign ]', function () {
     expect(getSpecificOpt(spy, 'size')).eq(4)
   })
 
-  it('should merge headers', function () {
+  it('should merge headers', () => {
     const spy = sinon.spy()
     fetchApisign(hash)(spy)(testUrl, { headers: { 'custom-header': 'value' } })
 
     expect(getSpecificHeader(spy, 'custom-header')).eq('value')
   })
 
-  it('should set \'apisign\' header', function () {
+  it('should set \'apisign\' header', () => {
     const spy = sinon.spy()
     const url = `${testUrl}/?param1=value1&param2=value2`
     fetchApisign(hash)(spy)(url)

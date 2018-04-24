@@ -7,43 +7,43 @@ const constant = <T> (arg: T) => () => arg
 const toString = (arg: any): string => `${arg}`
 const toNumber = (arg: string): number => Number(arg)
 
-describe('[ pipe ]', function () {
-  it('should return the identity function', function () {
+describe('[ pipe ]', () => {
+  it('should return the identity function', () => {
     const piped = pipe()
     expect(piped(1)).eq(1)
   })
 
-  it('should work with a constant function', function () {
+  it('should work with a constant function', () => {
     const piped = pipe(constant(10))
     expect(piped()).eq(10)
   })
 
-  it('should work with a constant function', function () {
+  it('should work with a constant function', () => {
     const piped = pipe(constant(10), add(2), toString)
     expect(piped()).eq('12')
   })
 
-  it('should work with a discarding constant function', function () {
+  it('should work with a discarding constant function', () => {
     const piped = pipe(add(2), constant(10), toString)
     expect(piped(2)).eq('10')
   })
 
-  it('should work with one function', function () {
+  it('should work with one function', () => {
     const piped = pipe(add(2))
     expect(piped(2)).eq(4)
   })
 
-  it('should work with two functions', function () {
+  it('should work with two functions', () => {
     const piped = pipe(add(2), mult(10))
     expect(piped(0)).eq(20)
   })
 
-  it('should work with functions returning different type', function () {
+  it('should work with functions returning different type', () => {
     const piped = pipe(mult(10), toString)
     expect(piped(1)).eq('10')
   })
 
-  it('should work with functions returning different type', function () {
+  it('should work with functions returning different type', () => {
     const piped = pipe(toNumber, mult(10))
     expect(piped('10')).eq(100)
   })

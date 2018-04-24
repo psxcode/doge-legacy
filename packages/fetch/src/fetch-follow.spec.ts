@@ -68,8 +68,8 @@ const makeNumRedirectRequestSpy = (numRedirects: number) => {
   return spy
 }
 
-describe('[ fetch-follow ]', function () {
-  it('should not touch url', async function () {
+describe('[ fetch-follow ]', () => {
+  it('should not touch url', async () => {
     const spy = makeRequestSpy()
     const url = `${testUrl}/?param1=value1&param2=value2`
     await fetchFollow(0)(spy)(url)
@@ -77,21 +77,21 @@ describe('[ fetch-follow ]', function () {
     expect(getUrl(spy)).eq(url)
   })
 
-  it('should provide default init options', async function () {
+  it('should provide default init options', async () => {
     const spy = makeRequestSpy()
     await fetchFollow(0)(spy)(testUrl)
 
     getInitOptions(spy)
   })
 
-  it('should set \'redirect\' to \'manual\'', async function () {
+  it('should set \'redirect\' to \'manual\'', async () => {
     const spy = makeRequestSpy()
     await fetchFollow(0)(spy)(testUrl)
 
     expect(getSpecificOpt(spy, 'redirect')).eq('manual')
   })
 
-  it('should merge init options', function () {
+  it('should merge init options', () => {
     const spy = makeRequestSpy()
     const opts = { body: 'body', size: 4 }
     fetchGet(spy)(testUrl, opts)
@@ -100,7 +100,7 @@ describe('[ fetch-follow ]', function () {
     expect(getSpecificOpt(spy, 'size')).eq(opts.size)
   })
 
-  it('should not follow if \'location\' is not set', async function () {
+  it('should not follow if \'location\' is not set', async () => {
     const spy = sinon.mock().returns(Promise.resolve(makeRedirectNoLocationResponse()))
     const { status } = await fetchFollow(2)(spy)(testUrl)
 
@@ -108,14 +108,14 @@ describe('[ fetch-follow ]', function () {
     expect(status).eq(302)
   })
 
-  it('should follow \'location\'', async function () {
+  it('should follow \'location\'', async () => {
     const spy = makeRedirectRequestSpy()
     await fetchFollow(2)(spy)(testUrl)
 
     expect(getUrl(spy, 1)).eq(testRedirectUrl)
   })
 
-  it('should not follow if \'maxRedirects\' is 0', async function () {
+  it('should not follow if \'maxRedirects\' is 0', async () => {
     const spy = makeRedirectRequestSpy()
     const { status } = await fetchFollow(0)(spy)(testUrl)
 
@@ -123,7 +123,7 @@ describe('[ fetch-follow ]', function () {
     expect(status).eq(302)
   })
 
-  it('should not follow if \'maxRedirects\' is reached', async function () {
+  it('should not follow if \'maxRedirects\' is reached', async () => {
     const spy = makeNumRedirectRequestSpy(3)
     const { status } = await fetchFollow(2)(spy)(testUrl)
 
@@ -131,7 +131,7 @@ describe('[ fetch-follow ]', function () {
     expect(status).eq(302)
   })
 
-  it('should follow if \'maxRedirects\' not reached', async function () {
+  it('should follow if \'maxRedirects\' not reached', async () => {
     const spy = makeNumRedirectRequestSpy(2)
     const { status } = await fetchFollow(2)(spy)(testUrl)
 
@@ -139,7 +139,7 @@ describe('[ fetch-follow ]', function () {
     expect(status).eq(200)
   })
 
-  it('should provide \'referer\'', async function () {
+  it('should provide \'referer\'', async () => {
     const spy = makeRedirectRequestSpy()
     await fetchFollow(2)(spy)(testUrlSearch)
 

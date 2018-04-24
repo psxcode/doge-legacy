@@ -23,7 +23,7 @@ const makeDataSpy = <T> (expectedData: T[]) => {
 describe('[ rx-node / to-stream ]', function () {
   this.slow(200)
 
-  it('should work with single string', async function () {
+  it('should work with single string', async () => {
     const source$ = Observable.of('test')
     const stream = toStream.call(source$, { encoding: 'utf8' })
     const dataSpy = makeDataSpy(['test'])
@@ -40,7 +40,7 @@ describe('[ rx-node / to-stream ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with multiple strings', async function () {
+  it('should work with multiple strings', async () => {
     const data = 'this is test'.split(' ')
     const source$ = Observable.from(data)
     const stream = toStream.call(source$, { encoding: 'utf8' })
@@ -58,7 +58,7 @@ describe('[ rx-node / to-stream ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with errors inside observable', async function () {
+  it('should work with errors inside observable', async () => {
     const source$ = Observable.interval(10).map((v: number) => {
       if (v < 2) return `${v}`
       throw new Error('')
@@ -78,7 +78,7 @@ describe('[ rx-node / to-stream ]', function () {
     sinon.assert.calledOnce(errSpy)
   })
 
-  it('should work with encoding', async function () {
+  it('should work with encoding', async () => {
     const source$ = Observable.of('this is test')
     const stream = toStream.call(source$, { encoding: 'base64' })
     const dataSpy = makeDataSpy(['dGhpcyBpcyB0ZXN0'])
@@ -95,7 +95,7 @@ describe('[ rx-node / to-stream ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with encoding', async function () {
+  it('should work with encoding', async () => {
     const source$ = Observable.of(new Buffer('dGhpcyBpcyB0ZXN0', 'base64'))
     const stream = toStream.call(source$, { encoding: 'utf8' })
     const dataSpy = makeDataSpy(['this is test'])

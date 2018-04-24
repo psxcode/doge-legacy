@@ -35,35 +35,35 @@ const getSpecificHeader = (spy: SinonSpy, key: string) => {
 const makeRequestSpy = () => sinon.mock()
   .returns(Promise.resolve(new Response('{}', { status: 200 })))
 
-describe('[ fetch-get ]', function () {
-  it('should forward url', function () {
+describe('[ fetch-get ]', () => {
+  it('should forward url', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
     expect(callArg(spy)).eq(testUrl)
   })
 
-  it('should forward url with path', function () {
+  it('should forward url with path', () => {
     const spy = makeRequestSpy()
     const url = `${testUrl}/custom/path`
     fetchGet(spy)(url)
     expect(callArg(spy)).eq(url)
   })
 
-  it('should forward url with search', function () {
+  it('should forward url with search', () => {
     const spy = makeRequestSpy()
     const url = `${testUrl}/?param1=value1&param2=value2`
     fetchGet(spy)(url)
     expect(callArg(spy)).eq(url)
   })
 
-  it('should provide default init options', function () {
+  it('should provide default init options', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
 
     getOpts(spy)
   })
 
-  it('should merge init options', function () {
+  it('should merge init options', () => {
     const spy = makeRequestSpy()
     const opts = { body: 'body', size: 4 }
     fetchGet(spy)(testUrl, opts)
@@ -72,14 +72,14 @@ describe('[ fetch-get ]', function () {
     expect(getSpecificOpt(spy, 'size')).eq(opts.size)
   })
 
-  it('should set method GET', function () {
+  it('should set method GET', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
 
     expect(getMethod(spy)).eq('GET')
   })
 
-  it('should override method', function () {
+  it('should override method', () => {
     const spy = makeRequestSpy()
     const opts = { method: 'POST' }
     fetchGet(spy)(testUrl, opts)
@@ -87,35 +87,35 @@ describe('[ fetch-get ]', function () {
     expect(getMethod(spy)).eq('GET')
   })
 
-  it('should set default headers', function () {
+  it('should set default headers', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
 
     getHeaders(spy)
   })
 
-  it('should set user-agent header', function () {
+  it('should set user-agent header', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
 
     getSpecificHeader(spy, 'user-agent')
   })
 
-  it('should set accept header', function () {
+  it('should set accept header', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
 
     getSpecificHeader(spy, 'accept')
   })
 
-  it('should set \'accept-encoding\' header', function () {
+  it('should set \'accept-encoding\' header', () => {
     const spy = makeRequestSpy()
     fetchGet(spy)(testUrl)
 
     getSpecificHeader(spy, 'accept-encoding')
   })
 
-  it('should allow override header', function () {
+  it('should allow override header', () => {
     const spy = makeRequestSpy()
     const opts = { headers: { accept: '*/*' } }
     fetchGet(spy)(testUrl, opts)
@@ -123,7 +123,7 @@ describe('[ fetch-get ]', function () {
     expect(getSpecificHeader(spy, 'accept')).eq(opts.headers.accept)
   })
 
-  it('should merge header', function () {
+  it('should merge header', () => {
     const spy = makeRequestSpy()
     const opts = { headers: { 'custom-header': 'value' } }
     fetchGet(spy)(testUrl, opts)

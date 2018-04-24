@@ -16,8 +16,8 @@ const clearTimeoutSpy = (id: any) => {
   expect(timeoutId).eq(id)
 }
 
-describe('[ pingRaw ]', function () {
-  it('should work', async function () {
+describe('[ pingRaw ]', () => {
+  it('should work', async () => {
     let i = 0
     const maxCount = 2
     await new Promise(resolve => {

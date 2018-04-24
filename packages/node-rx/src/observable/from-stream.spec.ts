@@ -40,7 +40,7 @@ const makeDataSpy = <T> (expectedData: T[]) => {
 describe('[ rx-node / from-stream ]', function () {
   this.slow(200)
 
-  it('should work with simple readable', async function () {
+  it('should work with simple readable', async () => {
     const data = 'this is test'.split(' ')
     const source = makeReadable(data, { encoding: 'utf8' })
     const dataSpy = makeDataSpy(data)
@@ -54,7 +54,7 @@ describe('[ rx-node / from-stream ]', function () {
     sinon.assert.notCalled(errSpy)
   })
 
-  it('should work with error', async function () {
+  it('should work with error', async () => {
     const source = makeErrorReadable()
     const dataSpy = makeDataSpy([])
     const errSpy = sinon.spy()

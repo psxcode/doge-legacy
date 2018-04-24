@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import { dataConsumer, readable, readableTest } from '@psxcode/node-streams-test'
+import { dataConsumer, makeNumbers, readable, readableTest } from '@psxcode/node-streams-test'
 import concat from './concat'
 
 xdescribe('[ concat ]', () => {
-  readableTest([0, 1, 2, 3, 4],
+  readableTest(makeNumbers(4),
     (data) => {
       const s1 = readable({ delayMs: 50 })({ objectMode: true })(data)
       const s2 = readable({ delayMs: 10 })({ objectMode: true })(data)

@@ -34,43 +34,43 @@ const getSpecificSearchParam = (spy: SinonSpy, key: string) => {
   return params.get(key)
 }
 
-describe('[ fetch-apikey ]', function () {
-  it('should forward url', function () {
+describe('[ fetch-apikey ]', () => {
+  it('should forward url', () => {
     const spy = sinon.spy()
     fetchApikey(apikey, nonce)(spy)(testUrl)
 
     expect(getUrlWithoutSearch(spy)).eq(testUrl)
   })
 
-  it('should merge url search', function () {
+  it('should merge url search', () => {
     const spy = sinon.spy()
     fetchApikey(apikey, nonce)(spy)(`${testUrl}?param1=value1`)
 
     expect(getSpecificSearchParam(spy, 'param1')).eq('value1')
   })
 
-  it('should add nonce to url search', function () {
+  it('should add nonce to url search', () => {
     const spy = sinon.spy()
     fetchApikey(apikey, nonce)(spy)(`${testUrl}?param1=value1`)
 
     expect(getSpecificSearchParam(spy, 'nonce')).eq(`${nonce()}`)
   })
 
-  it('should add apikey to url search', function () {
+  it('should add apikey to url search', () => {
     const spy = sinon.spy()
     fetchApikey(apikey, nonce)(spy)(`${testUrl}?param1=value1`)
 
     expect(getSpecificSearchParam(spy, 'apikey')).eq(apikey)
   })
 
-  it('should set init options', function () {
+  it('should set init options', () => {
     const spy = sinon.spy()
     fetchApikey(apikey, nonce)(spy)(testUrl)
 
     getOpts(spy)
   })
 
-  it('should not modify init options', function () {
+  it('should not modify init options', () => {
     const spy = sinon.spy()
     const opts = { body: 'body', size: 4 }
     fetchApikey(apikey, nonce)(spy)(testUrl, opts)

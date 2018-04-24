@@ -10,7 +10,8 @@ xdescribe('[ scan ]', () => {
     (spy) => writable({})({ objectMode: true })(spy),
     () => scan(addAll),
     (data, spy) => {
-      expect(spy.data()).deep
-        .eq(Array.from(data).reduce((acc: number[], val, i) => [...acc, i > 0 ? val + acc[i - 1] : val], []))
+      expect(spy.data()).deep.eq(
+        Array.from(data).reduce((acc: number[], val, i) => [...acc, i > 0 ? val + acc[i - 1] : val], [])
+      )
     })
 })

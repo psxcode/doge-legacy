@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import identityAsync from './identity-async'
 
-describe('[ identityAsync ]', function () {
-  it('should return same value', async function () {
+describe('[ identityAsync ]', () => {
+  it('should return same value', async () => {
     expect(await identityAsync(42)).eq(42)
   })
 })

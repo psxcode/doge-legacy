@@ -1,8 +1,8 @@
 import * as sinon from 'sinon'
 import binary from './binary'
 
-describe('[ binary ]', function () {
-  it('should work', function () {
+describe('[ binary ]', () => {
+  it('should work', () => {
     const spy = sinon.spy()
     const un = binary(spy)
     un('a', 'b', 'c')

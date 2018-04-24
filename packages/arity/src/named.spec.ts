@@ -1,8 +1,8 @@
 import * as sinon from 'sinon'
 import named from './named'
 
-describe('[ named ]', function () {
-  it('should work', function () {
+describe('[ named ]', () => {
+  it('should work', () => {
     const spy = sinon.spy()
     const f = named(() => ['a', 'b', 'c'])(spy)
     f(1, 2, 3)

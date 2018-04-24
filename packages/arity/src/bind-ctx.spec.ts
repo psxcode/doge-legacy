@@ -1,13 +1,13 @@
 import { expect } from 'chai'
-import { pipe } from '@doge/compose'
+import { pipe } from '@psxcode/compose'
 import bindCtx from './bind-ctx'
 
-const getCtx = function () {
+const getCtx = () => {
   return this
 }
 
-describe('[ bindCtx ]', function () {
-  it('should work as a constant', function () {
+describe('[ bindCtx ]', () => {
+  it('should work as a constant', () => {
     const ctx = {
       value: 10
     }
@@ -15,7 +15,7 @@ describe('[ bindCtx ]', function () {
     expect(binded()).deep.eq(ctx)
   })
 
-  it('should work with pipe', function () {
+  it('should work with pipe', () => {
     const ctx = {
       value: 10
     }

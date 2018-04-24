@@ -11,7 +11,7 @@ const makeNodeThrowingSpy = <T> () => (arg: T, cb: NodeCallback<never>) => {
   throw new Error('crash during async operation')
 }
 
-describe('[ promisify ]', function () {
+describe('[ promisify ]', () => {
   it('should work with \'node-async-style\' function', async () => {
     const spy = promisify(makeNodeAsyncSpy<string, number>(42))
     expect(await spy('answer')).eq(42)

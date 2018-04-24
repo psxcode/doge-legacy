@@ -46,40 +46,40 @@ f = document.getElementById('challenge-form');
 const challengeMethodModified = `var s,t,o,p,b,r,e,a,k,i,n,g,f, ZsFepQr={"Fn":+((!+[]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]))};
 ;ZsFepQr.Fn*=!+[]+!![]+!![];parseInt(ZsFepQr.Fn, 10) `
 
-describe('[ helpers ]', function () {
+describe('[ helpers ]', () => {
 
-  describe('[ helpers / isJsChallenge ]', function () {
-    it('should return true if challenge found', function () {
+  describe('[ helpers / isJsChallenge ]', () => {
+    it('should return true if challenge found', () => {
       expect(isJsChallenge(challengeMethodRaw)).eq(true)
     })
   })
 
-  describe('[ helpers / getChallengeId ]', function () {
-    it('should find jschl_vc', function () {
+  describe('[ helpers / getChallengeId ]', () => {
+    it('should find jschl_vc', () => {
       expect(getChallengeId(form)).eq(jschlVc)
     })
   })
 
-  describe('[ helpers / getChallengePass ]', function () {
-    it('should find pass', function () {
+  describe('[ helpers / getChallengePass ]', () => {
+    it('should find pass', () => {
       expect(getChallengePass(form)).eq(pass)
     })
   })
 
-  describe('[ helpers / getChallengeMethod ]', function () {
-    it('should find challenge method', function () {
+  describe('[ helpers / getChallengeMethod ]', () => {
+    it('should find challenge method', () => {
       expect(getChallengeMethod(challengeMethodRaw)).eq(challengeMethodExtracted)
     })
   })
 
-  describe('[ helpers / modifyChallengeMethod ]', function () {
-    it('should modify challenge method', function () {
+  describe('[ helpers / modifyChallengeMethod ]', () => {
+    it('should modify challenge method', () => {
       expect(modifyChallengeMethod(challengeMethodExtracted)).eq(challengeMethodModified)
     })
   })
 
-  describe('[ helpers / evalChallenge ]', function () {
-    it('should execute challenge method', function () {
+  describe('[ helpers / evalChallenge ]', () => {
+    it('should execute challenge method', () => {
       expect(evalChallenge(challengeMethodModified)).eq(114)
     })
   })

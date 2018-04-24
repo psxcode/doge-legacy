@@ -1,5 +1,5 @@
 import { Request, RequestInit, Response } from 'node-fetch'
-import { compose } from '@doge/compose'
+import { compose } from '@psxcode/compose'
 import { fetchGet, fetchApikey } from '@doge/fetch'
 import { nonce } from './nonce'
 import { fetchApisign } from '../../fetch/src'

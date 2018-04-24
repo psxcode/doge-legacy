@@ -8,28 +8,28 @@ const constant = <T> (arg: T) => () => arg
 const toString = (arg: any): string => `${arg}`
 const toNumber = (arg: string): number => Number(arg)
 
-describe('[ all ]', function () {
-  it('should return the identity function', function () {
+describe('[ all ]', () => {
+  it('should return the identity function', () => {
     const piped = all()
     expect(piped(1)).deep.eq([1])
   })
 
-  it('should work with a constant function', function () {
+  it('should work with a constant function', () => {
     const piped = all(constant(10))
     expect(piped(4)).deep.eq([10])
   })
 
-  it('should work with one function', function () {
+  it('should work with one function', () => {
     const piped = all(add(2))
     expect(piped(2)).deep.eq([4])
   })
 
-  it('should work with multiple functions', function () {
+  it('should work with multiple functions', () => {
     const piped = all(constant(10), add(2), toString)
     expect(piped(4)).deep.eq([10, 6, '4'])
   })
 
-  it('should work with functions returning different type', function () {
+  it('should work with functions returning different type', () => {
     const piped = all(toNumber, pipe(toNumber, mult(10)))
     expect(piped('10')).deep.eq([10, 100])
   })

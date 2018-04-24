@@ -4,8 +4,8 @@ import curry from './curry'
 const add = (a: number, b: number) => a + b
 const sum = (...args: number[]) => args.reduce(add)
 
-describe('[ curry ]', function () {
-  it('should work', function () {
+describe('[ curry ]', () => {
+  it('should work', () => {
     let binded = curry(sum, 2)
     expect(typeof binded).eq('function')
     binded = binded(2)
