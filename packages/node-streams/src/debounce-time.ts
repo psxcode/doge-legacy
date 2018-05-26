@@ -3,7 +3,7 @@ import { Transform, TransformOptions } from 'stream'
 import { waitTime } from '@doge/wait'
 
 export const debounceTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => debounceRaw(opts)((cb: () => void) => waitTime(cb)(ms))
+  (ms: number) => debounceRaw(opts)(cb => waitTime(cb)(ms))
 
 const debounceTime = debounceTimeRaw({ objectMode: true })
 
