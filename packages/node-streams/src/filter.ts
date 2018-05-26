@@ -10,7 +10,7 @@ export const filterRaw = (opts: TransformOptions) => <T> (predicate: (value: T) 
       } catch (e) {
         return callback(e)
       }
-      callback(null, res ? chunk : undefined)
+      callback(undefined, res ? chunk : undefined)
     }
   })
 

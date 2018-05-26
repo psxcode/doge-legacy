@@ -9,7 +9,7 @@ export const lastRaw = (opts: TransformOptions) => () => {
       callback()
     },
     flush (callback) {
-      callback(null, value)
+      callback(undefined, value)
     }
   })
 }

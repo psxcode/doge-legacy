@@ -13,7 +13,7 @@ export const reduceRaw = (opts: TransformOptions) => <T, R> (reducer: (state: R,
       callback()
     },
     flush (callback) {
-      callback(null, state)
+      callback(undefined, state)
     }
   })
 }

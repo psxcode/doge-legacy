@@ -10,7 +10,7 @@ export const mapRaw = (opts: TransformOptions) => <T, R> (xf: (value: T) => R) =
       } catch (e) {
         return callback(e)
       }
-      callback(null, res)
+      callback(undefined, res)
     }
   })
 

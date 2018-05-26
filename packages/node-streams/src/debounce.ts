@@ -19,7 +19,7 @@ export const debounceRaw = (opts: TransformOptions) =>
       },
       flush (callback) {
         unsubscribe && unsubscribe()
-        callback(null, lastChunk)
+        callback(undefined, lastChunk)
       }
     })
   }

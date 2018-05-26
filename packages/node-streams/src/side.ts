@@ -9,7 +9,7 @@ export const sideRaw = (opts: TransformOptions) => <T> (sideFn: (value: T) => vo
       } catch (e) {
         return callback(e)
       }
-      callback(null, chunk)
+      callback(undefined, chunk)
     }
   })
 

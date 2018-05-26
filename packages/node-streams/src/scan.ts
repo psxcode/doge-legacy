@@ -10,7 +10,7 @@ export const scanRaw = (opts: TransformOptions) => <T, R> (reducer: (state: R, v
       } catch (e) {
         return callback(e)
       }
-      callback(null, state)
+      callback(undefined, state)
     }
   })
 }

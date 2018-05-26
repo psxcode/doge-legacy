@@ -2,11 +2,14 @@ import { Transform, TransformOptions } from 'stream'
 import { WaitPromiseFn } from './types'
 
 interface IDelayItem {
-  timestamp: number,
+  timestamp: number
   data: any
 }
 
-export const delayRaw = (opts: TransformOptions) => (wait: WaitPromiseFn, timestamp: () => number) => (ms: number) => {
+export const delayRaw = (opts: TransformOptions) => (
+  wait: WaitPromiseFn,
+  timestamp: () => number
+) => (ms: number) => {
   const buffer: IDelayItem[] = []
   let inProgress = false
   let endCallback: any
