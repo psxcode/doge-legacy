@@ -9,9 +9,11 @@ export interface IReadableConsumer {
   eager?: boolean
 }
 
-const readableConsumer = <T> (stream: ReadableStream,
-                                           sink: (data: T) => void,
-                                           { delayMs, readSize, eager }: IReadableConsumer) => {
+const readableConsumer = <T> (
+  stream: ReadableStream,
+  sink: (data: T) => void,
+  { delayMs, readSize, eager }: IReadableConsumer
+) => {
   const dbg = debug('stream-test:readable-consumer')
   let i = 0
   const eagerReader = (i: number) => {

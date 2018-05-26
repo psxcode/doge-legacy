@@ -5,7 +5,8 @@ import subscribeEx from './subscribe-ex'
 import { onEx } from './events'
 import { IEEValue, UnsubFn } from './types'
 
-export const zipRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
+export const zipRaw = (opts: ReadableOptions) =>
+(...streams: ReadableStream[]): ReadableStream => {
   let unsubscribe: UnsubFn
   let unsubscribeEnd: UnsubFn
   let latest: any[][] = streams.map(() => [])
