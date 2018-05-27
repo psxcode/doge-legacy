@@ -1,6 +1,7 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const distinctRaw = (opts: TransformOptions) => <T> (isEqual: (a: T, b: T) => boolean) => {
+const distinct = (opts: TransformOptions) =>
+<T> (isEqual: (a: T, b: T) => boolean) => {
   let lastChunk: T
   return new Transform({
     ...opts,
@@ -13,7 +14,5 @@ export const distinctRaw = (opts: TransformOptions) => <T> (isEqual: (a: T, b: T
     }
   })
 }
-
-const distinct = distinctRaw({ objectMode: true })
 
 export default distinct

@@ -14,7 +14,7 @@ xdescribe('[ side ]', () => {
   transformTest<string>(makeStrings(8),
     (data) => readable({})({ encoding: 'utf8' })(data),
     (spy) => writable({})({ decodeStrings: false })(spy),
-    () => side(x => x),
+    () => side({ objectMode: true })(x => x),
     (data, spy) => {
       expect(spy.callCount()).eq(Array.from(data).length)
     })
@@ -22,7 +22,7 @@ xdescribe('[ side ]', () => {
   transformTest<number>(makeNumbers(4),
     (data) => readable({})({ objectMode: true })(data),
     (spy) => writable({})({ objectMode: true })(spy),
-    () => side(multiply(2)),
+    () => side({ objectMode: true })(multiply(2)),
     (data, spy) => {
       expect(spy.data()).deep.eq(Array.from(data))
     })

@@ -1,10 +1,10 @@
 import ReadableStream = NodeJS.ReadableStream
 import { Readable, ReadableOptions } from 'stream'
-import { emptyRaw } from './empty'
 import subscribe from './subscribe'
 import { UnsubFn } from './types'
+import empty from './empty'
 
-export const mergeRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
+const merge = (opts: ReadableOptions) => (...streams: ReadableStream[]): ReadableStream => {
   let unsubscribe: UnsubFn
   return streams.length
     ? new Readable({
@@ -23,9 +23,7 @@ export const mergeRaw = (opts: ReadableOptions) => (...streams: ReadableStream[]
         unsubscribe = undefined
       }
     })
-    : emptyRaw(opts)()
+    : empty(opts)()
 }
-
-const merge = mergeRaw({ objectMode: true })
 
 export default merge

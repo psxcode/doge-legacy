@@ -1,8 +1,10 @@
 /* tslint:disable no-conditional-assignment */
-import ReadableStream = NodeJS.ReadableStream
-import { on, onceAll, onEx } from './events'
-import { IObserverEx } from './types'
 import noop from './noop'
+import onEx from './on-ex'
+import onceAll from './once-all'
+import on from './on'
+import { IObserverEx } from './types'
+import ReadableStream = NodeJS.ReadableStream
 
 const subscribeReadableEx = ({ next, error, complete = noop }: IObserverEx) =>
   (...streams: ReadableStream[]) => {
@@ -11,10 +13,10 @@ const subscribeReadableEx = ({ next, error, complete = noop }: IObserverEx) =>
       complete()
     }
     const unsub = [
-      onEx('readable')(({ index, ee }) => {
+      onEx('readable')(({ emitter, emitterIndex }) => {
         let value
-        while (value = (ee as ReadableStream).read()) {
-          next({ value, index, ee })
+        while (value = (emitter as ReadableStream).read()) {
+          next({ value, emitter, emitterIndex })
         }
       })(...streams),
       error ? on('error')(error)(...streams) : noop,

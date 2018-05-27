@@ -1,14 +1,14 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
 import { makeNumbers, readable, wait, waitForEvents } from '@psxcode/node-streams-test'
-import { IEEValue } from './types'
 import subscribeEx from './subscribe-ex'
+import { EmitterValue } from './types'
 
 describe('[ subscribeEx ]', () => {
   xit('should work with single stream', async () => {
     const d1 = [0, 1]
     const s1 = readable({})({ objectMode: true })(d1)
-    const expextedData = Array.from(d1).map((v): IEEValue => ({ value: v, index: 0, ee: s1 }))
+    const expextedData: EmitterValue[] = Array.from(d1).map((v) => ({ value: v, emitterIndex: 0, emitter: s1 }))
     const receivedData: number[] = []
     const spy = sinon.spy((data: any) => receivedData.push(data))
 

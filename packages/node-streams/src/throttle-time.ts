@@ -1,10 +1,8 @@
-import { throttleRaw } from './throttle'
 import { Transform, TransformOptions } from 'stream'
 import { waitTime } from '@doge/wait'
+import throttle from './throttle'
 
-export const throttleTimeRaw = (opts: TransformOptions) =>
-  (ms: number) => throttleRaw(opts)((cb: () => void) => waitTime(cb)(ms))
-
-const throttleTime = throttleTimeRaw({ objectMode: true })
+const throttleTime = (opts: TransformOptions) =>
+  (ms: number) => throttle(opts)((cb: () => void) => waitTime(cb)(ms))
 
 export default throttleTime

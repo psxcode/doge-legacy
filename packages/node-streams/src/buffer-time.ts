@@ -1,10 +1,8 @@
 import { Transform, TransformOptions } from 'stream'
 import { waitTime } from '@doge/wait'
-import { bufferRaw } from './buffer'
+import buffer from './buffer'
 
-export const bufferTimeRaw = (opts: TransformOptions) => (ms: number) =>
-  bufferRaw(opts)(cb => waitTime(cb)(ms))
-
-const bufferTime = bufferTimeRaw({ objectMode: true })
+const bufferTime = (opts: TransformOptions) => (ms: number) =>
+  buffer(opts)(cb => waitTime(cb)(ms))
 
 export default bufferTime

@@ -1,7 +1,7 @@
 import { Transform, TransformOptions } from 'stream'
 import { WaitFn } from './types'
 
-export const debounceRaw = (opts: TransformOptions) =>
+const debounce = (opts: TransformOptions) =>
   (wait: WaitFn) => {
     let lastChunk: any
     let unsubscribe: any
@@ -23,7 +23,5 @@ export const debounceRaw = (opts: TransformOptions) =>
       }
     })
   }
-
-const debounce = debounceRaw({ objectMode: true })
 
 export default debounce

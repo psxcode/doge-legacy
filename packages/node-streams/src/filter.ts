@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const filterRaw = (opts: TransformOptions) => <T> (predicate: (value: T) => boolean) =>
+const filter = (opts: TransformOptions) => <T> (predicate: (value: T) => boolean) =>
   new Transform({
     ...opts,
     transform (chunk, encoding, callback) {
@@ -13,7 +13,5 @@ export const filterRaw = (opts: TransformOptions) => <T> (predicate: (value: T) 
       callback(undefined, res ? chunk : undefined)
     }
   })
-
-const filter = filterRaw({ objectMode: true })
 
 export default filter

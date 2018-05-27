@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const sideRaw = (opts: TransformOptions) => <T> (sideFn: (value: T) => void) =>
+const side = (opts: TransformOptions) => <T> (sideFn: (value: T) => void) =>
   new Transform({
     ...opts,
     transform (chunk: any, encoding, callback) {
@@ -12,7 +12,5 @@ export const sideRaw = (opts: TransformOptions) => <T> (sideFn: (value: T) => vo
       callback(undefined, chunk)
     }
   })
-
-const side = sideRaw({ objectMode: true })
 
 export default side

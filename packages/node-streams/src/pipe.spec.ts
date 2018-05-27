@@ -12,7 +12,11 @@ xdescribe('[ pipe ]', () => {
   transformTest<number>(makeNumbers(4),
     (data) => readable({})({ objectMode: true })(data),
     (spy) => writable({})({ objectMode: true })(spy),
-    () => pipe(filter(isEqual(10)), first(), map(multiply(2))),
+    () => pipe(
+      filter({ objectMode: true })(isEqual(10)),
+      first({ objectMode: true })(),
+      map({ objectMode: true })(multiply(2))
+    ),
     (data, spy) => {
       expect(spy.callCount()).eq(1)
       expect(spy.data()).deep.eq([20])

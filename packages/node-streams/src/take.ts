@@ -1,9 +1,10 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions } from 'stream'
 import filter from './filter'
 
-const take = (numTake: number) => {
-  let i = 0
-  return filter(() => i++ < numTake)
-}
+const take = (opts: TransformOptions) =>
+  (numTake: number) => {
+    let i = 0
+    return filter(opts)(() => i++ < numTake)
+  }
 
 export default take

@@ -4,10 +4,10 @@ export type WaitFn = (cb: () => void) => () => void
 export type WaitPromiseFn = (ms: number) => Promise<any>
 export type UnsubFn = (() => void) | undefined
 
-export interface IEEValue {
+export type EmitterValue = {
   value: any
-  index: number
-  ee: EventEmitter
+  emitter: EventEmitter
+  emitterIndex: number
 }
 
 export interface IObserver {
@@ -17,7 +17,7 @@ export interface IObserver {
 }
 
 export interface IObserverEx {
-  next: (chunk: IEEValue) => void
-  error?: (err: IEEValue) => void,
+  next: (chunk: EmitterValue) => void
+  error?: (err: EmitterValue) => void,
   complete?: () => void
 }

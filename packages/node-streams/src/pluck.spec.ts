@@ -19,7 +19,12 @@ xdescribe('[ pluck ]', () => {
   transformTest(makeNumbers(8),
     (data) => readable({})({ objectMode: true })(data),
     (spy) => writable({})({ objectMode: true })(spy),
-    () => [pluck('value'), filter(isEqual(10)), first(), map(multiply(2))],
+    () => [
+      pluck('value'),
+      filter({ objectMode: true })(isEqual(10)),
+      first({ objectMode: true })(),
+      map({ objectMode: true })(multiply(2))
+    ],
     (data, spy) => {
       expect(spy.callCount()).eq(1)
       expect(spy.data()).deep.eq([20])

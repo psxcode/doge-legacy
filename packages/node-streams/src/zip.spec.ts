@@ -7,7 +7,7 @@ xdescribe('[ zip ]', () => {
     (data) => {
       const s1 = readable({ delayMs: 30 })({ objectMode: true })(data)
       const s2 = readable({ delayMs: 10 })({ objectMode: true })([0, 1, 2, 3, 4, 5, 6])
-      return zip(s1, s2)
+      return zip({ objectMode: true })(s1, s2)
     },
     dataConsumer,
     (data, spy) => {

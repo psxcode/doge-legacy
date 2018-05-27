@@ -2,7 +2,7 @@
 import { Readable, ReadableOptions } from 'stream'
 import { iterate } from '@psxcode/iterable'
 
-export const fromRaw = (opts: ReadableOptions) => <T> (iterable: Iterable<T>) => {
+const from = (opts: ReadableOptions) => <T> (iterable: Iterable<T>) => {
   const iterator = iterate(iterable)
   return new Readable({
     ...opts,
@@ -17,7 +17,5 @@ export const fromRaw = (opts: ReadableOptions) => <T> (iterable: Iterable<T>) =>
     }
   })
 }
-
-const from = fromRaw({ objectMode: true })
 
 export default from

@@ -1,11 +1,11 @@
 import ReadableStream = NodeJS.ReadableStream
 import { Readable, ReadableOptions } from 'stream'
-import { emptyRaw } from './empty'
 import subscribeEx from './subscribe-ex'
-import { onEx } from './events'
-import { IEEValue, UnsubFn } from './types'
+import onEx from './on-ex'
+import empty from './empty'
+import { EmitterValue, UnsubFn } from './types'
 
-export const zipRaw = (opts: ReadableOptions) =>
+const zip = (opts: ReadableOptions) =>
 (...streams: ReadableStream[]): ReadableStream => {
   let unsubscribe: UnsubFn
   let unsubscribeEnd: UnsubFn
@@ -24,8 +24,8 @@ export const zipRaw = (opts: ReadableOptions) =>
       read () {
         if (!unsubscribe) {
           unsubscribe = subscribeEx({
-            next: ({ value, index }: IEEValue) => {
-              latest[index].push(value)
+            next: ({ value, emitterIndex }: EmitterValue) => {
+              latest[emitterIndex].push(value)
               if (hasValueForZip()) {
                 this.push(latest.map(l => l.shift()))
                 if (checkDone()) {
@@ -34,10 +34,10 @@ export const zipRaw = (opts: ReadableOptions) =>
                 }
               }
             },
-            error: ({ value }: IEEValue) => this.emit('error', value)
+            error: ({ value }: EmitterValue) => this.emit('error', value)
           })(...streams)
-          unsubscribeEnd = onEx('end')(({ index }: IEEValue) => {
-            done[index] = true
+          unsubscribeEnd = onEx('end')(({ emitterIndex }: EmitterValue) => {
+            done[emitterIndex] = true
             if (checkDone()) {
               this.push(null)
               unsub()
@@ -47,9 +47,7 @@ export const zipRaw = (opts: ReadableOptions) =>
       },
       destroy: unsub
     })
-    : emptyRaw(opts)()
+    : empty(opts)()
 }
-
-const zip = zipRaw({ objectMode: true })
 
 export default zip

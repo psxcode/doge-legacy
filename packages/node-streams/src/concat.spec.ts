@@ -3,11 +3,12 @@ import { dataConsumer, makeNumbers, readable, readableTest } from '@psxcode/node
 import concat from './concat'
 
 xdescribe('[ concat ]', () => {
-  readableTest(makeNumbers(4),
+  readableTest(
+    makeNumbers(4),
     (data) => {
       const s1 = readable({ delayMs: 50 })({ objectMode: true })(data)
       const s2 = readable({ delayMs: 10 })({ objectMode: true })(data)
-      return concat(s1, s2)
+      return concat({ objectMode: true })(s1, s2)
     },
     dataConsumer,
     (data, spy) => {

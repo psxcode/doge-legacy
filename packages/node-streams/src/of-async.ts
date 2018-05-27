@@ -1,7 +1,7 @@
 import { Readable, ReadableOptions } from 'stream'
 import { UnsubFn, WaitFn } from './types'
 
-export const ofAsyncRaw = (opts: ReadableOptions) =>
+const ofAsync = (opts: ReadableOptions) =>
   (wait: WaitFn) => <T> (...values: T[]) => {
     let i = 0
     let unsubscribe: UnsubFn
@@ -20,7 +20,5 @@ export const ofAsyncRaw = (opts: ReadableOptions) =>
       }
     })
   }
-
-const ofAsync = ofAsyncRaw({ objectMode: true })
 
 export default ofAsync

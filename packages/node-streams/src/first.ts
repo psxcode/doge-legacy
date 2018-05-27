@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const firstRaw = (opts: TransformOptions) => () => {
+const first = (opts: TransformOptions) => () => {
   let fulfilled = false
   return new Transform({
     ...opts,
@@ -14,7 +14,5 @@ export const firstRaw = (opts: TransformOptions) => () => {
     }
   })
 }
-
-const first = firstRaw({ objectMode: true })
 
 export default first

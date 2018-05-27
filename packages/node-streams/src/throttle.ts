@@ -1,7 +1,7 @@
 import { Transform, TransformOptions } from 'stream'
 import { UnsubFn, WaitFn } from './types'
 
-export const throttleRaw = (opts: TransformOptions) =>
+const throttle = (opts: TransformOptions) =>
   (wait: WaitFn) => {
     let lastChunk: any
     let unsubscribe: UnsubFn
@@ -24,7 +24,5 @@ export const throttleRaw = (opts: TransformOptions) =>
       }
     })
   }
-
-const throttle = throttleRaw({ objectMode: true })
 
 export default throttle

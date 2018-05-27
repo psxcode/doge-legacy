@@ -1,6 +1,6 @@
 import { Transform, TransformOptions } from 'stream'
 
-export const lastRaw = (opts: TransformOptions) => () => {
+const last = (opts: TransformOptions) => () => {
   let value: any
   return new Transform({
     ...opts,
@@ -13,7 +13,5 @@ export const lastRaw = (opts: TransformOptions) => () => {
     }
   })
 }
-
-const last = lastRaw({ objectMode: true })
 
 export default last

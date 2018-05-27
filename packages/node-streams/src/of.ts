@@ -1,7 +1,7 @@
 /* tslint:disable no-empty */
 import { Readable, ReadableOptions } from 'stream'
 
-export const ofRaw = <T> (opts: ReadableOptions) => (...values: T[]) => {
+const of = <T> (opts: ReadableOptions) => (...values: T[]) => {
   let i = 0
   return new Readable({
     ...opts,
@@ -11,7 +11,5 @@ export const ofRaw = <T> (opts: ReadableOptions) => (...values: T[]) => {
     }
   })
 }
-
-const of = ofRaw<any>({ objectMode: true })
 
 export default of

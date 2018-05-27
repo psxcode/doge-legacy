@@ -1,11 +1,11 @@
 import ReadableStream = NodeJS.ReadableStream
 import { Readable, ReadableOptions } from 'stream'
-import { emptyRaw } from './empty'
 import subscribe from './subscribe'
 import subscribeEx from './subscribe-ex'
-import { IEEValue } from './types'
+import empty from './empty'
+import { EmitterValue } from './types'
 
-export const withLatestRaw = (opts: ReadableOptions) =>
+const withLatest = (opts: ReadableOptions) =>
   (...streams: ReadableStream[]) => (main: ReadableStream): ReadableStream => {
     let unsubscribeMain: (() => void) | undefined
     let unsubscribeRest: (() => void) | undefined
@@ -29,15 +29,13 @@ export const withLatestRaw = (opts: ReadableOptions) =>
               }
             })(main)
             unsubscribeRest = subscribeEx({
-              next: ({ value, index }: IEEValue) => latest[index] = value
+              next: ({ value, emitterIndex }: EmitterValue) => latest[emitterIndex] = value
             })(...streams)
           }
         },
         destroy: unsub
       })
-      : emptyRaw(opts)()
+      : empty(opts)()
   }
-
-const withLatest = withLatestRaw({ objectMode: true })
 
 export default withLatest
