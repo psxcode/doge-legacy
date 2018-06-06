@@ -19,8 +19,7 @@
     "test": "nyc yarn mocha --opts mocha.opts",
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@psxcode/compose": "*",
     "@types/chai": "*",
