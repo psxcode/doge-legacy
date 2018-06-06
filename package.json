@@ -17,7 +17,7 @@
     "bootstrap": "lerna bootstrap",
     "commit": "git-cz",
     "build": "lerna run build",
-    "release": "lerna publish --conventional-commits -m 'chore(release): publish'",
+    "release": "lerna publish --conventional-commits",
     "clean": "lerna run clean"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "commitizen": "*",
     "cz-conventional-changelog": "*",
     "cz-customizable": "*",
-    "lerna": "*",
+    "lerna": "3.0.0-beta.20",
     "rimraf": "*",
     "tslint": "*",
     "tslint-config-standard": "*",

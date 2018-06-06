@@ -1,20 +1,24 @@
 {
-  "lerna": "2.9.1",
+  "lerna": "3.0.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "version": "independent",
-  "commands": {
+  "ignoreChanges": [
+    "**/.nyc_output/**",
+    "**/coverage/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.spec.ts",
+    "**/*.opts",
+    "**/tsconfig.json",
+    "**/tsconfig.test.json",
+    "**/tshook.js"
+  ],
+  "command": {
     "publish": {
-      "ignore": [
-        ".nyc_output",
-        "coverage",
-        "node_modules",
-        "src",
-        "mocha.opts",
-        "tsconfig.json",
-        "tsconfig.test.json",
-        "tshook.js"
-      ]
+      "message": "chore(release): publish %s",
+      "allowBranch": "master",
+      "conventionalCommits": true
     }
   }
 }
