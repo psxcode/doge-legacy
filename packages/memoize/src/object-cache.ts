@@ -1,17 +1,17 @@
 import { ICache } from './types'
 
 class ObjectCache<V> implements ICache<string, V> {
-  cache: { [k: string]: any }
+  cache: { [k: string]: V }
 
-  constructor (cache: { [k: string]: any } = Object.create(null)) {
+  constructor (cache: { [k: string]: V } = Object.create(null)) {
     this.cache = cache
   }
 
-  get (key: string) {
+  get (key: string): V {
     return this.cache[key]
   }
 
-  set (key: string, value: any) {
+  set (key: string, value: V): this {
     this.cache[key] = value
     return this
   }

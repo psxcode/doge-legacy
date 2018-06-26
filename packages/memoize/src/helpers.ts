@@ -5,4 +5,8 @@ export const makeObjectCache = <V> (cache?: { [k: string]: any }): ICache<string
 
 export const makeMapCache = <K, V> (): ICache<K, V> => new Map<K, V>()
 
-export const makeJsonSerializer = (): ISerializer<string, any> => JSON.stringify
+export const makeWeakMapCache = <K extends object, V> (): ICache<K, V> => new WeakMap<K, V>()
+
+export const makeJsonSerializer = <T> (): ISerializer<string, T> => (value: T) => JSON.stringify(value)
+
+export const makeIdentitySerializer = <T> (): ISerializer<T, T> => (value: T) => value
