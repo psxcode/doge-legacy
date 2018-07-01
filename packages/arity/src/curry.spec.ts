@@ -2,15 +2,14 @@ import { expect } from 'chai'
 import curry from './curry'
 
 const add = (a: number, b: number) => a + b
-const sum = (...args: number[]) => args.reduce(add)
 
 describe('[ curry ]', () => {
   it('should work', () => {
-    let binded = curry(sum, 2)
-    expect(typeof binded).eq('function')
-    binded = binded(2)
-    expect(typeof binded).eq('function')
-    binded = binded(3)
-    expect(typeof binded).eq('number')
+    const binded0 = curry(add)
+    expect(typeof binded0).eq('function')
+    const binded1 = binded0(2)
+    expect(typeof binded1).eq('function')
+    const binded2 = binded1(3)
+    expect(typeof binded2).eq('number')
   })
 })
