@@ -1,12 +1,10 @@
-import * as sinon from 'sinon'
+import { expect } from 'chai'
 import nullary from './nullary'
 
 describe('[ nullary ]', () => {
   it('should work', () => {
-    const spy = sinon.spy()
+    const spy = (a: number) => 42
     const un = nullary(spy)
     un('a', 'b', 'c')
-    sinon.assert.calledOnce(spy)
-    sinon.assert.calledWithExactly(spy)
   })
 })
