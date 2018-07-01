@@ -3,7 +3,7 @@ import branch from './branch'
 
 describe('[ branch ]', () => {
   it('should work', async () => {
-    const br = branch(x => x === 1, (x) => x, (x) => x * 2)
+    const br = branch(x => x === 1, (x: number) => x, (x: number) => x * 2)
     expect(br(1)).eq(1)
     expect(br(2)).eq(4)
   })
