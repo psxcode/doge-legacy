@@ -1,6 +1,7 @@
+import FixedArray from '@psxcode/circular'
 import iterate from './iterate'
 
-const take = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
+const takeFirst = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
   * [Symbol.iterator] () {
     const it = iterate(iterable)
     let i = 0
@@ -10,5 +11,31 @@ const take = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
     }
   }
 })
+
+const takeLast = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
+  * [Symbol.iterator] () {
+    const last = new FixedArray<T>(n)
+    let numValues = 0
+    for (let value of iterable) {
+      last.shift(value)
+      numValues++
+    }
+    const it = iterate(last)
+
+    /* skip empty values */
+    const offset = last.length - numValues
+    for (let i = 0; i < offset; ++i) {
+      it.next()
+    }
+
+    /* actual values */
+    for (let value of it) {
+      yield value
+    }
+  }
+})
+
+const take = (n: number) =>
+  n < 0 ? takeLast(-n) : takeFirst(n)
 
 export default take

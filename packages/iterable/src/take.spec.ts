@@ -28,3 +28,37 @@ describe('[ take ]', () => {
     expect(result).deep.eq([0, 1])
   })
 })
+
+describe('[ takeLast ]', () => {
+  it('works with arrays', () => {
+    const data = [1, 2, 3, 4, 5]
+    const result = [...take(-2)(data)]
+    expect(result).deep.eq([4, 5])
+  })
+
+  it('works chained', () => {
+    const data = [1, 2, 3, 4, 5]
+    const result = [...pipe(map(mult2), take(-2))(data)]
+    expect(result).deep.eq([8, 10])
+  })
+
+  it('works with Generators', () => {
+    const data = gen(5)
+    const result = [...take(-2)(data)]
+    expect(result).deep.eq([3, 4])
+  })
+})
+
+describe('[ take overflow ]', () => {
+  it('works with arrays', () => {
+    const data = [1, 2, 3, 4, 5]
+    const result = [...take(42)(data)]
+    expect(result).deep.eq([1, 2, 3, 4, 5])
+  })
+
+  it('works with arrays', () => {
+    const data = [1, 2, 3, 4, 5]
+    const result = [...take(-42)(data)]
+    expect(result).deep.eq([1, 2, 3, 4, 5])
+  })
+})
