@@ -1,4 +1,4 @@
-import FixedArray from '@psxcode/circular'
+import FixedArray from '@psxcode/fixed-array'
 import iterate from './iterate'
 
 const takeFirst = (n: number) => <T> (iterable: Iterable<T>): Iterable<T> => ({
