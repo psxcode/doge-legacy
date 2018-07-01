@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { pipe } from '@psxcode/compose'
-import last from './last'
+import take from './take'
 import map from './map'
 import range from './range'
 
@@ -14,7 +14,7 @@ describe('[ range ]', () => {
   })
 
   it('works chained', () => {
-    const result = [...pipe(map(mult2), last)(range(6))]
+    const result = [...pipe(map(mult2), take(-1))(range(6))]
     expect(result).deep.eq([10])
   })
 })
