@@ -1,9 +1,7 @@
-import { IHash, NamedFn } from './types'
-
 const named = (keys: () => string[]) =>
-  (fn: NamedFn<any>) =>
+  <R> (fn: (props: {[k: string]: any}) => R) =>
     (...args: any[]) =>
-      fn(keys().reduce((res: IHash<any>, name, i) => {
+      fn(keys().reduce((res: {[k: string]: any}, name, i) => {
         res[name] = args[i]
         return res
       }, {}))

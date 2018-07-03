@@ -1,5 +1,3 @@
-import { IHash, PositionalFn } from './types'
-
 const positional = (keys = Object.keys) =>
   (fn: PositionalFn<any>) =>
     (props: IHash<any>) =>
