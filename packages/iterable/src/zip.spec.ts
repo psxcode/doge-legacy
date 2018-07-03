@@ -7,7 +7,7 @@ const gen = function* (n: number) {
 const multBy = (x: number) => (val: number) => val * x
 const mult2 = multBy(2)
 
-describe('[ tail ]', () => {
+describe('[ zip ]', () => {
   it('works with arrays', () => {
     const data0 = [1, 2, 3]
     const data1 = ['1', '2', '3']
