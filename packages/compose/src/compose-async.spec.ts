@@ -19,12 +19,6 @@ describe('[ composeAsync ]', () => {
     expect(res).eq(1)
   })
 
-  it('should work with sync \'constant\' function', async () => {
-    const piped = composeAsync(constant('aaa'))
-    const res = await piped()
-    expect(res).eq('aaa')
-  })
-
   it('should work with a discarding \'constant\' function', async () => {
     const piped = composeAsync(toString, constant(10), add(2))
     expect(await piped(2)).eq('10')
@@ -69,7 +63,7 @@ describe('[ composeAsync ]', () => {
   it('should handle throwing function', async () => {
     const piped = composeAsync(throwing('error'))
     try {
-      await piped()
+      await piped({})
       expect.fail('should not reach this point')
     } catch (e) {
       expect(e.message).eq('error')
@@ -79,7 +73,7 @@ describe('[ composeAsync ]', () => {
   it('should handle throwing function inside pipe', async () => {
     const piped = composeAsync(toString, throwing('error'), addAsync(2))
     try {
-      await piped()
+      await piped(42)
       expect.fail('should not reach this point')
     } catch (e) {
       expect(e.message).eq('error')

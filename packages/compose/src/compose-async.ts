@@ -1,15 +1,13 @@
-import { AsyncFn, AsyncPipeFn } from './pipe-async'
-
-function composeAsync<A> (): (arg: A) => A
-function composeAsync<A, B> (fn: AsyncPipeFn<A, B>): AsyncFn<A, B>
-function composeAsync<A, B, C> (fn0: AsyncPipeFn<B, C>, fn1: AsyncPipeFn<A, B>): AsyncFn<A, C>
-function composeAsync<A, B, C, D> (fn0: AsyncPipeFn<C, D>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<A, B>): AsyncFn<A, D>
-function composeAsync<A, B, C, D, E> (fn0: AsyncPipeFn<D, E>, fn1: AsyncPipeFn<C, D>, fn2: AsyncPipeFn<B, C>, fn3: AsyncPipeFn<A, B>): AsyncFn<A, E>
-function composeAsync<A, B, C, D, E, F> (fn0: AsyncPipeFn<E, F>, fn1: AsyncPipeFn<D, E>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<B, C>, fn4: AsyncPipeFn<A, B>): AsyncFn<A, F>
-function composeAsync<A, B, C, D, E, F, G> (fn0: AsyncPipeFn<F, G>, fn1: AsyncPipeFn<E, F>, fn2: AsyncPipeFn<D, E>, fn3: AsyncPipeFn<D, C>, fn4: AsyncPipeFn<B, C>, fn5: AsyncPipeFn<A, B>): AsyncFn<A, G>
-function composeAsync<A, B, C, D, E, F, G, H> (fn0: AsyncPipeFn<G, H>, fn1: AsyncPipeFn<F, G>, fn2: AsyncPipeFn<E, F>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<C, D>, fn5: AsyncPipeFn<B, C>, fn6: AsyncPipeFn<A, B>): AsyncFn<A, H>
-function composeAsync<A, B, C, D, E, F, G, H, I> (fn0: AsyncPipeFn<H, I>, fn1: AsyncPipeFn<G, H>, fn2: AsyncPipeFn<F, G>, fn3: AsyncPipeFn<E, F>, fn4: AsyncPipeFn<D, E>, fn5: AsyncPipeFn<C, D>, fn6: AsyncPipeFn<B, C>, fn7: AsyncPipeFn<A, B>): AsyncFn<A, I>
-function composeAsync (...fns: AsyncPipeFn<any, any>[]) {
+function composeAsync<A, B, C, D, E, F, G, H, I> (fn0: (arg: H) => Promise<I> | I, fn1: (arg: G) => Promise<H> | H, fn2: (arg: F) => Promise<G> | G, fn3: (arg: E) => Promise<F> | F, fn4: (arg: D) => Promise<E> | E, fn5: (arg: C) => Promise<D> | D, fn6: (arg: B) => Promise<C> | C, fn7: (arg: A) => Promise<B> | B): (arg: A) => Promise<I>
+function composeAsync<A, B, C, D, E, F, G, H> (fn0: (arg: G) => Promise<H> | H, fn1: (arg: F) => Promise<G> | G, fn2: (arg: E) => Promise<F> | F, fn3: (arg: D) => Promise<E> | E, fn4: (arg: C) => Promise<D> | D, fn5: (arg: B) => Promise<C> | C, fn6: (arg: A) => Promise<B> | B): (arg: A) => Promise<H>
+function composeAsync<A, B, C, D, E, F, G> (fn0: (arg: F) => Promise<G> | G, fn1: (arg: E) => Promise<F> | F, fn2: (arg: D) => Promise<E> | E, fn3: (arg: C) => Promise<D> | D, fn4: (arg: B) => Promise<C> | C, fn5: (arg: A) => Promise<B> | B): (arg: A) => Promise<G>
+function composeAsync<A, B, C, D, E, F> (fn0: (arg: E) => Promise<F> | F, fn1: (arg: D) => Promise<E> | E, fn2: (arg: C) => Promise<D> | D, fn3: (arg: B) => Promise<C> | C, fn4: (arg: A) => Promise<B> | B): (arg: A) => Promise<F>
+function composeAsync<A, B, C, D, E> (fn0: (arg: D) => Promise<E> | E, fn1: (arg: C) => Promise<D> | D, fn2: (arg: B) => Promise<C> | C, fn3: (arg: A) => Promise<B> | B): (arg: A) => Promise<E>
+function composeAsync<A, B, C, D> (fn0: (arg: C) => Promise<D> | D, fn1: (arg: B) => Promise<C> | C, fn2: (arg: A) => Promise<B> | B): (arg: A) => Promise<D>
+function composeAsync<A, B, C> (fn0: (arg: B) => Promise<C> | C, fn1: (arg: A) => Promise<B> | B): (arg: A) => Promise<C>
+function composeAsync<A, B> (fn: (arg: A) => Promise<B> | B): (arg: A) => Promise<B>
+function composeAsync<A> (): (arg: A) => Promise<A>
+function composeAsync (...fns: any[]): any {
   return (initial: any) => fns.reduceRight((arg, fn) => arg.then(fn), Promise.resolve(initial))
 }
 

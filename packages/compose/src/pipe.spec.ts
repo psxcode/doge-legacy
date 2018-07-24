@@ -9,23 +9,15 @@ const toNumber = (arg: string): number => Number(arg)
 
 describe('[ pipe ]', () => {
   it('should return the identity function', () => {
-    const piped = pipe()
-    expect(piped(1)).eq(1)
-  })
-
-  it('should work with a constant function', () => {
-    const piped = pipe(constant(10))
-    expect(piped()).eq(10)
-  })
-
-  it('should work with a constant function', () => {
-    const piped = pipe(constant(10), add(2), toString)
-    expect(piped()).eq('12')
+    const piped = pipe<number>()
+    const res = piped(1)
+    expect(res).eq(1)
   })
 
   it('should work with a discarding constant function', () => {
     const piped = pipe(add(2), constant(10), toString)
-    expect(piped(2)).eq('10')
+    const res = piped(2)
+    expect(res).eq('10')
   })
 
   it('should work with one function', () => {

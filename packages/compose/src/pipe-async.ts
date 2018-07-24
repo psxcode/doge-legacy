@@ -1,16 +1,13 @@
-export type AsyncFn <A, B> = (arg?: A) => Promise<B>
-export type AsyncPipeFn<A, B> = (arg?: A) => B | Promise<B>
-
+function pipeAsync<A, B, C, D, E, F, G, H, I> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C, fn2: (arg: C) => Promise<D> | D, fn3: (arg: D) => Promise<E> | E, fn4: (arg: E) => Promise<F> | F, fn5: (arg: F) => Promise<G> | G, fn6: (arg: G) => Promise<H> | H, fn7: (arg: H) => Promise<I> | I): (arg: A) => Promise<I>
+function pipeAsync<A, B, C, D, E, F, G, H> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C, fn2: (arg: C) => Promise<D> | D, fn3: (arg: D) => Promise<E> | E, fn4: (arg: E) => Promise<F> | F, fn5: (arg: F) => Promise<G> | G, fn6: (arg: G) => Promise<H> | H): (arg: A) => Promise<H>
+function pipeAsync<A, B, C, D, E, F, G> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C, fn2: (arg: C) => Promise<D> | D, fn3: (arg: D) => Promise<E> | E, fn4: (arg: E) => Promise<F> | F, fn5: (arg: F) => Promise<G> | G): (arg: A) => Promise<G>
+function pipeAsync<A, B, C, D, E, F> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C, fn2: (arg: C) => Promise<D> | D, fn3: (arg: D) => Promise<E> | E, fn4: (arg: E) => Promise<F> | F): (arg: A) => Promise<F>
+function pipeAsync<A, B, C, D, E> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C, fn2: (arg: C) => Promise<D> | D, fn3: (arg: D) => Promise<E> | E): (arg: A) => Promise<E>
+function pipeAsync<A, B, C, D> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C, fn2: (arg: C) => Promise<D> | D): (arg: A) => Promise<D>
+function pipeAsync<A, B, C> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => Promise<C> | C): (arg: A) => Promise<C>
+function pipeAsync<A, B> (fn0: (arg: A) => Promise<B> | B): (arg: A) => Promise<B>
 function pipeAsync<A> (): (arg: A) => Promise<A>
-function pipeAsync<A, B> (fn0: AsyncPipeFn<A, B>): AsyncFn<A, B>
-function pipeAsync<A, B, C> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>): AsyncFn<A, C>
-function pipeAsync<A, B, C, D> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>): AsyncFn<A, D>
-function pipeAsync<A, B, C, D, E> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>): AsyncFn<A, E>
-function pipeAsync<A, B, C, D, E, F> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>): AsyncFn<A, F>
-function pipeAsync<A, B, C, D, E, F, G> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>): AsyncFn<A, G>
-function pipeAsync<A, B, C, D, E, F, G, H> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>, fn6: AsyncPipeFn<G, H>): AsyncFn<A, H>
-function pipeAsync<A, B, C, D, E, F, G, H, I> (fn0: AsyncPipeFn<A, B>, fn1: AsyncPipeFn<B, C>, fn2: AsyncPipeFn<C, D>, fn3: AsyncPipeFn<D, E>, fn4: AsyncPipeFn<E, F>, fn5: AsyncPipeFn<F, G>, fn6: AsyncPipeFn<G, H>, fn7: AsyncPipeFn<H, I>): AsyncFn<A, I>
-function pipeAsync (...fns: AsyncPipeFn<any, any>[]): AsyncFn<any, any> {
+function pipeAsync (...fns: any[]): any {
   return (initial: any) => fns.reduce((arg, fn) => arg.then(fn), Promise.resolve(initial))
 }
 

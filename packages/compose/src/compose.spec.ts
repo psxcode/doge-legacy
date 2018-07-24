@@ -13,16 +13,6 @@ describe('[ compose ]', () => {
     expect(piped(1)).eq(1)
   })
 
-  it('should work with a constant function', () => {
-    const piped = compose(constant(10))
-    expect(piped()).eq(10)
-  })
-
-  it('should work with a constant function', () => {
-    const piped = compose(toString, add(2), constant(10))
-    expect(piped()).eq('12')
-  })
-
   it('should work with a discarding constant function', () => {
     const piped = compose(toString, constant(10), add(2))
     expect(piped(2)).eq('10')

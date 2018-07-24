@@ -11,27 +11,32 @@ const toNumber = (arg: string): number => Number(arg)
 
 describe('[ allAsync ]', () => {
   it('should return the identity function', async () => {
-    const piped = allAsync()
-    expect(await piped(1)).deep.eq([1])
+    const piped = allAsync<number>()
+    const res = await piped(1)
+    expect(res).deep.eq([1])
   })
 
   it('should work with a constant function', async () => {
     const piped = allAsync(constant(10))
-    expect(await piped(4)).deep.eq([10])
+    const res = await piped()
+    expect(res).deep.eq([10])
   })
 
   it('should work with one function', async () => {
     const piped = allAsync(add(2))
-    expect(await piped(2)).deep.eq([4])
+    const res = await piped(2)
+    expect(res).deep.eq([4])
   })
 
   it('should work with multiple functions', async () => {
     const piped = allAsync(constant(10), addAsync(2), toString)
-    expect(await piped(4)).deep.eq([10, 6, '4'])
+    const res = await piped(4)
+    expect(res).deep.eq([10, 6, '4'])
   })
 
   it('should work with functions returning different type', async () => {
     const piped = allAsync(toNumber, pipe(toNumber, multAsync(10)))
-    expect(await piped('10')).deep.eq([10, 100])
+    const res = await piped('10')
+    expect(res).deep.eq([10, 100])
   })
 })
