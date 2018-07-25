@@ -8,7 +8,10 @@ function composeAsync<A, B, C> (fn0: (arg: B) => Promise<C> | C, fn1: (arg: A) =
 function composeAsync<A, B> (fn: (arg: A) => Promise<B> | B): (arg: A) => Promise<B>
 function composeAsync<A> (): (arg: A) => Promise<A>
 function composeAsync (...fns: any[]): any {
-  return (initial: any) => fns.reduceRight((arg, fn) => arg.then(fn), Promise.resolve(initial))
+  return (initial: any) => fns.reduceRight(
+    (arg, fn) => arg.then(fn),
+    Promise.resolve(initial)
+  )
 }
 
 export default composeAsync

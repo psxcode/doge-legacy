@@ -8,7 +8,11 @@ function allAsync<A, B, C> (fn0: (arg?: A) => Promise<B> | B, fn1: (arg?: A) => 
 function allAsync<A, B> (fn: (arg?: A) => Promise<B> | B): (arg?: A) => Promise<[B]>
 function allAsync<A> (): (arg: A) => Promise<[A]>
 function allAsync (...fns: any[]): any {
-  return (value: any) => fns.length ? Promise.all(fns.map(fn => Promise.resolve(fn(value)))) : Promise.resolve([value])
+  return (value: any) => Promise.all(
+    fns.length
+      ? fns.map(fn => Promise.resolve(fn(value)))
+      : [Promise.resolve(value)]
+  )
 }
 
 export default allAsync

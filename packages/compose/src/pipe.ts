@@ -7,8 +7,11 @@ function pipe<A, B, C, D> (fn0: (arg: A) => B, fn1: (arg: B) => C, fn2: (arg: C)
 function pipe<A, B, C> (fn0: (arg: A) => B, fn1: (arg: B) => C): (arg: A) => C
 function pipe<A, B> (fn: (arg: A) => B): (arg: A) => B
 function pipe<A> (): (arg: A) => A
-function pipe (...fns: ((arg: any) => any)[]): (arg: any) => any {
-  return (initial: any) => fns.reduce((arg, fn) => fn(arg), initial)
+function pipe (...fns: any[]): any {
+  return (initial: any) => fns.reduce(
+    (arg, fn) => fn(arg),
+    initial
+  )
 }
 
 export default pipe

@@ -8,7 +8,10 @@ function compose<A, B, C> (fn0: (arg: B) => C, fn1: (arg: A) => B): (arg: A) => 
 function compose<A, B> (fn: (arg: A) => B): (arg: A) => B
 function compose<A> (): (arg: A) => A
 function compose (...fns: any[]): any {
-  return (initial: any) => fns.reduceRight((arg, fn) => fn(arg), initial)
+  return (initial: any) => fns.reduceRight(
+    (arg, fn) => fn(arg),
+    initial
+  )
 }
 
 export default compose

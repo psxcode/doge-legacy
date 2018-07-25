@@ -8,7 +8,10 @@ function pipeAsync<A, B, C> (fn0: (arg: A) => Promise<B> | B, fn1: (arg: B) => P
 function pipeAsync<A, B> (fn0: (arg: A) => Promise<B> | B): (arg: A) => Promise<B>
 function pipeAsync<A> (): (arg: A) => Promise<A>
 function pipeAsync (...fns: any[]): any {
-  return (initial: any) => fns.reduce((arg, fn) => arg.then(fn), Promise.resolve(initial))
+  return (initial: any) => fns.reduce(
+    (arg, fn) => arg.then(fn),
+    Promise.resolve(initial)
+  )
 }
 
 export default pipeAsync
