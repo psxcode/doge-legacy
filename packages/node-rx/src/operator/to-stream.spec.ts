@@ -6,7 +6,7 @@ import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/interval'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
-import { waitTimePromise as wait } from '@doge/wait'
+import { waitTimePromise as wait } from '@psxcode/wait'
 import { toStream } from './to-stream'
 
 const makeDataSpy = <T> (expectedData: T[]) => {

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import * as sinon from 'sinon'
-import { waitTimePromise as wait } from '@doge/wait'
+import { waitTimePromise as wait } from '@psxcode/wait'
 import onceAll from './once-all'
 
 describe('[ onceAll ]', () => {

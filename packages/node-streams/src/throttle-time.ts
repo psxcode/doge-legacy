@@ -1,5 +1,5 @@
 import { Transform, TransformOptions } from 'stream'
-import { waitTime } from '@doge/wait'
+import { waitTime } from '@psxcode/wait'
 import throttle from './throttle'
 
 const throttleTime = (opts: TransformOptions) =>

@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@doge/arity": "*",
-    "@psxcode/compose": "*",
+    "@psxcode/compose": "^0.1.0",
     "@psxcode/iterable": "*",
     "@psxcode/node-streams": "*"
   },

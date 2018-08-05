@@ -7,7 +7,7 @@ import 'rxjs/add/observable/throw'
 import 'rxjs/add/observable/interval'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
-import { waitTimePromise as wait } from '@doge/wait'
+import { waitTimePromise as wait } from '@psxcode/wait'
 import { toEventEmitter } from './to-event-emitter'
 
 const makeDataSpy = <T> (expectedData: T[]) => {

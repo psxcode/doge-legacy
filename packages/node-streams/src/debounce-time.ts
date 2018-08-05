@@ -1,6 +1,6 @@
 import debounce from './debounce'
 import { Transform, TransformOptions } from 'stream'
-import { waitTime } from '@doge/wait'
+import { waitTime } from '@psxcode/wait'
 
 const debounceTime = (opts: TransformOptions) =>
   (ms: number) => debounce(opts)(cb => waitTime(cb)(ms))

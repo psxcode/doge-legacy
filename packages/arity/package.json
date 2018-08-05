@@ -21,7 +21,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@psxcode/compose": "*",
+    "@psxcode/compose": "^0.1.0",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",

@@ -20,8 +20,8 @@
     "test:watch": "yarn mocha --opts mocha.opts --watch"
   },
   "dependencies": {
-    "@psxcode/fixed-array": "*",
-    "@psxcode/compose": "*"
+    "circularr": "^0.1.1",
+    "@psxcode/compose": "^0.1.0"
   },
   "devDependencies": {
     "@doge/arity": "*",

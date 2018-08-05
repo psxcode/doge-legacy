@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import { waitTimePromise as wait } from '@doge/wait'
+import { waitTimePromise as wait } from '@psxcode/wait'
 import onceRaceEx from './once-race-ex'
 
 describe('[ onceRaceEx ]', () => {
