@@ -1,13 +1,13 @@
-import { ICache } from './types'
+import { IMemoizeCache } from './types'
 
-class ObjectCache<V> implements ICache<string, V> {
+class ObjectCache<V> implements IMemoizeCache<string, V> {
   cache: { [k: string]: V }
 
   constructor (cache: { [k: string]: V } = Object.create(null)) {
     this.cache = cache
   }
 
-  get (key: string): V {
+  get (key: string): V | undefined {
     return this.cache[key]
   }
 
@@ -17,7 +17,7 @@ class ObjectCache<V> implements ICache<string, V> {
   }
 
   has (key: string): boolean {
-    return Object.prototype.hasOwnProperty.call(this.cache, key)
+    return Reflect.has(this.cache, key)
   }
 }
 

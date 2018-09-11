@@ -1,17 +1,20 @@
-import { ICache, ISerializer } from './types'
+import { IMemoizeCache, IMemoizeKeySerializer } from './types'
 
-const memoize = <T, K, V> (cache: ICache<K, V>, serializer: ISerializer<K, T>) =>
-  (fn: (arg: T) => V) =>
-   (arg: T): V => {
-     const cacheKey = serializer(arg)
+const memoize = <T, R, CacheKey> (
+  cache: IMemoizeCache<CacheKey, R>,
+  serializer: IMemoizeKeySerializer<CacheKey, T>
+) =>
+  (fn: (arg: T) => R) =>
+    (arg: T): R => {
+      const cacheKey = serializer(arg)
 
-     if (!cache.has(cacheKey)) {
-       const computedValue = fn(arg)
-       cache.set(cacheKey, computedValue)
-       return computedValue
-     }
+      if (cache.has(cacheKey)) {
+        return cache.get(cacheKey) as R
+      }
 
-     return cache.get(cacheKey)!
-   }
+      const computedValue = fn(arg)
+      cache.set(cacheKey, computedValue)
+      return computedValue
+    }
 
 export default memoize

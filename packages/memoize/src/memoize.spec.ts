@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
 import memoize from './memoize'
-import { ICache } from './types'
+import { IMemoizeCache } from './types'
 
-const makeSpyCache = (cache: { [k: string]: any } = {}) => {
-  const c: ICache<any, any> = {
+const makeSpyCache = (cache: { [k: string]: any } = Object.create(null)) => {
+  const c: IMemoizeCache<any, any> = {
     get (key: any) {
       return cache[key]
     },
@@ -13,7 +13,7 @@ const makeSpyCache = (cache: { [k: string]: any } = {}) => {
       return this
     },
     has (key: any) {
-      return Object.prototype.hasOwnProperty.call(cache, key)
+      return Reflect.has(cache, key)
     }
   }
   sinon.stub(c, 'get').callThrough()

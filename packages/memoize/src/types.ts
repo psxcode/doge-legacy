@@ -1,9 +1,9 @@
-export interface ICache<K, V> {
-  get (key: K): V | undefined
-  set (key: K, value: V): this
-  has (key: K): boolean
+export interface IMemoizeCache<Key, Value> {
+  get (key: Key): Value | undefined
+  set (key: Key, value: Value): this
+  has (key: Key): boolean
 }
 
-export interface ISerializer<K, V> {
-  (val: V): K
+export interface IMemoizeKeySerializer<Key, Value> {
+  (val: Value): Key
 }
