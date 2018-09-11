@@ -25,12 +25,8 @@
   },
   "devDependencies": {
     "@psxcode/node-streams-test": "*",
-    "@types/chai": "*",
     "@types/debug": "*",
-    "@types/mocha": "*",
-    "@types/node": "*",
     "@types/node-fetch": "*",
-    "@types/sinon": "*",
     "chai": "*",
     "debug": "*",
     "esm": "*",

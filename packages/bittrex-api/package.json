@@ -28,11 +28,6 @@
     "tough-cookie": "*"
   },
   "devDependencies": {
-    "@types/chai": "*",
-    "@types/mocha": "*",
-    "@types/node": "*",
-    "@types/node-fetch": "*",
-    "@types/sinon": "*",
     "chai": "*",
     "esm": "*",
     "mocha": "*",

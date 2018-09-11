@@ -21,10 +21,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chai": "*",
-    "@types/mocha": "*",
-    "@types/node": "*",
-    "@types/sinon": "*",
     "chai": "*",
     "esm": "*",
     "mocha": "*",

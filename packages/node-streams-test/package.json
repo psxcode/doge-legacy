@@ -22,11 +22,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chai": "*",
     "@types/debug": "*",
-    "@types/mocha": "*",
-    "@types/node": "*",
-    "@types/sinon": "*",
     "chai": "*",
     "debug": "*",
     "esm": "*",

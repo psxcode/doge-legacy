@@ -26,10 +26,6 @@
   },
   "devDependencies": {
     "@psxcode/wait": "^0.1.0",
-    "@types/chai": "*",
-    "@types/mocha": "*",
-    "@types/node": "*",
-    "@types/sinon": "*",
     "chai": "*",
     "esm": "*",
     "mocha": "*",
