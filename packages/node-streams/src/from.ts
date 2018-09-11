@@ -1,6 +1,6 @@
 /* tslint:disable no-conditional-assignment */
 import { Readable, ReadableOptions } from 'stream'
-import { iterate } from '@psxcode/iterable'
+import { iterate } from 'iterama'
 
 const from = (opts: ReadableOptions) => <T> (iterable: Iterable<T>) => {
   const iterator = iterate(iterable)

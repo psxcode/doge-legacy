@@ -1,4 +1,4 @@
-import { iterate } from '@psxcode/iterable'
+import { iterate } from 'iterama'
 import { identityAsync } from '@doge/arity'
 import {
   AsyncPullProducer,

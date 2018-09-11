@@ -23,7 +23,7 @@
   "dependencies": {
     "@doge/arity": "*",
     "@psxcode/compose": "^0.1.0",
-    "@psxcode/iterable": "*",
+    "iterama": "^0.1.0",
     "@psxcode/node-streams": "*"
   },
   "devDependencies": {
