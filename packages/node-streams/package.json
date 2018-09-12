@@ -21,7 +21,7 @@
     "test:watch": "yarn mocha --watch --opts mocha.opts"
   },
   "dependencies": {
-    "@doge/arity": "*"
+    "@psxcode/arity": "^0.1.0"
   },
   "devDependencies": {
     "@psxcode/node-streams-test": "*",

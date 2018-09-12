@@ -1,5 +1,5 @@
 import { iterate } from 'iterama'
-import { identityAsync } from '@doge/arity'
+import { identityAsync } from '@psxcode/arity'
 import {
   AsyncPullProducer,
   AsyncPushConsumer,

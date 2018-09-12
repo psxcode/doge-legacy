@@ -555,6 +555,10 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
+"@psxcode/arity@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@psxcode/arity/-/arity-0.1.0.tgz#b773f309fdf135e531d9d46d7a600522af857d9a"
+
 "@psxcode/compose@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@psxcode/compose/-/compose-0.1.0.tgz#f274a388e05f3137d6996a170806a42b258fffdd"
