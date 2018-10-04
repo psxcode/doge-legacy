@@ -24,7 +24,7 @@
     "@psxcode/arity": "^0.1.0",
     "@psxcode/compose": "^0.1.0",
     "iterama": "^0.1.0",
-    "@psxcode/node-streams": "*"
+    "node-streams": "^0.1.0"
   },
   "devDependencies": {
     "@types/debug": "*",

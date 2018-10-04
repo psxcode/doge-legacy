@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@psxcode/arity": "^0.1.0",
-    "@psxcode/node-streams": "*",
+    "node-streams": "^0.1.0",
     "rxjs": "*"
   },
   "devDependencies": {
