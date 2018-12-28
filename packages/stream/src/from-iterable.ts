@@ -1,26 +1,26 @@
 import { iterate } from 'iterama'
-import { identityAsync } from '@psxcode/arity'
 import {
   AsyncPullProducer,
-  AsyncPushConsumer,
   AsyncPushProducer,
   PullProducer,
-  PushConsumer,
-  PushProducer
+  PushProducer,
+  SOK
 } from './types'
 
 export const push = <T> (iterable: Iterable<T>): PushProducer<T> =>
-  (consumer: PushConsumer<T>) => {
+  (consumer) => {
     const it = iterate(iterable)
     let ir: IteratorResult<T>
-    while (consumer(ir = it.next()) && !ir.done);
+
+    while (consumer(ir = it.next()) === SOK && !ir.done);
   }
 
 export const pushAsync = <T> (iterable: Iterable<T>): AsyncPushProducer<T> =>
-  async (consumer: AsyncPushConsumer<T>) => {
+  async (consumer) => {
     const it = iterate(iterable)
     let ir: IteratorResult<T>
-    while (await consumer(identityAsync(ir = it.next())) && !ir.done);
+
+    while ((await consumer(Promise.resolve(ir = it.next()))) === SOK && !ir.done);
   }
 
 export const pull = <T> (iterable: Iterable<T>): PullProducer<T> => {
@@ -30,5 +30,5 @@ export const pull = <T> (iterable: Iterable<T>): PullProducer<T> => {
 
 export const pullAsync = <T> (iterable: Iterable<T>): AsyncPullProducer<T> => {
   const it = iterate(iterable)
-  return () => identityAsync(it.next())
+  return () => Promise.resolve(it.next())
 }
